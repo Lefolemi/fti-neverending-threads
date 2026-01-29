@@ -1,0 +1,7 @@
+0.0.1 :
+- added main menu.
+
+0.0.2 :
+- added global constant
+- planning how the app works
+- removed icon.svg

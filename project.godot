@@ -11,10 +11,13 @@ config_version=5
 [application]
 
 config/name="FTI - Neverending Threads"
-config/version="0.0.1"
+config/version="0.0.2"
 run/main_scene="uid://dhgrbt14bg60n"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+
+[autoload]
+
+GConst="*res://scripts/global/global_constant.gd"
 
 [display]
 

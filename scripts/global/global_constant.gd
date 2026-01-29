@@ -1,0 +1,3 @@
+extends Node
+
+enum Rank { NONE, AMATEUR, NOVICE, INTERMEDIATE, EXPERT, MASTER, MAGISTRA };

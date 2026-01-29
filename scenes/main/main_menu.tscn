@@ -1,0 +1,158 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhgrbt14bg60n"]
+
+[ext_resource type="Script" uid="uid://bvmaty5rslu0k" path="res://scripts/main_menu/utilities/version.gd" id="1_sd5it"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -435.0
+offset_right = 20.0
+offset_bottom = -412.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FTI"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 26.5
+offset_right = 20.0
+offset_bottom = 49.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "NEVERENDING THREADS"
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.0
+offset_top = -369.0
+offset_right = 23.0
+offset_bottom = -346.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "vX.X.X"
+script = ExtResource("1_sd5it")
+
+[node name="MatkulContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.5
+offset_top = -133.0
+offset_right = 185.5
+offset_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+scroll_deadzone = 10
+
+[node name="VBox" type="VBoxContainer" parent="MatkulContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Matkul1" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Manajemen Proyek Perangkat Lunak"
+
+[node name="Matkul2" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Jaringan Komputer"
+
+[node name="Matkul3" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Keamanan Siber"
+
+[node name="Matkul4" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pemrograman Web 1"
+
+[node name="Matkul5" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Mobile Programming"
+
+[node name="Matkul6" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Metodologi Riset"
+
+[node name="Matkul7" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Computer Vision"
+
+[node name="Matkul8" type="Button" parent="MatkulContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Pengolahan Citra Digital"
+
+[node name="UtilityContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = 304.0
+offset_right = 186.0
+offset_bottom = 432.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+scroll_deadzone = 10
+
+[node name="VBox" type="VBoxContainer" parent="UtilityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="Achievement" type="Button" parent="UtilityContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Achievement"
+
+[node name="Rank" type="Button" parent="UtilityContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Rank"
+
+[node name="Settings" type="Button" parent="UtilityContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Settings"

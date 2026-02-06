@@ -5,3 +5,7 @@
 - added global constant
 - planning how the app works
 - removed icon.svg
+
+0.0.3 :
+- added Quiz UI
+- added Result UI

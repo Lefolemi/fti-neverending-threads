@@ -1,0 +1,148 @@
+[gd_scene format=3 uid="uid://gt3kp25qfgdr"]
+
+[node name="Background" type="ScrollContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Vbox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BGColorLabel" type="Label" parent="Margin/Vbox"]
+layout_mode = 2
+text = "Background Color"
+
+[node name="BGColorPicker" type="ColorPickerButton" parent="Margin/Vbox"]
+layout_mode = 2
+edit_alpha = false
+
+[node name="BGColorButtons" type="HBoxContainer" parent="Margin/Vbox"]
+layout_mode = 2
+
+[node name="RainbowMode" type="CheckBox" parent="Margin/Vbox/BGColorButtons"]
+layout_mode = 2
+text = "Rainbow Mode"
+
+[node name="RandomColor" type="Button" parent="Margin/Vbox/BGColorButtons"]
+layout_mode = 2
+text = "Random Color"
+
+[node name="WallpaperColorLabel" type="Label" parent="Margin/Vbox"]
+layout_mode = 2
+text = "Wallapaper Color"
+
+[node name="WallpaperColorPicker" type="ColorPickerButton" parent="Margin/Vbox"]
+layout_mode = 2
+edit_alpha = false
+
+[node name="WallpaperColorButtons" type="HBoxContainer" parent="Margin/Vbox"]
+layout_mode = 2
+
+[node name="RainbowMode" type="CheckBox" parent="Margin/Vbox/WallpaperColorButtons"]
+layout_mode = 2
+text = "Rainbow Mode"
+
+[node name="RandomColor" type="Button" parent="Margin/Vbox/WallpaperColorButtons"]
+layout_mode = 2
+text = "Random Color"
+
+[node name="Separator1" type="HSeparator" parent="Margin/Vbox"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="WallpaperLabel" type="Label" parent="Margin/Vbox"]
+layout_mode = 2
+text = "Wallpaper"
+
+[node name="WallpaperGrid" type="GridContainer" parent="Margin/Vbox"]
+layout_mode = 2
+columns = 5
+
+[node name="Wallpaper1" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper2" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper3" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper4" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper5" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper6" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper7" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper8" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper9" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper10" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Separator2" type="HSeparator" parent="Margin/Vbox"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="WallpaperOpacityLabel" type="Label" parent="Margin/Vbox"]
+layout_mode = 2
+text = "Wallpaper Opacity"
+
+[node name="WallpaperOpacitySlider" type="HSlider" parent="Margin/Vbox"]
+layout_mode = 2
+
+[node name="WallpaperMotionLabel" type="Label" parent="Margin/Vbox"]
+layout_mode = 2
+text = "Wallpaper Motion"
+
+[node name="WallpaperMotionBox" type="HBoxContainer" parent="Margin/Vbox"]
+layout_mode = 2
+
+[node name="MotionXLabel" type="Label" parent="Margin/Vbox/WallpaperMotionBox"]
+layout_mode = 2
+text = "Motion X: "
+
+[node name="MotionX" type="SpinBox" parent="Margin/Vbox/WallpaperMotionBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MotionYLabel" type="Label" parent="Margin/Vbox/WallpaperMotionBox"]
+layout_mode = 2
+text = "Motion Y: "
+
+[node name="MotionX2" type="SpinBox" parent="Margin/Vbox/WallpaperMotionBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WallpaperScaleLabel" type="Label" parent="Margin/Vbox"]
+layout_mode = 2
+text = "Wallpaper Scale"
+
+[node name="ScaleSpin" type="SpinBox" parent="Margin/Vbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Separator3" type="HSeparator" parent="Margin/Vbox"]
+layout_mode = 2
+theme_override_constants/separation = 30

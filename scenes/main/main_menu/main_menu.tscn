@@ -1,0 +1,152 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhgrbt14bg60n"]
+
+[ext_resource type="Script" uid="uid://bvmaty5rslu0k" path="res://scripts/main_menu/utilities/version.gd" id="1_0kd0q"]
+[ext_resource type="PackedScene" uid="uid://btccjgt5e7jvc" path="res://scenes/main/main_menu/matkul_container.tscn" id="2_r7wpq"]
+[ext_resource type="PackedScene" uid="uid://d12ccl3c5de7q" path="res://scenes/main/main_menu/course_container.tscn" id="3_k0ycp"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -435.0
+offset_right = 20.0
+offset_bottom = -412.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "FTI"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 26.5
+offset_right = 20.0
+offset_bottom = 49.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "NEVERENDING THREADS"
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.0
+offset_top = -369.0
+offset_right = 23.0
+offset_bottom = -346.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "vX.X.X"
+script = ExtResource("1_0kd0q")
+
+[node name="MatkulContainer" parent="." instance=ExtResource("2_r7wpq")]
+layout_mode = 1
+offset_top = -153.0
+offset_bottom = 153.0
+
+[node name="ModeContainer" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -178.0
+offset_top = -98.5
+offset_right = 178.0
+offset_bottom = 98.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ModeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Mode1" type="Button" parent="ModeContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Normal Mode"
+autowrap_mode = 3
+
+[node name="Mode2" type="Button" parent="ModeContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Midtest"
+autowrap_mode = 3
+
+[node name="Mode3" type="Button" parent="ModeContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Final Test"
+autowrap_mode = 3
+
+[node name="Mode4" type="Button" parent="ModeContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "All in One"
+autowrap_mode = 3
+
+[node name="CourseContainer" parent="." instance=ExtResource("3_k0ycp")]
+layout_mode = 1
+offset_top = -153.0
+offset_bottom = 153.0
+
+[node name="UtilityContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = 304.0
+offset_right = 186.0
+offset_bottom = 432.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="UtilityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="Achievement" type="Button" parent="UtilityContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Achievement"
+
+[node name="Rank" type="Button" parent="UtilityContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Rank"
+
+[node name="Settings" type="Button" parent="UtilityContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Settings"

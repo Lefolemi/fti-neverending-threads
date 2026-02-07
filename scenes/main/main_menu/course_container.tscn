@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://d12ccl3c5de7q"]
+
+[node name="CourseContainer" type="ScrollContainer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.5
+offset_top = -133.0
+offset_right = 185.5
+offset_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Course1" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+autowrap_mode = 3
+
+[node name="Course2" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course3" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course4" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+autowrap_mode = 3
+
+[node name="Course5" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course6" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course7" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+autowrap_mode = 3
+
+[node name="Course8" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course9" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course10" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+autowrap_mode = 3
+
+[node name="Course11" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course12" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course13" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3
+
+[node name="Course14" type="Button" parent="VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "..."
+autowrap_mode = 3

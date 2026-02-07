@@ -9,3 +9,8 @@
 0.0.3 :
 - added Quiz UI
 - added Result UI
+
+0.0.4 :
+- added settings menu (both General option and Background option)
+- added UTS mode, UAS mode, and All in One mode
+- planning how the achievement system works

@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://hni6gcm36gmx"]
+
+[ext_resource type="PackedScene" uid="uid://bsl3oforo30ty" path="res://scenes/utilities/settings/settings_general.tscn" id="1_i2ta4"]
+[ext_resource type="PackedScene" uid="uid://gt3kp25qfgdr" path="res://scenes/utilities/settings/settings_background.tscn" id="2_v2mdq"]
+
+[node name="Settings" type="GridContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -463.0
+offset_right = 300.0
+offset_bottom = 321.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="Menu" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="General" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "General"
+
+[node name="Background" type="Button" parent="Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Background"
+
+[node name="Content" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="General" parent="Content" instance=ExtResource("1_i2ta4")]
+layout_mode = 2
+
+[node name="Background" parent="Content" instance=ExtResource("2_v2mdq")]
+visible = false
+layout_mode = 2
+
+[node name="Confirm" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 2
+
+[node name="Apply" type="Button" parent="Confirm"]
+layout_mode = 2
+text = "Apply"
+
+[node name="Cancel" type="Button" parent="Confirm"]
+layout_mode = 2
+text = "Cancel"

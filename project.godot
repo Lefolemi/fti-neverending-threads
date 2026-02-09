@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="FTI - Neverending Threads"
-config/version="0.0.4"
-run/main_scene="uid://dhgrbt14bg60n"
+config/version="0.0.5"
+run/main_scene="uid://dj6yefx2qbmh0"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
 
-GConst="*res://scripts/global/global_constant.gd"
+GConst="*res://scripts/global/vars/global_constant.gd"
+GVar="*res://scripts/global/vars/global_variable.gd"
+Load="*res://scripts/global/loading/loading.gd"
 
 [display]
 

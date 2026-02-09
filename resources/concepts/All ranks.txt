@@ -1,0 +1,25 @@
+None -> Amateur -> Novice -> Intermediate -> Expert -> Master -> Magistra
+
+None: 0 credits
+Amateur: 120 credits
+- Sandbox Mode unlocked
+- Color picker unlocked
+
+Novice: 380 credits
+- All in One Mode unlocked
+- More accesible in Sandbox Mode
+
+Intermediate: 800 credits
+- A complete control on Sandbox Mode
+- 3 Theme Set unlocked
+
+Expert: 1350 credits
+- Ability to see all questions and answers
+- Even more 3 Theme Set unlocked
+
+Master: 1950 credits
+- A special wallpaper
+- Custom questions and answers
+
+Magistra: 2618 credits
+- God mode unlocked

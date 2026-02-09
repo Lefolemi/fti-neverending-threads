@@ -14,3 +14,7 @@
 - added settings menu (both General option and Background option)
 - added UTS mode, UAS mode, and All in One mode
 - planning how the achievement system works
+
+0.0.5 :
+- added loading screen and loading system
+- added function for the main menu (for MatkulContainer, CourseContainer, and ModeContainer)

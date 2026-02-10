@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dokqfnbfvm1cy"]
+[gd_scene load_steps=2 format=3 uid="uid://dokqfnbfvm1cy"]
+
+[ext_resource type="Script" uid="uid://brry3asx1e1me" path="res://scripts/debug_menu/debug_menu.gd" id="1_akh33"]
 
 [node name="DebugMenu" type="Control"]
 layout_mode = 3
@@ -7,3 +9,245 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_akh33")
+
+[node name="MenuVBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -88.0
+offset_right = 208.0
+offset_bottom = 88.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="QuizDebug" type="Button" parent="MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Quiz Debug"
+
+[node name="CurrentInfo" type="Button" parent="MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Current Information"
+
+[node name="Back" type="Button" parent="MenuVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Back"
+
+[node name="QuizDebug" type="GridContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.5
+offset_top = -363.0
+offset_right = 264.5
+offset_bottom = 363.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="PanelContainer" parent="QuizDebug"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="QuizDebug/Content"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="QuizDebug/Content/Margin"]
+layout_mode = 2
+
+[node name="FilePathLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "File path"
+
+[node name="FilePath" type="HBoxContainer" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="FilePathLine" type="LineEdit" parent="QuizDebug/Content/Margin/VBox/FilePath"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "..."
+
+[node name="FilePathButton" type="Button" parent="QuizDebug/Content/Margin/VBox/FilePath"]
+layout_mode = 2
+text = "Select"
+
+[node name="SetRangeLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "Set Range"
+
+[node name="SetRange" type="HBoxContainer" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="FromLabel" type="Label" parent="QuizDebug/Content/Margin/VBox/SetRange"]
+layout_mode = 2
+text = "From: "
+
+[node name="FromSpin" type="SpinBox" parent="QuizDebug/Content/Margin/VBox/SetRange"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ToLabel" type="Label" parent="QuizDebug/Content/Margin/VBox/SetRange"]
+layout_mode = 2
+text = "To: "
+
+[node name="ToSpin" type="SpinBox" parent="QuizDebug/Content/Margin/VBox/SetRange"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="QuizModeLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "Quiz Mode"
+
+[node name="QuizMode" type="OptionButton" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Quizizz Mode"
+popup/item_0/id = 0
+popup/item_1/text = "Elearning Mode"
+popup/item_1/id = 1
+
+[node name="SetTimerLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "Set Timer"
+
+[node name="SetTimerSpin" type="SpinBox" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="SetTimerLabel2" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "* Note: The timer in Quizizz Mode applies per question."
+
+[node name="OptionsLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "Options"
+
+[node name="OptionsGrid" type="GridContainer" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="RandomizeSet" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Randomize set"
+
+[node name="RandomizeWords" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Randomize words"
+
+[node name="OnlyShowMarked" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Only show marked"
+
+[node name="AllowStopwatch" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Allow stopwatch"
+
+[node name="HideQuestions" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hide questions"
+
+[node name="HideAnswers" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hide answers"
+
+[node name="ShowQuestionNumber" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Show question number"
+
+[node name="ShowScoreCount" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Show score count"
+
+[node name="ResultModeLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+text = "Result Mode"
+
+[node name="ResultMode" type="OptionButton" parent="QuizDebug/Content/Margin/VBox"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Normal Result"
+popup/item_0/id = 0
+popup/item_1/text = "Practice Result"
+popup/item_1/id = 1
+popup/item_2/text = "Exam Result"
+popup/item_2/id = 2
+
+[node name="Confirm" type="HBoxContainer" parent="QuizDebug"]
+layout_mode = 2
+alignment = 2
+
+[node name="Start" type="Button" parent="QuizDebug/Confirm"]
+layout_mode = 2
+text = "Let's go!"
+
+[node name="Cancel" type="Button" parent="QuizDebug/Confirm"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SelectFile" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+offset_left = 59.5
+offset_top = 213.0
+offset_right = 588.5
+offset_bottom = 904.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="SelectFile"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="SelectFile/Margin"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="SelectFile/Margin/VBox"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SelectFileLabel" type="Label" parent="SelectFile/Margin/VBox"]
+layout_mode = 2
+text = "Select file"
+
+[node name="FileList" type="ScrollContainer" parent="SelectFile/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="SelectFile/Margin/VBox/FileList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="File1" type="HBoxContainer" parent="SelectFile/Margin/VBox/FileList/VBox"]
+layout_mode = 2
+
+[node name="File" type="Button" parent="SelectFile/Margin/VBox/FileList/VBox/File1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://resources/csv/debug/debugmode_quiz.csv"
+alignment = 0
+
+[node name="Explore" type="Button" parent="SelectFile/Margin/VBox/FileList/VBox/File1"]
+layout_mode = 2
+text = "Explore"
+
+[connection signal="pressed" from="MenuVBox/Back" to="." method="_on_back_pressed"]

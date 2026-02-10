@@ -18,3 +18,8 @@
 0.0.5 :
 - added loading screen and loading system
 - added function for the main menu (for MatkulContainer, CourseContainer, and ModeContainer)
+
+0.0.6 :
+- now the root of current scene is hidden when it's loading
+- added debug mode
+- in debug mode, debug mode panel and select file has been added

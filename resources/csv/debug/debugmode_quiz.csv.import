@@ -1,0 +1,15 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ektulauseq5m"
+valid=false
+
+[deps]
+
+source_file="res://resources/csv/debug/debugmode_quiz.csv"
+
+[params]
+
+compress=true
+delimiter=0

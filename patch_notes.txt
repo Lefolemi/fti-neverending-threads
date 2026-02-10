@@ -23,3 +23,8 @@
 - now the root of current scene is hidden when it's loading
 - added debug mode
 - in debug mode, debug mode panel and select file has been added
+
+0.0.7 :
+- added CSV Viewer
+- in CSV Viewer, added search bar and sorting
+- Debug mode is now updated (actually just for CSV Viewer related)

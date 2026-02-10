@@ -22,4 +22,4 @@ Master: 1950 credits
 - Custom questions and answers
 
 Magistra: 2618 credits
-- God mode unlocked
+- Debug mode unlocked

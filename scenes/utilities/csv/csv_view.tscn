@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmxxs44qrg0ly"]
+
+[ext_resource type="Script" uid="uid://d2sud7147xkvs" path="res://scripts/utilities/csv/csv_view.gd" id="1_e3x6t"]
+[ext_resource type="Script" uid="uid://crwn5n6jmksoo" path="res://scripts/utilities/csv/csv_view_content.gd" id="2_vlphs"]
+
+[node name="CSVView" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e3x6t")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_vlphs")
+
+[node name="Info" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="Content/Info"]
+layout_mode = 2
+text = "Back"
+
+[node name="FilePathLabel" type="Label" parent="Content/Info"]
+layout_mode = 2
+text = "Current CSV: ..."
+
+[node name="SearchBar" type="LineEdit" parent="Content"]
+layout_mode = 2
+placeholder_text = "Search things..."
+
+[node name="Sort" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="SortBy" type="OptionButton" parent="Content/Sort"]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "None"
+popup/item_0/id = 0
+
+[node name="SortOrder" type="OptionButton" parent="Content/Sort"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Ascending"
+popup/item_1/id = 1
+popup/item_2/text = "Descending"
+popup/item_2/id = 2
+
+[node name="Table" type="Tree" parent="Content"]
+layout_mode = 2
+size_flags_vertical = 3
+column_titles_visible = true
+hide_root = true

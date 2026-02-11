@@ -28,3 +28,8 @@
 - added CSV Viewer
 - in CSV Viewer, added search bar and sorting
 - Debug mode is now updated (actually just for CSV Viewer related)
+
+0.0.8 :
+- made the debug menu more functional (it's working now)
+- added current information (actually it's already added just updated now)
+- all that left is to make sure Quiz session is actually working!

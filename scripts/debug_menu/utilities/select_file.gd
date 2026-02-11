@@ -70,10 +70,16 @@ func _create_ui_row(full_path: String) -> void:
 	
 	# B. Create the File Button (The Name)
 	var btn_file = Button.new()
+	
+	# Calculate the text we want to show (Relative Path)
+	var relative_path = full_path.replace(SCAN_DIR, "")
+	btn_file.text = relative_path
+
 	# Show relative path so it's readable (e.g. "debug/test.csv" instead of full res://...)
 	btn_file.text = full_path.replace(SCAN_DIR, "") 
 	btn_file.size_flags_horizontal = Control.SIZE_EXPAND_FILL # Dynamic Expansion
 	btn_file.alignment = HORIZONTAL_ALIGNMENT_LEFT # Align text to left looks better in lists
+	btn_file.pressed.connect(_on_file_selected.bind(relative_path))
 	
 	# C. Create the Explore Button (The Action)
 	var btn_explore = Button.new()
@@ -85,6 +91,15 @@ func _create_ui_row(full_path: String) -> void:
 	hbox.add_child(btn_file)
 	hbox.add_child(btn_explore)
 	item_container.add_child(hbox)
+
+func _on_file_selected(button_text: String) -> void:
+	# 1. Update the LineEdit in QuizDebug with the button's text
+	var line_edit = owner.get_node("QuizDebug/Content/Margin/VBox/FilePath/FilePathLine")
+	if line_edit:
+		line_edit.text = button_text
+	
+	# 2. Close this menu and return to QuizDebug
+	show_menu("QuizDebug")
 
 # --- 3. The Action ---
 func _on_explore_pressed(csv_path: String) -> void:

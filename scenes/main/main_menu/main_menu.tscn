@@ -162,7 +162,7 @@ theme_override_constants/separation = 15
 [node name="Shop" type="Button" parent="UtilityContainer/VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "Shpo"
+text = "Shop"
 
 [node name="Statistics" type="Button" parent="UtilityContainer/VBox"]
 layout_mode = 2

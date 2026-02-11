@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dokqfnbfvm1cy"]
 
-[ext_resource type="Script" uid="uid://brry3asx1e1me" path="res://scripts/debug_menu/debug_menu.gd" id="1_akh33"]
 [ext_resource type="Script" uid="uid://b2ww5v4qwyn4y" path="res://scripts/debug_menu/utilities/debug_menu_vbox.gd" id="2_vmsah"]
 [ext_resource type="Script" uid="uid://lrin6ppe0837" path="res://scripts/debug_menu/menu/quiz_debug.gd" id="3_s14dr"]
 [ext_resource type="Script" uid="uid://qyjaxstemfn1" path="res://scripts/debug_menu/utilities/select_file.gd" id="4_nt0s4"]
+[ext_resource type="Script" uid="uid://bwijum3u3fg48" path="res://scripts/debug_menu/utilities/current_information.gd" id="5_a3kbn"]
 
 [node name="DebugMenu" type="Control"]
 layout_mode = 3
@@ -12,7 +12,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_akh33")
 
 [node name="MenuVBox" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -134,7 +133,7 @@ text = "Set Timer"
 [node name="SetTimerSpin" type="SpinBox" parent="QuizDebug/Content/Margin/VBox"]
 layout_mode = 2
 
-[node name="SetTimerLabel2" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+[node name="SetTimerNote1" type="Label" parent="QuizDebug/Content/Margin/VBox"]
 layout_mode = 2
 text = "* Note: The timer in Quizizz Mode applies per question."
 
@@ -201,6 +200,10 @@ alignment = 2
 layout_mode = 2
 text = "Let's go!"
 
+[node name="Save" type="Button" parent="QuizDebug/Confirm"]
+layout_mode = 2
+text = "Save"
+
 [node name="Cancel" type="Button" parent="QuizDebug/Confirm"]
 layout_mode = 2
 text = "Cancel"
@@ -241,6 +244,10 @@ text = "Cancel"
 layout_mode = 2
 text = "Select file"
 
+[node name="SearchBar" type="LineEdit" parent="SelectFile/Margin/VBox"]
+layout_mode = 2
+placeholder_text = "..."
+
 [node name="FileList" type="ScrollContainer" parent="SelectFile/Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -250,8 +257,36 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="CurrentInformation" type="GridContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -173.0
+offset_top = -266.0
+offset_right = 195.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_a3kbn")
+
+[node name="Content" type="PanelContainer" parent="CurrentInformation"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Information" type="RichTextLabel" parent="CurrentInformation/Content"]
+layout_mode = 2
+bbcode_enabled = true
+
+[node name="Close" type="Button" parent="CurrentInformation"]
+layout_mode = 2
+text = "Close"
+
 [connection signal="pressed" from="MenuVBox/QuizDebugButton" to="MenuVBox" method="_on_quiz_debug_button_pressed"]
-[connection signal="pressed" from="MenuVBox/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="QuizDebug/Content/Margin/VBox/FilePath/FilePathButton" to="QuizDebug" method="_on_file_path_button_pressed"]
-[connection signal="pressed" from="QuizDebug/Confirm/Cancel" to="QuizDebug" method="_on_cancel_pressed"]
+[connection signal="pressed" from="MenuVBox/CurrentInfoButton" to="MenuVBox" method="_on_current_info_button_pressed"]
+[connection signal="pressed" from="MenuVBox/Back" to="MenuVBox" method="_on_back_pressed"]
 [connection signal="pressed" from="SelectFile/Margin/VBox/CancelButton" to="SelectFile" method="_on_cancel_button_pressed"]

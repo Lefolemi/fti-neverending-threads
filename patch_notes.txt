@@ -33,3 +33,9 @@
 - made the debug menu more functional (it's working now)
 - added current information (actually it's already added just updated now)
 - all that left is to make sure Quiz session is actually working!
+
+0.0.9 :
+- update the main menu where all the sets now properly have names
+- added achievement UI
+- added shop UI
+- some minor changes i don't remember

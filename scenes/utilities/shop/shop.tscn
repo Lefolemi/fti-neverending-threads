@@ -1,0 +1,275 @@
+[gd_scene load_steps=2 format=3 uid="uid://cq5n0vm3ynk6x"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2i5ok"]
+
+[node name="Shop" type="GridContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -249.0
+offset_top = -316.5
+offset_right = 249.0
+offset_bottom = 316.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Shop"
+horizontal_alignment = 1
+
+[node name="Content" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Content"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Content/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Shop1" type="VBoxContainer" parent="Content/Scroll/VBox"]
+layout_mode = 2
+
+[node name="WallpaperLabel" type="Label" parent="Content/Scroll/VBox/Shop1"]
+layout_mode = 2
+text = "Wallpaper"
+horizontal_alignment = 1
+
+[node name="WallpaperGrid" type="GridContainer" parent="Content/Scroll/VBox/Shop1"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 60
+columns = 3
+
+[node name="Item1" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item1"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item1"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item2" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item2"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item2"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item3" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item3"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item3"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item4" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item4"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item4"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item5" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item5"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item5"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item6" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item6"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item6"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item7" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item7"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item7"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item8" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item8"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item8"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item9" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item9"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item9"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Separator1" type="HSeparator" parent="Content/Scroll/VBox"]
+layout_mode = 2
+
+[node name="Shop2" type="VBoxContainer" parent="Content/Scroll/VBox"]
+layout_mode = 2
+
+[node name="WallpaperLabel" type="Label" parent="Content/Scroll/VBox/Shop2"]
+layout_mode = 2
+text = "Theme Color"
+horizontal_alignment = 1
+
+[node name="WallpaperGrid" type="GridContainer" parent="Content/Scroll/VBox/Shop2"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 60
+columns = 3
+
+[node name="Item1" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item1"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item1"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item2" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item2"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item2"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item3" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item3"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item3"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item4" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item4"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item4"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item5" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item5"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item5"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Item6" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/WallpaperGrid"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item6"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_2i5ok")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/WallpaperGrid/Item6"]
+layout_mode = 2
+text = "Wallpaper 1"
+horizontal_alignment = 1
+
+[node name="Confirm" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 2
+
+[node name="Buy" type="Button" parent="Confirm"]
+layout_mode = 2
+text = "Buy"
+
+[node name="Close" type="Button" parent="Confirm"]
+layout_mode = 2
+text = "Close"

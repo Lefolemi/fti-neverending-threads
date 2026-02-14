@@ -1,0 +1,15 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bqbxtejacrinh"
+valid=false
+
+[deps]
+
+source_file="res://resources/csv/matkul/setnamelist.csv"
+
+[params]
+
+compress=true
+delimiter=0

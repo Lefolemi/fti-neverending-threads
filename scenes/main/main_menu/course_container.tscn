@@ -24,7 +24,7 @@ theme_override_constants/separation = 20
 [node name="Course1" type="Button" parent="VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+text = "..."
 autowrap_mode = 3
 
 [node name="Course2" type="Button" parent="VBox"]
@@ -42,7 +42,7 @@ autowrap_mode = 3
 [node name="Course4" type="Button" parent="VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+text = "..."
 autowrap_mode = 3
 
 [node name="Course5" type="Button" parent="VBox"]
@@ -60,7 +60,7 @@ autowrap_mode = 3
 [node name="Course7" type="Button" parent="VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+text = "..."
 autowrap_mode = 3
 
 [node name="Course8" type="Button" parent="VBox"]
@@ -78,7 +78,7 @@ autowrap_mode = 3
 [node name="Course10" type="Button" parent="VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+text = "..."
 autowrap_mode = 3
 
 [node name="Course11" type="Button" parent="VBox"]

@@ -79,9 +79,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -178.0
-offset_top = -98.5
+offset_top = -121.5
 offset_right = 178.0
-offset_bottom = 98.5
+offset_bottom = 121.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_k0ycp")
@@ -101,16 +101,22 @@ autowrap_mode = 3
 [node name="Mode2" type="Button" parent="ModeContainer/VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "Midtest"
+text = "Practice Mode"
 autowrap_mode = 3
 
 [node name="Mode3" type="Button" parent="ModeContainer/VBox"]
 layout_mode = 2
 mouse_filter = 1
-text = "Final Test"
+text = "Midtest"
 autowrap_mode = 3
 
 [node name="Mode4" type="Button" parent="ModeContainer/VBox"]
+layout_mode = 2
+mouse_filter = 1
+text = "Final Test"
+autowrap_mode = 3
+
+[node name="Mode5" type="Button" parent="ModeContainer/VBox"]
 layout_mode = 2
 mouse_filter = 1
 text = "All in One"

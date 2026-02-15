@@ -39,8 +39,8 @@ func _refresh_display():
 	txt += "\n"
 	
 	txt += "[b][u]QUIZ FLAGS[/u][/b]\n"
-	txt += "Random Set: %s\n" % _bool_str(GVar.quiz_randomize_set)
-	txt += "Random Words: %s\n" % _bool_str(GVar.quiz_randomize_words)
+	txt += "Random Set: %s\n" % _bool_str(GVar.quiz_subset_qty)
+	txt += "Random Words: %s\n" % _bool_str(GVar.quiz_randomize_set)
 	txt += "Only Marked: %s\n" % _bool_str(GVar.quiz_only_show_marked)
 	txt += "Stopwatch: %s\n" % _bool_str(GVar.quiz_allow_stopwatch)
 	txt += "Hide Quest: %s\n" % _bool_str(GVar.quiz_hide_questions)

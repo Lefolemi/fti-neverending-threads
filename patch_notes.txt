@@ -39,3 +39,7 @@
 - added achievement UI
 - added shop UI
 - some minor changes i don't remember
+
+0.0.10 :
+- the quiz session has been functional!!
+- most of core features in the quiz session also has been implemented too

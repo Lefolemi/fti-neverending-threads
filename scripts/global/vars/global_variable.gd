@@ -12,11 +12,11 @@ var set_range_from: int = 0;
 var set_range_to: int = 0;
 var current_quiz_mode: int = 0;
 var current_quiz_timer: int = 0;
-var quiz_result_mode: bool = 0;
+var quiz_result_mode: int = 0;
 
 # Quiz Options Information
+var quiz_subset_qty: int = 0;
 var quiz_randomize_set: bool;
-var quiz_randomize_words: bool;
 var quiz_only_show_marked: bool;
 var quiz_allow_stopwatch: bool;
 var quiz_hide_questions: bool;

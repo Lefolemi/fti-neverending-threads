@@ -1,6 +1,8 @@
 None -> Amateur -> Novice -> Intermediate -> Expert -> Master -> Magistra
 
 None: 0 credits
+- Unlock the game itself ;)
+
 Amateur: 120 credits
 - Sandbox Mode unlocked
 - Color picker unlocked

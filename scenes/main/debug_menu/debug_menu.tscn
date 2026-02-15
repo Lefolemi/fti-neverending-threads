@@ -44,7 +44,6 @@ size_flags_vertical = 3
 text = "Back"
 
 [node name="QuizDebug" type="GridContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -145,13 +144,20 @@ text = "Options"
 layout_mode = 2
 columns = 2
 
+[node name="HBox" type="HBoxContainer" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+
+[node name="PickSubsetLabel" type="Label" parent="QuizDebug/Content/Margin/VBox/OptionsGrid/HBox"]
+layout_mode = 2
+text = "Pick subset: "
+
+[node name="PickSubset" type="SpinBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="RandomizeSet" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
 layout_mode = 2
 text = "Randomize set"
-
-[node name="RandomizeWords" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
-layout_mode = 2
-text = "Randomize words"
 
 [node name="OnlyShowMarked" type="CheckBox" parent="QuizDebug/Content/Margin/VBox/OptionsGrid"]
 layout_mode = 2

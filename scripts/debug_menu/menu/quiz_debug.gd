@@ -10,8 +10,8 @@ extends GridContainer
 @onready var result_mode_opt: OptionButton = $Content/Margin/VBox/ResultMode
 
 # 2. Checkbox Options
-@onready var ck_random_set: CheckBox = $Content/Margin/VBox/OptionsGrid/RandomizeSet
-@onready var ck_random_words: CheckBox = $Content/Margin/VBox/OptionsGrid/RandomizeWords
+@onready var ck_pick_subset: SpinBox = $Content/Margin/VBox/OptionsGrid/HBox/PickSubset
+@onready var ck_randomize_set: CheckBox = $Content/Margin/VBox/OptionsGrid/RandomizeSet
 @onready var ck_only_marked: CheckBox = $Content/Margin/VBox/OptionsGrid/OnlyShowMarked
 @onready var ck_stopwatch: CheckBox = $Content/Margin/VBox/OptionsGrid/AllowStopwatch
 @onready var ck_hide_q: CheckBox = $Content/Margin/VBox/OptionsGrid/HideQuestions
@@ -59,8 +59,8 @@ func save_info() -> void:
 	GVar.quiz_result_mode = bool(result_mode_opt.selected)
 
 	# 2. Save Boolean Options (Checkboxes)
-	GVar.quiz_randomize_set = ck_random_set.button_pressed
-	GVar.quiz_randomize_words = ck_random_words.button_pressed
+	GVar.quiz_subset_qty = ck_pick_subset.value
+	GVar.quiz_randomize_set = ck_randomize_set.button_pressed
 	GVar.quiz_only_show_marked = ck_only_marked.button_pressed
 	GVar.quiz_allow_stopwatch = ck_stopwatch.button_pressed
 	GVar.quiz_hide_questions = ck_hide_q.button_pressed
@@ -79,5 +79,4 @@ func _on_save_pressed() -> void:
 func _on_start_pressed() -> void:
 	save_info();
 
-	# 3. Transition (Uncomment when you are ready)
-	# Load.load_res(["res://scenes/QuizScene.tscn"], "res://scenes/QuizScene.tscn")
+	Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")

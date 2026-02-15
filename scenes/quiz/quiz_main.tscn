@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://jojn6vgec4wb"]
+[gd_scene load_steps=2 format=3 uid="uid://jojn6vgec4wb"]
+
+[ext_resource type="Script" uid="uid://brdvq1a8ncfq7" path="res://scripts/quiz/main/quiz_main.gd" id="1_1sy5u"]
 
 [node name="Quiz" type="Control"]
 layout_mode = 3
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1sy5u")
 
 [node name="Question" type="RichTextLabel" parent="."]
 layout_mode = 1
@@ -37,13 +40,13 @@ offset_bottom = 67.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GiveUp" type="Button" parent="Utilities"]
+[node name="Finish" type="Button" parent="Utilities"]
 layout_mode = 0
 offset_left = -263.0
 offset_top = -542.0
 offset_right = -126.0
 offset_bottom = -503.0
-text = "Give Up"
+text = "Finish"
 
 [node name="Reset" type="Button" parent="Utilities"]
 layout_mode = 0
@@ -116,7 +119,7 @@ grow_vertical = 2
 text = "Q1 / Q100"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="Answers" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -130,55 +133,41 @@ offset_bottom = 296.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBox" type="VBoxContainer" parent="Answers"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Answer1" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="Answer1" type="Button" parent="Answers/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
 alignment = 0
 autowrap_mode = 3
 
-[node name="Answer2" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="Answer2" type="Button" parent="Answers/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
 alignment = 0
 autowrap_mode = 3
 
-[node name="Answer3" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="Answer3" type="Button" parent="Answers/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
 alignment = 0
 autowrap_mode = 3
 
-[node name="Answer4" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="Answer4" type="Button" parent="Answers/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa"
 alignment = 0
 autowrap_mode = 3
 
-[node name="Information" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 27.0
-offset_right = 20.0
-offset_bottom = 67.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="RightWrong" type="Label" parent="Information"]
+[node name="RightWrong" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -186,9 +175,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -161.5
-offset_top = 279.0
+offset_top = 322.0
 offset_right = 161.5
-offset_bottom = 302.0
+offset_bottom = 345.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Right: 00 || Wrong: 00"
@@ -268,11 +257,32 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "<"
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 58.0
-offset_top = 320.0
-offset_right = 246.0
-offset_bottom = 369.0
-text = "Current time: 00:00:00
-Best time: 00:00:00"
+[node name="StopwatchLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -266.0
+offset_top = -255.0
+offset_right = -78.0
+offset_bottom = -232.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Current time: 00:00:00"
+
+[node name="BesttimeLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -266.0
+offset_top = -226.0
+offset_right = -78.0
+offset_bottom = -203.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Best time: 00:00:00"

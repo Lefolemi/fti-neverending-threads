@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://jojn6vgec4wb"]
+[gd_scene load_steps=3 format=3 uid="uid://jojn6vgec4wb"]
 
 [ext_resource type="Script" uid="uid://brdvq1a8ncfq7" path="res://scripts/quiz/main/quiz_main.gd" id="1_1sy5u"]
+[ext_resource type="Script" uid="uid://binrgky0b4m4h" path="res://scripts/quiz/utilities/jump_question.gd" id="2_dr0d3"]
 
 [node name="Quiz" type="Control"]
 layout_mode = 3
@@ -56,7 +57,7 @@ offset_right = 19.0
 offset_bottom = -503.0
 text = "Reset"
 
-[node name="Settings" type="Button" parent="Utilities"]
+[node name="SessionSettings" type="Button" parent="Utilities"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -69,7 +70,7 @@ offset_right = 69.0
 offset_bottom = 391.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Settings"
+text = "Session Settings"
 
 [node name="JumpQuestion" type="Button" parent="Utilities"]
 layout_mode = 1
@@ -99,8 +100,7 @@ offset_right = 60.0
 offset_bottom = -207.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Time
-000"
+text = "Time: --"
 horizontal_alignment = 1
 
 [node name="Page" type="Label" parent="."]
@@ -286,3 +286,103 @@ offset_bottom = -203.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Best time: 00:00:00"
+
+[node name="BGMenu" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="JumpMenu" type="GridContainer" parent="."]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.5
+offset_top = -363.0
+offset_right = 264.5
+offset_bottom = 363.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_dr0d3")
+
+[node name="TimerLabel" type="Label" parent="JumpMenu"]
+layout_mode = 2
+text = "Time: --"
+
+[node name="Content" type="PanelContainer" parent="JumpMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="JumpMenu/Content"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="JumpMenu/Content/Margin"]
+layout_mode = 2
+
+[node name="SearchQuestion" type="LineEdit" parent="JumpMenu/Content/Margin/VBox"]
+layout_mode = 2
+placeholder_text = "..."
+
+[node name="SearchStatus" type="Label" parent="JumpMenu/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="ShowHide" type="GridContainer" parent="JumpMenu/Content/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="ShowFlagged" type="CheckBox" parent="JumpMenu/Content/Margin/VBox/ShowHide"]
+layout_mode = 2
+button_pressed = true
+text = "Show flagged"
+
+[node name="ShowMarked" type="CheckBox" parent="JumpMenu/Content/Margin/VBox/ShowHide"]
+layout_mode = 2
+button_pressed = true
+text = "Show marked"
+
+[node name="ShowDone" type="CheckBox" parent="JumpMenu/Content/Margin/VBox/ShowHide"]
+layout_mode = 2
+button_pressed = true
+text = "Show answered"
+
+[node name="ShowNotDone" type="CheckBox" parent="JumpMenu/Content/Margin/VBox/ShowHide"]
+layout_mode = 2
+button_pressed = true
+text = "Show unanswered"
+
+[node name="Separator" type="HSeparator" parent="JumpMenu/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="Questions" type="ScrollContainer" parent="JumpMenu/Content/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="JumpMenu/Content/Margin/VBox/Questions"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Confirm" type="HBoxContainer" parent="JumpMenu"]
+layout_mode = 2
+alignment = 2
+
+[node name="Cancel" type="Button" parent="JumpMenu/Confirm"]
+layout_mode = 2
+text = "Cancel"

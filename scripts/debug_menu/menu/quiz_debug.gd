@@ -7,7 +7,7 @@ extends GridContainer
 @onready var to_spin: SpinBox = $Content/Margin/VBox/SetRange/ToSpin
 @onready var quiz_mode_opt: OptionButton = $Content/Margin/VBox/QuizMode
 @onready var timer_spin: SpinBox = $Content/Margin/VBox/SetTimerSpin
-@onready var result_mode_opt: OptionButton = $Content/Margin/VBox/ResultMode
+@onready var session_mode_opt: OptionButton = $Content/Margin/VBox/SessionMode
 
 # 2. Checkbox Options
 @onready var ck_pick_subset: SpinBox = $Content/Margin/VBox/OptionsGrid/HBox/PickSubset
@@ -56,7 +56,7 @@ func save_info() -> void:
 	# For Result Mode: OptionButton returns an Index (0, 1, 2).
 	# Since GVar.quiz_result_mode is a BOOL, we check if it's not the first option.
 	# (Assuming Index 0 = Normal/False, Index 1 = Immediate/True)
-	GVar.quiz_result_mode = bool(result_mode_opt.selected)
+	GVar.quiz_session_mode = bool(session_mode_opt.selected)
 
 	# 2. Save Boolean Options (Checkboxes)
 	GVar.quiz_subset_qty = ck_pick_subset.value

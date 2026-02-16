@@ -43,3 +43,7 @@
 0.0.10 :
 - the quiz session has been functional!!
 - most of core features in the quiz session also has been implemented too
+
+0.0.11 :
+- Result screen is now functional!
+- And session modes now also mostly functional.

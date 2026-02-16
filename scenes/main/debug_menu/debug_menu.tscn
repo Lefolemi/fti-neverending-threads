@@ -183,19 +183,19 @@ text = "Show question number"
 layout_mode = 2
 text = "Show score count"
 
-[node name="ResultModeLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
+[node name="SessionModeLabel" type="Label" parent="QuizDebug/Content/Margin/VBox"]
 layout_mode = 2
 text = "Result Mode"
 
-[node name="ResultMode" type="OptionButton" parent="QuizDebug/Content/Margin/VBox"]
+[node name="SessionMode" type="OptionButton" parent="QuizDebug/Content/Margin/VBox"]
 layout_mode = 2
 selected = 0
 item_count = 3
-popup/item_0/text = "Normal Result"
+popup/item_0/text = "Normal Mode"
 popup/item_0/id = 0
-popup/item_1/text = "Practice Result"
+popup/item_1/text = "Practice Mode"
 popup/item_1/id = 1
-popup/item_2/text = "Exam Result"
+popup/item_2/text = "Exam Mode"
 popup/item_2/id = 2
 
 [node name="Confirm" type="HBoxContainer" parent="QuizDebug"]

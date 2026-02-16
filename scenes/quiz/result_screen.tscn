@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://bgpkp2e2f2ygt"]
+[gd_scene load_steps=3 format=3 uid="uid://bgpkp2e2f2ygt"]
+
+[ext_resource type="Script" uid="uid://de0xy6jlwwwky" path="res://scripts/resultscreen/main/result_screen.gd" id="1_5lamp"]
+[ext_resource type="Script" uid="uid://dyogb42kb50w2" path="res://scripts/resultscreen/utilities/question_list.gd" id="2_emclk"]
 
 [node name="ResultScreen" type="Control"]
 layout_mode = 3
@@ -7,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_5lamp")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
@@ -16,9 +20,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -109.5
-offset_top = -482.0
+offset_top = -548.0
 offset_right = 109.5
-offset_bottom = -434.0
+offset_bottom = -500.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 30
@@ -26,7 +30,7 @@ text = "THE RESULT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Right" type="Label" parent="."]
+[node name="RightWrong" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -34,29 +38,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -119.0
-offset_top = -390.0
+offset_top = -456.0
 offset_right = 119.0
-offset_bottom = -356.0
+offset_bottom = -422.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Right: 0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Wrong" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -119.0
-offset_top = -327.0
-offset_right = 119.0
-offset_bottom = -293.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Wrong: 0"
+text = "Right: 0 || Wrong: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -68,9 +55,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -119.0
-offset_top = -277.0
+offset_top = -399.0
 offset_right = 119.0
-offset_bottom = -228.0
+offset_bottom = -350.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Score
@@ -86,15 +73,53 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -119.0
-offset_top = -190.0
+offset_top = -330.0
 offset_right = 119.0
-offset_bottom = -141.0
+offset_bottom = -281.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Your time: 00:00:00
 Best time: 00:00:00"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Grade" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -119.0
+offset_top = -267.0
+offset_right = 119.0
+offset_bottom = -218.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 25
+text = "A+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuestionList" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -238.5
+offset_top = -145.0
+offset_right = 238.5
+offset_bottom = 145.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_emclk")
+
+[node name="VBox" type="VBoxContainer" parent="QuestionList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Comment" type="Label" parent="."]
 layout_mode = 1
@@ -104,9 +129,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -145.0
-offset_top = -18.0
+offset_top = 161.0
 offset_right = 145.0
-offset_bottom = 123.0
+offset_bottom = 249.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "..."
@@ -128,7 +153,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Retry"
 
-[node name="BacktoMenu" type="Button" parent="."]
+[node name="BackToMenu" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

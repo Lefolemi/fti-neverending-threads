@@ -11,7 +11,7 @@ func show_menu(node: String):
 
 func _on_quiz_debug_button_pressed() -> void:
 	show_menu("QuizDebug");
-	
+
 func _on_current_info_button_pressed() -> void:
 	show_menu("CurrentInformation");
 

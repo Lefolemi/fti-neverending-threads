@@ -27,6 +27,9 @@ extends Control
 @onready var btn_next: Button = $Function/Next
 @onready var btn_prev: Button = $Function/Previous
 
+# Jump Menu
+@onready var jump_menu: GridContainer = $JumpMenu
+
 # --- Data Structure ---
 var _question_deck: Array = []
 var _current_index: int = 0
@@ -59,6 +62,7 @@ func _ready() -> void:
 	btn_flag.pressed.connect(_on_flag_pressed)
 	btn_mark.pressed.connect(_on_mark_pressed)
 	btn_finish.pressed.connect(_on_finish_pressed)
+	btn_jump.pressed.connect(_on_jump_button_pressed) 
 	
 	# 4. Start
 	if _question_deck.size() > 0:
@@ -78,7 +82,6 @@ func _process(delta: float) -> void:
 	
 	# Quiz Timer (Countdown)
 	if GVar.current_quiz_timer > 0:
-		# If Quizizz mode, only count down if we haven't answered yet
 		if _quiz_mode == 0 and _quizizz_answered:
 			pass
 		else:
@@ -87,6 +90,10 @@ func _process(delta: float) -> void:
 				_timer_val = 0
 				_on_timer_finished()
 			_update_timer_label()
+
+func _on_jump_button_pressed() -> void:
+	if jump_menu:
+		jump_menu.open_menu()
 
 # --- CORE 1: Data Loading ---
 func _load_quiz_data() -> void:
@@ -100,9 +107,6 @@ func _load_quiz_data() -> void:
 	var marked_questions = [] # Stores only marked ones
 	
 	var header = file.get_csv_line() # Skip Header
-	
-	# We track the actual line number in the file (0 is header, 1 is first Q)
-	# This is crucial for saving data back to the correct line later.
 	var file_line_idx = 1 
 	
 	while not file.eof_reached():
@@ -112,7 +116,6 @@ func _load_quiz_data() -> void:
 			continue 
 		
 		# Check Range
-		# Note: We use file_line_idx - 1 because your range assumes 0-based index for questions
 		var logical_index = file_line_idx - 1
 		if logical_index >= GVar.set_range_from and logical_index <= GVar.set_range_to:
 			
@@ -145,8 +148,6 @@ func _load_quiz_data() -> void:
 		file_line_idx += 1
 	
 	# --- SELECTION LOGIC ---
-	
-	# 1. Decide which pool to use (Marked vs All)
 	var target_pool = []
 	
 	if GVar.quiz_only_show_marked:
@@ -158,7 +159,7 @@ func _load_quiz_data() -> void:
 	else:
 		target_pool = valid_questions
 		
-	# 2. Handle Subset / Shuffle
+	# Handle Subset / Shuffle
 	if GVar.quiz_subset_qty > 0 and GVar.quiz_subset_qty < target_pool.size():
 		target_pool.shuffle()
 		_question_deck = target_pool.slice(0, GVar.quiz_subset_qty)
@@ -175,7 +176,7 @@ func _setup_ui_mode() -> void:
 	page_label.visible = GVar.quiz_show_question_number
 	timer_label.visible = (GVar.current_quiz_timer > 0)
 	
-	# [FIXED] Score Count Visibility & Initial Text
+	# Score Count Visibility
 	right_wrong_label.visible = GVar.quiz_score_count
 	_update_score_label()
 	
@@ -207,35 +208,38 @@ func _load_question_ui(idx: int) -> void:
 	question_label.text = data["q_text"] if not GVar.quiz_hide_questions else "???"
 	page_label.text = "Q%d / Q%d" % [idx + 1, _question_deck.size()]
 	
-	# [FIXED] Clear "Correct/Wrong" text if Score Count is off
 	if not GVar.quiz_score_count:
 		right_wrong_label.text = "" 
 	
 	# 2. Options Buttons
 	for i in range(4):
 		var btn = btn_answers[i]
-		var opt_data = data["options"][i]
-		
-		btn.text = opt_data["text"] if not GVar.quiz_hide_answers else "???"
-		btn.disabled = false
-		btn.modulate = Color.WHITE
-		
-		# VISUAL STATE RESTORATION
-		if _quiz_mode == 1: # Elearning
-			if data["user_answer"] == i:
-				btn.modulate = Color(1, 1, 0)
-		
-		elif _quiz_mode == 0: # Quizizz
-			if data["is_locked"]:
-				btn.disabled = true
-				if opt_data["is_correct"]:
-					btn.modulate = Color.GREEN
-				elif data["user_answer"] == i:
-					btn.modulate = Color.RED
-				
-				# [FIXED] If user timed out (answer is -1), still show the Green Answer
-				if data["user_answer"] == -1 and opt_data["is_correct"]:
-					btn.modulate = Color.GREEN
+		# Safety check for range
+		if i < data["options"].size():
+			var opt_data = data["options"][i]
+			
+			btn.text = opt_data["text"] if not GVar.quiz_hide_answers else "???"
+			btn.disabled = false
+			btn.modulate = Color.WHITE
+			btn.show()
+			
+			# VISUAL STATE RESTORATION
+			if _quiz_mode == 1: # Elearning
+				if data["user_answer"] == i:
+					btn.modulate = Color(1, 1, 0)
+			
+			elif _quiz_mode == 0: # Quizizz
+				if data["is_locked"]:
+					btn.disabled = true
+					if opt_data["is_correct"]:
+						btn.modulate = Color.GREEN
+					elif data["user_answer"] == i:
+						btn.modulate = Color.RED
+					
+					if data["user_answer"] == -1 and opt_data["is_correct"]:
+						btn.modulate = Color.GREEN
+		else:
+			btn.hide()
 
 	# 3. Nav Buttons State
 	_update_nav_buttons()
@@ -259,14 +263,14 @@ func _on_answer_pressed(btn_idx: int) -> void:
 		
 		var is_correct = data["options"][btn_idx]["is_correct"]
 		
-		# [FIXED] Update Score variables
+		# Update Score variables
 		if is_correct:
 			_score_right += 1
 		else:
 			_score_wrong += 1
 		_update_score_label()
 		
-		# Feedback Text (Always show Correct/Wrong text even if scoreboard is off)
+		# Feedback Text
 		right_wrong_label.text = "CORRECT!" if is_correct else "WRONG!"
 		right_wrong_label.modulate = Color.GREEN if is_correct else Color.RED
 		
@@ -302,85 +306,104 @@ func _on_flag_pressed() -> void:
 
 func _on_mark_pressed() -> void:
 	var data = _question_deck[_current_index]
-	
-	# Toggle state in memory
 	data["marked"] = !data["marked"]
-	
-	# Update Visuals
 	btn_mark.modulate = Color.YELLOW if data["marked"] else Color.WHITE
-	
-	# SAVE TO CSV
 	_update_csv_mark(data["csv_line_index"], data["marked"])
 
 func _update_csv_mark(line_index: int, new_state: bool) -> void:
 	var path = "res://resources/csv/" + GVar.current_csv
-	
-	# 1. Read the ENTIRE file into memory
 	var file_read = FileAccess.open(path, FileAccess.READ)
-	if not file_read:
-		push_error("Could not open CSV for writing: " + path)
-		return
+	if not file_read: return
 		
 	var lines = []
 	while not file_read.eof_reached():
-		# Get raw array of columns
 		var csv_row = file_read.get_csv_line()
-		if csv_row.size() > 0: # Skip completely empty EOF lines
-			lines.append(csv_row)
-	
+		if csv_row.size() > 0: lines.append(csv_row)
 	file_read.close()
 	
-	# 2. Modify the specific line
-	# Safety check: ensure index exists
 	if line_index < lines.size():
 		var target_row = lines[line_index]
-		# Ensure row has enough columns (at least 6)
 		if target_row.size() >= 6:
 			target_row[5] = "1" if new_state else "0"
 			lines[line_index] = target_row
 	
-	# 3. Rewrite the file
 	var file_write = FileAccess.open(path, FileAccess.WRITE)
 	for row in lines:
-		# Write back using comma separation
-		# Note: StoreString is safer than store_csv_line for precise control, 
-		# but store_csv_line handles quotes automatically.
 		file_write.store_csv_line(row)
-	
 	file_write.close()
-	print("Saved Mark status for Line ", line_index, " to: ", new_state)
+
+# --- FINISH & RESULTS (UPDATED) ---
 
 func _on_finish_pressed() -> void:
 	_is_quiz_active = false
-	print("Quiz Finished! Final Score: ", _score_right, " Right, ", _score_wrong, " Wrong.")
-	# Load Result Scene Here
+	print("Quiz Finished! Calculating Results...")
+	
+	# 1. Build History Data for GVar
+	var history_data = []
+	var final_correct_count = 0
+	
+	for q in _question_deck:
+		var user_ans_text = "No Answer"
+		if q["user_answer"] != -1:
+			if q["user_answer"] < q["options"].size():
+				user_ans_text = q["options"][q["user_answer"]]["text"]
+			
+		var correct_ans_text = ""
+		var is_correct = false
+		
+		# Find correct option
+		for opt in q["options"]:
+			if opt["is_correct"]:
+				correct_ans_text = opt["text"]
+				if q["user_answer"] != -1:
+					if q["options"][q["user_answer"]] == opt:
+						is_correct = true
+		
+		if is_correct: final_correct_count += 1
+		
+		history_data.append({
+			"q_text": q["q_text"],
+			"user_ans_text": user_ans_text,
+			"correct_ans_text": correct_ans_text,
+			"is_correct": is_correct,
+			"csv_line_index": q["csv_line_index"],
+			"marked": q["marked"]
+		})
+
+	# 2. Populate GLOBAL VARIABLES
+	GVar.quiz_total_questions = _question_deck.size()
+	GVar.quiz_correct_count = final_correct_count
+	GVar.quiz_history = history_data
+	
+	# Time Taken Logic
+	if GVar.quiz_allow_stopwatch:
+		GVar.quiz_time_taken = _stopwatch_val
+	else:
+		GVar.quiz_time_taken = _stopwatch_val # Simplified
+
+	# 3. Transition to Result Screen
+	Load.load_res(["res://scenes/quiz/result_screen.tscn"], "res://scenes/quiz/result_screen.tscn")
 
 # --- TIMERS ---
 
 func _on_timer_finished() -> void:
 	if _quiz_mode == 0:
-		# Quizizz Time Up!
 		if not _quizizz_answered:
 			var data = _question_deck[_current_index]
 			data["is_locked"] = true
-			data["user_answer"] = -1 # No answer given
+			data["user_answer"] = -1 
 			_quizizz_answered = true
 			
-			# [FIXED] Count as Wrong
 			_score_wrong += 1
 			_update_score_label()
 			
 			right_wrong_label.text = "TIME UP!"
 			right_wrong_label.modulate = Color.RED
 			
-			# Show Correct Answer (Green)
 			_load_question_ui(_current_index)
-			
-			# Wait and Next
 			await get_tree().create_timer(2.0).timeout
 			_try_go_next()
 	else:
-		# Elearning Time Up! (Force Finish)
 		_on_finish_pressed()
 
 func _update_timer_label() -> void:
@@ -389,32 +412,24 @@ func _update_timer_label() -> void:
 	timer_label.text = "%02d:%02d" % [mins, secs]
 
 func _update_stopwatch_label() -> void:
-	# [FIXED] Hours, Minutes, Seconds format
 	var total_sec = int(_stopwatch_val)
 	var hrs = total_sec / 3600
 	var mins = (total_sec % 3600) / 60
 	var secs = total_sec % 60
 	stopwatch_label.text = "Current time: %02d:%02d:%02d" % [hrs, mins, secs]
 
-# [NEW] Helper for Score Label
 func _update_score_label() -> void:
 	if GVar.quiz_score_count:
 		right_wrong_label.text = "Right: %d || Wrong: %d" % [_score_right, _score_wrong]
 	else:
-		# If Score Count is OFF, we leave the text empty 
-		# (It will be temporarily overwritten by "CORRECT!"/"WRONG!" in quizizz mode)
-		if _quiz_mode == 1: # In Elearning, just keep it empty
+		if _quiz_mode == 1: 
 			right_wrong_label.text = ""
 
 func _update_nav_buttons() -> void:
-	# 1. Update Visual Status (Mark/Flag) - Runs in ALL MODES
-	# This ensures the button turns Yellow immediately if the loaded question is marked
 	var data = _question_deck[_current_index]
-	
 	btn_mark.modulate = Color.YELLOW if data["marked"] else Color.WHITE
 	btn_flag.modulate = Color.RED if data["flagged"] else Color.WHITE
 
-	# 2. Update Navigation Enable/Disable (E-Learning Mode Only)
 	if _quiz_mode == 1:
 		btn_prev.disabled = (_current_index == 0)
 		btn_next.disabled = (_current_index == _question_deck.size() - 1)

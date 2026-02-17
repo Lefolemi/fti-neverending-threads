@@ -35,7 +35,7 @@ func _refresh_display():
 	txt += "Range: %d - %d\n" % [GVar.set_range_from, GVar.set_range_to]
 	txt += "Quiz Mode: %d\n" % GVar.current_quiz_mode
 	txt += "Timer: %ds\n" % GVar.current_quiz_timer
-	txt += "Result Mode: %s\n" % ("Immediate" if GVar.quiz_result_mode else "Normal")
+	txt += "Session Mode: %s\n" % ("Immediate" if GVar.quiz_session_mode else "Normal")
 	txt += "\n"
 	
 	txt += "[b][u]QUIZ FLAGS[/u][/b]\n"

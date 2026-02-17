@@ -78,5 +78,6 @@ func _on_save_pressed() -> void:
 
 func _on_start_pressed() -> void:
 	save_info();
+	GVar.last_scene = owner.scene_file_path
 
 	Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")

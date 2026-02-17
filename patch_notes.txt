@@ -47,3 +47,8 @@
 0.0.11 :
 - Result screen is now functional!
 - And session modes now also mostly functional.
+- session settings are now functional!
+
+0.0.12 :
+- added paraphrasing in quiz
+- sooo many life quality changes

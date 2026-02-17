@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://jojn6vgec4wb"]
+[gd_scene load_steps=7 format=3 uid="uid://jojn6vgec4wb"]
 
 [ext_resource type="Script" uid="uid://brdvq1a8ncfq7" path="res://scripts/quiz/main/quiz_main.gd" id="1_1sy5u"]
+[ext_resource type="Script" uid="uid://wmtc1nxqu0fm" path="res://scripts/quiz/components/utilities.gd" id="2_5blnm"]
 [ext_resource type="Script" uid="uid://binrgky0b4m4h" path="res://scripts/quiz/utilities/jump_question.gd" id="2_dr0d3"]
+[ext_resource type="Script" uid="uid://b1gwrupqij6sp" path="res://scripts/quiz/components/answers.gd" id="2_hfa3x"]
+[ext_resource type="Script" uid="uid://c228pr1dmov1r" path="res://scripts/quiz/utilities/session_settings.gd" id="3_4rysn"]
+[ext_resource type="Script" uid="uid://c2j7ijofxxyh6" path="res://scripts/quiz/components/function.gd" id="3_880dy"]
 
 [node name="Quiz" type="Control"]
 layout_mode = 3
@@ -40,6 +44,7 @@ offset_right = 20.0
 offset_bottom = 67.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_5blnm")
 
 [node name="Finish" type="Button" parent="Utilities"]
 layout_mode = 0
@@ -49,15 +54,15 @@ offset_right = -126.0
 offset_bottom = -503.0
 text = "Finish"
 
-[node name="Reset" type="Button" parent="Utilities"]
+[node name="Restart" type="Button" parent="Utilities"]
 layout_mode = 0
 offset_left = -119.0
 offset_top = -542.0
 offset_right = 19.0
 offset_bottom = -503.0
-text = "Reset"
+text = "Restart"
 
-[node name="SessionSettings" type="Button" parent="Utilities"]
+[node name="SessionSettingsButton" type="Button" parent="Utilities"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -100,7 +105,7 @@ offset_right = 60.0
 offset_bottom = -207.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Time: --"
+text = "--"
 horizontal_alignment = 1
 
 [node name="Page" type="Label" parent="."]
@@ -132,6 +137,7 @@ offset_right = 267.0
 offset_bottom = 296.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_hfa3x")
 
 [node name="VBox" type="VBoxContainer" parent="Answers"]
 layout_mode = 2
@@ -196,6 +202,7 @@ offset_right = 20.0
 offset_bottom = 67.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_880dy")
 
 [node name="Flag" type="Button" parent="Function"]
 layout_mode = 1
@@ -384,5 +391,105 @@ layout_mode = 2
 alignment = 2
 
 [node name="Cancel" type="Button" parent="JumpMenu/Confirm"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="SessionSettings" type="GridContainer" parent="."]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.5
+offset_top = -363.0
+offset_right = 264.5
+offset_bottom = 363.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_4rysn")
+
+[node name="Content" type="PanelContainer" parent="SessionSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="SessionSettings/Content"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="SessionSettings/Content/Margin"]
+layout_mode = 2
+
+[node name="QuizModeLabel" type="Label" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+text = "Quiz Mode"
+
+[node name="QuizMode" type="OptionButton" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Quizizz Mode"
+popup/item_0/id = 0
+popup/item_1/text = "Elearning Mode"
+popup/item_1/id = 1
+
+[node name="SetTimerLabel" type="Label" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+text = "Set Timer"
+
+[node name="SetTimerSpin" type="SpinBox" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="SetTimerNote1" type="Label" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+text = "* Note: The timer in Quizizz Mode applies per question."
+
+[node name="OptionsLabel" type="Label" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+text = "Options"
+
+[node name="OptionsGrid" type="GridContainer" parent="SessionSettings/Content/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="RandomizeSet" type="CheckBox" parent="SessionSettings/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Randomize set"
+
+[node name="OnlyShowMarked" type="CheckBox" parent="SessionSettings/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Only show marked"
+
+[node name="HideQuestions" type="CheckBox" parent="SessionSettings/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hide questions"
+
+[node name="HideAnswers" type="CheckBox" parent="SessionSettings/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hide answers"
+
+[node name="ShowQuestionNumber" type="CheckBox" parent="SessionSettings/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Show question number"
+
+[node name="ShowScoreCount" type="CheckBox" parent="SessionSettings/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Show score count"
+
+[node name="Confirm" type="HBoxContainer" parent="SessionSettings"]
+layout_mode = 2
+alignment = 2
+
+[node name="Restart" type="Button" parent="SessionSettings/Confirm"]
+layout_mode = 2
+text = "Apply & Restart"
+
+[node name="Cancel" type="Button" parent="SessionSettings/Confirm"]
 layout_mode = 2
 text = "Cancel"

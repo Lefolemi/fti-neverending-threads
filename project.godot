@@ -20,6 +20,8 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 GConst="*res://scripts/global/vars/global_constant.gd"
 GVar="*res://scripts/global/vars/global_variable.gd"
 Load="*res://scripts/global/loading/loading.gd"
+ThemeEngine="*res://scripts/global/settings/theme_engine.gd"
+Audio="*res://scenes/global/audio/audio.tscn"
 
 [display]
 

@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://gt3kp25qfgdr"]
+[gd_scene load_steps=3 format=3 uid="uid://gt3kp25qfgdr"]
+
+[ext_resource type="Texture2D" uid="uid://ceyo2sy33w5h8" path="res://sprites/bg_thumbnail/tmb_1.png" id="1_50py4"]
+[ext_resource type="Texture2D" uid="uid://bsyms88wndpo3" path="res://sprites/bg_thumbnail/tmb_2.png" id="2_4w4oy"]
 
 [node name="Background" type="ScrollContainer"]
 anchors_preset = 15
@@ -73,9 +76,11 @@ columns = 5
 
 [node name="Wallpaper1" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
 layout_mode = 2
+texture_normal = ExtResource("1_50py4")
 
 [node name="Wallpaper2" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
 layout_mode = 2
+texture_normal = ExtResource("2_4w4oy")
 
 [node name="Wallpaper3" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
 layout_mode = 2
@@ -99,6 +104,48 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Wallpaper10" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper11" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper12" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper13" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper14" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper15" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper16" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper17" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper18" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper19" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper20" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper21" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper22" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper23" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
+layout_mode = 2
+
+[node name="Wallpaper24" type="TextureButton" parent="Margin/Vbox/WallpaperGrid"]
 layout_mode = 2
 
 [node name="Separator2" type="HSeparator" parent="Margin/Vbox"]

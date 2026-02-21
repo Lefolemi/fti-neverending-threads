@@ -52,3 +52,9 @@
 0.0.12 :
 - added paraphrasing in quiz
 - sooo many life quality changes
+
+0.0.13 :
+- added UI theme settings in General settings
+- added UI theme color changing system
+- added music and sfx
+- added Audio AutoLoad system

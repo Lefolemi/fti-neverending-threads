@@ -1,5 +1,9 @@
 extends Node
 
+# Game Information
+var current_credits: int = 0;
+var current_background_color: Color = Color("2b2b2b")
+
 # General Information
 var current_matkul: int = 0;
 var current_mode: int = 0;

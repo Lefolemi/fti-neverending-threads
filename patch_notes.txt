@@ -67,3 +67,7 @@
 0.0.15 :
 - added shop system
 - added preview in shop system
+
+0.0.16 :
+- added statistics UI
+- make statistics UI (kind of) usable

@@ -19,100 +19,104 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Vbox" type="VBoxContainer" parent="Margin"]
+[node name="VBox" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SoundLabel" type="Label" parent="Margin/Vbox"]
+[node name="MusicLabel" type="Label" parent="Margin/VBox"]
 layout_mode = 2
-text = "Sound effect"
+text = "Music"
 
-[node name="SoundSlider" type="HSlider" parent="Margin/Vbox"]
-layout_mode = 2
-mouse_filter = 1
-
-[node name="MusicLabel" type="Label" parent="Margin/Vbox"]
-layout_mode = 2
-text = "Sound effect"
-
-[node name="MusicSlider" type="HSlider" parent="Margin/Vbox"]
+[node name="MusicSlider" type="HSlider" parent="Margin/VBox"]
 layout_mode = 2
 mouse_filter = 1
+max_value = 1.0
+step = 0.1
 
-[node name="UIColorLabel" type="Label" parent="Margin/Vbox"]
+[node name="SoundLabel" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+text = "Sound Effect"
+
+[node name="SoundSlider" type="HSlider" parent="Margin/VBox"]
+layout_mode = 2
+mouse_filter = 1
+max_value = 1.0
+step = 0.1
+
+[node name="UIColorLabel" type="Label" parent="Margin/VBox"]
 layout_mode = 2
 text = "UI Color"
 
-[node name="UIColorGrid" type="GridContainer" parent="Margin/Vbox"]
+[node name="UIColorGrid" type="GridContainer" parent="Margin/VBox"]
 layout_mode = 2
 columns = 4
 
-[node name="ThemeOptionsLabel" type="Label" parent="Margin/Vbox"]
+[node name="ThemeOptionsLabel" type="Label" parent="Margin/VBox"]
 layout_mode = 2
 text = "Theme Options"
 
-[node name="ThemeOptions" type="GridContainer" parent="Margin/Vbox"]
+[node name="ThemeOptions" type="GridContainer" parent="Margin/VBox"]
 layout_mode = 2
 
-[node name="InvertUIColor" type="CheckBox" parent="Margin/Vbox/ThemeOptions"]
+[node name="InvertUIColor" type="CheckBox" parent="Margin/VBox/ThemeOptions"]
 layout_mode = 2
 text = "Invert UI Color"
 
-[node name="CurvedBorders" type="CheckBox" parent="Margin/Vbox/ThemeOptions"]
+[node name="CurvedBorders" type="CheckBox" parent="Margin/VBox/ThemeOptions"]
 layout_mode = 2
 text = "Curved Borders"
 
-[node name="UIShadow" type="CheckBox" parent="Margin/Vbox/ThemeOptions"]
+[node name="UIShadow" type="CheckBox" parent="Margin/VBox/ThemeOptions"]
 layout_mode = 2
 text = "UI Shadow"
 
-[node name="SetLabel" type="Label" parent="Margin/Vbox"]
+[node name="SetLabel" type="Label" parent="Margin/VBox"]
 layout_mode = 2
 text = "Set"
 
-[node name="SetList" type="GridContainer" parent="Margin/Vbox"]
+[node name="SetList" type="GridContainer" parent="Margin/VBox"]
 layout_mode = 2
 columns = 3
 
-[node name="Set1" type="Button" parent="Margin/Vbox/SetList"]
+[node name="Set1" type="Button" parent="Margin/VBox/SetList"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 1
 "
 
-[node name="Set2" type="Button" parent="Margin/Vbox/SetList"]
+[node name="Set2" type="Button" parent="Margin/VBox/SetList"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 2"
 
-[node name="Set3" type="Button" parent="Margin/Vbox/SetList"]
+[node name="Set3" type="Button" parent="Margin/VBox/SetList"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 3"
 
-[node name="Set4" type="Button" parent="Margin/Vbox/SetList"]
+[node name="Set4" type="Button" parent="Margin/VBox/SetList"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 4"
 
-[node name="Set5" type="Button" parent="Margin/Vbox/SetList"]
+[node name="Set5" type="Button" parent="Margin/VBox/SetList"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 5"
 
-[node name="Set6" type="Button" parent="Margin/Vbox/SetList"]
+[node name="Set6" type="Button" parent="Margin/VBox/SetList"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 6"
 
-[node name="ResetSet" type="Button" parent="Margin/Vbox"]
+[node name="ResetSet" type="Button" parent="Margin/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1

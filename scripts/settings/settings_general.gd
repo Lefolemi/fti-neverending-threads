@@ -1,9 +1,13 @@
 extends ScrollContainer
 
-@onready var color_grid: GridContainer = $Margin/Vbox/UIColorGrid
-@onready var chk_curved: CheckBox = $Margin/Vbox/ThemeOptions/CurvedBorders
-@onready var chk_shadow: CheckBox = $Margin/Vbox/ThemeOptions/UIShadow
-@onready var chk_invert: CheckBox = $Margin/Vbox/ThemeOptions/InvertUIColor
+@onready var color_grid: GridContainer = $Margin/VBox/UIColorGrid
+@onready var chk_curved: CheckBox = $Margin/VBox/ThemeOptions/CurvedBorders
+@onready var chk_shadow: CheckBox = $Margin/VBox/ThemeOptions/UIShadow
+@onready var chk_invert: CheckBox = $Margin/VBox/ThemeOptions/InvertUIColor
+
+# --- NEW: Audio Sliders ---
+@onready var slider_music: Slider = $Margin/VBox/MusicSlider
+@onready var slider_sfx: Slider = $Margin/VBox/SoundSlider
 
 # Track the currently selected label to reset its color
 var current_selected_label: Label = null
@@ -25,21 +29,30 @@ const COLOR_PALETTE = {
 }
 
 func _ready() -> void:
-	# 1. Setup Checkboxes based on current ThemeEngine state
+	# 1. Setup Checkboxes
 	chk_curved.button_pressed = ThemeEngine.use_curves
 	chk_shadow.button_pressed = ThemeEngine.use_shadows
-	chk_invert.button_pressed = ThemeEngine.use_light_mode # WE WILL ADD THIS TO ENGINE
+	chk_invert.button_pressed = ThemeEngine.use_light_mode 
 	
 	# Connect checkbox signals
 	chk_curved.toggled.connect(_on_curved_toggled)
 	chk_shadow.toggled.connect(_on_shadow_toggled)
 	chk_invert.toggled.connect(_on_invert_toggled)
 	
-	# 2. Clean any editor junk in the grid
+	# 2. Setup Audio Sliders from GVar
+	# Make sure your GVar has: var music_volume: float = 1.0 and sfx_volume: float = 1.0
+	slider_music.value = GVar.music_volume
+	slider_sfx.value = GVar.sfx_volume
+	
+	# Connect slider signals
+	slider_music.value_changed.connect(_on_music_changed)
+	slider_sfx.value_changed.connect(_on_sfx_changed)
+	
+	# 3. Clean any editor junk in the grid
 	for child in color_grid.get_children():
 		child.queue_free()
 	
-	# 3. Generate the 12 buttons
+	# 4. Generate the 12 buttons
 	for color_name in COLOR_PALETTE.keys():
 		_create_color_button(color_name, COLOR_PALETTE[color_name])
 
@@ -68,7 +81,6 @@ func _create_color_button(c_name: String, c_value: Color) -> void:
 	lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.add_child(lbl)
 	
-	# Automatically highlight the button if it matches the current theme
 	if c_value.is_equal_approx(ThemeEngine.current_background_color):
 		lbl.add_theme_color_override("font_color", Color.YELLOW)
 		current_selected_label = lbl
@@ -99,3 +111,34 @@ func _on_shadow_toggled(toggled_on: bool) -> void:
 func _on_invert_toggled(toggled_on: bool) -> void:
 	ThemeEngine.use_light_mode = toggled_on
 	ThemeEngine.refresh_theme(ThemeEngine.current_background_color)
+
+# --- NEW: Audio Interactions ---
+
+func _on_music_changed(value: float) -> void:
+	GVar.music_volume = value
+	var bus_idx = AudioServer.get_bus_index("Music")
+	
+	if bus_idx == -1: return
+	
+	# value = 1.0 (100%) -> 0 dB (Full original volume)
+	# value = 0.5 (50%)  -> -6 dB (Half perceived volume)
+	# value = 0.0 (0%)   -> -80 dB (Silent)
+	
+	if value <= 0.001:
+		AudioServer.set_bus_mute(bus_idx, true)
+	else:
+		AudioServer.set_bus_mute(bus_idx, false)
+		# This ensures 1.0 is the ceiling, not a starting point for boosting
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(value))
+
+func _on_sfx_changed(value: float) -> void:
+	GVar.sfx_volume = value
+	var bus_idx = AudioServer.get_bus_index("SFX")
+	
+	if bus_idx == -1: return
+	
+	if value <= 0.001:
+		AudioServer.set_bus_mute(bus_idx, true)
+	else:
+		AudioServer.set_bus_mute(bus_idx, false)
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(value))

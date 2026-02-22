@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhgrbt14bg60n"]
+[gd_scene load_steps=8 format=3 uid="uid://dhgrbt14bg60n"]
 
 [ext_resource type="Script" uid="uid://bvmaty5rslu0k" path="res://scripts/main_menu/utilities/version.gd" id="1_0kd0q"]
 [ext_resource type="Script" uid="uid://ckptwfw4gjrrd" path="res://scripts/main_menu/main/main_menu.gd" id="1_r7wpq"]
 [ext_resource type="PackedScene" uid="uid://btccjgt5e7jvc" path="res://scenes/main/main_menu/matkul_container.tscn" id="2_r7wpq"]
 [ext_resource type="PackedScene" uid="uid://d12ccl3c5de7q" path="res://scenes/main/main_menu/course_container.tscn" id="3_k0ycp"]
 [ext_resource type="Script" uid="uid://dv8c8rwy71l1d" path="res://scripts/main_menu/utilities/menu_page.gd" id="4_k0ycp"]
+[ext_resource type="Script" uid="uid://peqnp4rypx7p" path="res://scripts/main_menu/utilities/utility_container.gd" id="6_scmgr"]
 [ext_resource type="Script" uid="uid://dxu5q5551ot1" path="res://scripts/main_menu/utilities/debug_mode.gd" id="6_svxau"]
 
 [node name="MainMenu" type="Control"]
@@ -158,6 +159,7 @@ offset_bottom = 432.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
+script = ExtResource("6_scmgr")
 
 [node name="VBox" type="VBoxContainer" parent="UtilityContainer"]
 layout_mode = 2

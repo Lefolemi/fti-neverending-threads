@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7r3i5w2jbao"]
+
+[ext_resource type="Shader" uid="uid://ch7n7be8o60ea" path="res://resources/shader/bg/background.gdshader" id="1_467iq"]
+[ext_resource type="Script" uid="uid://dojsvpw57lil" path="res://scripts/global/bg/background.gd" id="1_n8x1i"]
+[ext_resource type="Texture2D" uid="uid://bn4qphf8rpim3" path="res://sprites/bg/bg_24.png" id="3_n8x1i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8x1i"]
+shader = ExtResource("1_467iq")
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/opacity = 1.0
+shader_parameter/velocity = Vector2(0, 0)
+shader_parameter/scale = 1.0
+shader_parameter/warp_strength = 0.0
+shader_parameter/warp_speed = 1.5
+
+[node name="BG" type="CanvasLayer"]
+layer = -10
+script = ExtResource("1_n8x1i")
+
+[node name="Wallpaper" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_n8x1i")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_n8x1i")
+stretch_mode = 1

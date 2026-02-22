@@ -38,133 +38,133 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="Shop1" type="VBoxContainer" parent="Content/Scroll/VBox"]
+[node name="WallpaperShop" type="VBoxContainer" parent="Content/Scroll/VBox"]
 layout_mode = 2
 
-[node name="WallpaperLabel" type="Label" parent="Content/Scroll/VBox/Shop1"]
+[node name="WallpaperLabel" type="Label" parent="Content/Scroll/VBox/WallpaperShop"]
 layout_mode = 2
 text = "Wallpaper"
 horizontal_alignment = 1
 
-[node name="WallpaperGrid" type="GridContainer" parent="Content/Scroll/VBox/Shop1"]
+[node name="WallpaperGrid" type="GridContainer" parent="Content/Scroll/VBox/WallpaperShop"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/h_separation = 60
 columns = 3
 
-[node name="Item1" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item1" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item1"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item1"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item1"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item1"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item2" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item2" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item2"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item2"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item2"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item2"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item3" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item3" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item3"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item3"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item3"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item3"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item4" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item4" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item4"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item4"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item4"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item4"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item5" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item5" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item5"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item5"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item5"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item5"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item6" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item6" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item6"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item6"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item6"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item6"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item7" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item7" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item7"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item7"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item7"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item7"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item8" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item8" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item8"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item8"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item8"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item8"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item9" type="VBoxContainer" parent="Content/Scroll/VBox/Shop1/WallpaperGrid"]
+[node name="Item9" type="VBoxContainer" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item9"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item9"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop1/WallpaperGrid/Item9"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/WallpaperShop/WallpaperGrid/Item9"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
@@ -172,94 +172,94 @@ horizontal_alignment = 1
 [node name="Separator1" type="HSeparator" parent="Content/Scroll/VBox"]
 layout_mode = 2
 
-[node name="Shop2" type="VBoxContainer" parent="Content/Scroll/VBox"]
+[node name="UIColorShop" type="VBoxContainer" parent="Content/Scroll/VBox"]
 layout_mode = 2
 
-[node name="ColorThemeLabel" type="Label" parent="Content/Scroll/VBox/Shop2"]
+[node name="ColorThemeLabel" type="Label" parent="Content/Scroll/VBox/UIColorShop"]
 layout_mode = 2
-text = "Color Theme"
+text = "UI Color Theme"
 horizontal_alignment = 1
 
-[node name="ColorThemeGrid" type="GridContainer" parent="Content/Scroll/VBox/Shop2"]
+[node name="ColorThemeGrid" type="GridContainer" parent="Content/Scroll/VBox/UIColorShop"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/h_separation = 60
 columns = 3
 
-[node name="Item1" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid"]
+[node name="Item1" type="VBoxContainer" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item1"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item1"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item1"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item1"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item2" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid"]
+[node name="Item2" type="VBoxContainer" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item2"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item2"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item2"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item2"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item3" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid"]
+[node name="Item3" type="VBoxContainer" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item3"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item3"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item3"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item3"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item4" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid"]
+[node name="Item4" type="VBoxContainer" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item4"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item4"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item4"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item4"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item5" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid"]
+[node name="Item5" type="VBoxContainer" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item5"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item5"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item5"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item5"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1
 
-[node name="Item6" type="VBoxContainer" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid"]
+[node name="Item6" type="VBoxContainer" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid"]
 layout_mode = 2
 
-[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item6"]
+[node name="Item" type="TextureButton" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item6"]
 layout_mode = 2
 texture_normal = SubResource("NoiseTexture2D_r3mde")
 stretch_mode = 6
 
-[node name="Label" type="Label" parent="Content/Scroll/VBox/Shop2/ColorThemeGrid/Item6"]
+[node name="Label" type="Label" parent="Content/Scroll/VBox/UIColorShop/ColorThemeGrid/Item6"]
 layout_mode = 2
 text = "Wallpaper 1"
 horizontal_alignment = 1

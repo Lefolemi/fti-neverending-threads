@@ -58,3 +58,8 @@
 - added UI theme color changing system
 - added music and sfx
 - added Audio AutoLoad system
+
+0.0.14 :
+- added Background settings
+- Wallpaper are now functional
+- Some quality life changes

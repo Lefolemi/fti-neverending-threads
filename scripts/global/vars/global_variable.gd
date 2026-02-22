@@ -2,13 +2,24 @@ extends Node
 
 # Game Information
 var current_credits: int = 0;
-var current_background_color: Color = Color("2b2b2b")
+var current_background_color: Color = Color("2b2b2b");
+var music_volume: int = 100;
+var sfx_volume: int = 100;
 
 # General Information
 var current_matkul: int = 0;
 var current_mode: int = 0;
 var current_course: int = 0;
 var last_scene: String = "";
+
+# Background Settings
+var current_bg_color: Color = Color("121212")
+var current_wp_color: Color = Color.WHITE
+var current_wp_id: int = 1 
+var current_opacity: float = 1.0
+var current_velocity: Vector2 = Vector2.ZERO
+var current_scale: float = 1.0
+var current_warp: float = 0.0
 
 # Current Quiz Information
 var current_csv: String = "";

@@ -63,3 +63,7 @@
 - added Background settings
 - Wallpaper are now functional
 - Some quality life changes
+
+0.0.15 :
+- added shop system
+- added preview in shop system

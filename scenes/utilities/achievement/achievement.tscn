@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dflfdehjqxdlu"]
+[gd_scene load_steps=2 format=3 uid="uid://dflfdehjqxdlu"]
+
+[ext_resource type="Script" uid="uid://bv7x0cav6ntp3" path="res://scripts/achievement/achievement.gd" id="1_w5aqf"]
 
 [node name="Achievement" type="GridContainer"]
 anchors_preset = 8
@@ -12,6 +14,7 @@ offset_right = 252.5
 offset_bottom = 316.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_w5aqf")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
@@ -45,54 +48,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 10
-
-[node name="AchievementBox" type="HBoxContainer" parent="Content/VBox/AchievementList/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="ColorIcon" type="ColorRect" parent="Content/VBox/AchievementList/VBox/AchievementBox"]
-custom_minimum_size = Vector2(72, 0)
-layout_mode = 2
-
-[node name="Description" type="VBoxContainer" parent="Content/VBox/AchievementList/VBox/AchievementBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Titile" type="Label" parent="Content/VBox/AchievementList/VBox/AchievementBox/Description"]
-layout_mode = 2
-text = "Achievement title"
-
-[node name="Description" type="Label" parent="Content/VBox/AchievementList/VBox/AchievementBox/Description"]
-layout_mode = 2
-text = "Achievement description"
-
-[node name="Percentage" type="Label" parent="Content/VBox/AchievementList/VBox/AchievementBox/Description"]
-layout_mode = 2
-text = "0%"
-
-[node name="AchievementBox2" type="HBoxContainer" parent="Content/VBox/AchievementList/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="ColorIcon" type="ColorRect" parent="Content/VBox/AchievementList/VBox/AchievementBox2"]
-custom_minimum_size = Vector2(72, 0)
-layout_mode = 2
-
-[node name="Description" type="VBoxContainer" parent="Content/VBox/AchievementList/VBox/AchievementBox2"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Titile" type="Label" parent="Content/VBox/AchievementList/VBox/AchievementBox2/Description"]
-layout_mode = 2
-text = "Achievement title"
-
-[node name="Description" type="Label" parent="Content/VBox/AchievementList/VBox/AchievementBox2/Description"]
-layout_mode = 2
-text = "Achievement description"
-
-[node name="Percentage" type="Label" parent="Content/VBox/AchievementList/VBox/AchievementBox2/Description"]
-layout_mode = 2
-text = "0%"
 
 [node name="Confirm" type="HBoxContainer" parent="."]
 layout_mode = 2

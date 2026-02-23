@@ -16,9 +16,12 @@ extends GridContainer
 @onready var vbox_time: VBoxContainer = $Content/TimeScroll/VBox
 @onready var vbox_courses: VBoxContainer = $Content/CoursesScroll/VBox
 
-# New OptionButton References
-@onready var opt_time_course: OptionButton = $Content/TimeScroll/VBox/Course
-@onready var opt_courses_course: OptionButton = $Content/CoursesScroll/VBox/Course
+# New OptionButton References inside the "Option" container
+@onready var opt_time_course: OptionButton = $Content/TimeScroll/VBox/Option/Course
+@onready var opt_time_mode: OptionButton = $Content/TimeScroll/VBox/Option/SessionMode
+
+@onready var opt_courses_course: OptionButton = $Content/CoursesScroll/VBox/Option/Course
+@onready var opt_courses_mode: OptionButton = $Content/CoursesScroll/VBox/Option/SessionMode
 
 @onready var btn_close: Button = $Confirm/Close
 
@@ -60,7 +63,7 @@ func _ready() -> void:
 	btn_close.pressed.connect(_on_close_pressed)
 	
 	# 2. Setup the OptionButtons dynamically
-	_setup_course_dropdowns()
+	_setup_dropdowns()
 	
 	# 3. Generate the initial UI lists
 	_generate_all_lists()
@@ -95,31 +98,43 @@ func _on_tab_pressed(tab_name: String) -> void:
 			btn_courses.modulate = Color.WHITE
 
 # --- Dropdown Setup & Signals ---
-func _setup_course_dropdowns() -> void:
+func _setup_dropdowns() -> void:
 	opt_time_course.clear()
 	opt_courses_course.clear()
+	opt_time_mode.clear()
+	opt_courses_mode.clear()
 	
 	for course_name in COURSE_LIST:
 		opt_time_course.add_item(course_name)
 		opt_courses_course.add_item(course_name)
 		
-	opt_time_course.item_selected.connect(_on_time_course_selected)
-	opt_courses_course.item_selected.connect(_on_grade_course_selected)
+	var modes = ["Quizizz Mode", "Elearning Mode"]
+	for m in modes:
+		opt_time_mode.add_item(m)
+		opt_courses_mode.add_item(m)
+		
+	# Bind both dropdowns in a tab to trigger the same refresh function
+	opt_time_course.item_selected.connect(_on_time_filter_changed)
+	opt_time_mode.item_selected.connect(_on_time_filter_changed)
+	
+	opt_courses_course.item_selected.connect(_on_courses_filter_changed)
+	opt_courses_mode.item_selected.connect(_on_courses_filter_changed)
 
-func _on_time_course_selected(index: int) -> void:
-	_populate_single_course(vbox_time, index, true)
+func _on_time_filter_changed(_ignore_index: int) -> void:
+	# Pass the currently selected index of BOTH dropdowns
+	_populate_single_course(vbox_time, opt_time_course.selected, opt_time_mode.selected, true)
 
-func _on_grade_course_selected(index: int) -> void:
-	_populate_single_course(vbox_courses, index, false)
+func _on_courses_filter_changed(_ignore_index: int) -> void:
+	_populate_single_course(vbox_courses, opt_courses_course.selected, opt_courses_mode.selected, false)
 
 # --- UI Generation ---
 func _generate_all_lists() -> void:
 	_populate_simple_vbox(vbox_overview, dummy_overview)
 	_populate_simple_vbox(vbox_performance, dummy_performance)
 	
-	# Generate the default selected course (Index 0)
-	_populate_single_course(vbox_time, 0, true)
-	_populate_single_course(vbox_courses, 0, false)
+	# Generate the default selected filters (Index 0 for both)
+	_populate_single_course(vbox_time, 0, 0, true)
+	_populate_single_course(vbox_courses, 0, 0, false)
 
 func _populate_simple_vbox(vbox: VBoxContainer, data: Dictionary) -> void:
 	for child in vbox.get_children():
@@ -131,31 +146,41 @@ func _populate_simple_vbox(vbox: VBoxContainer, data: Dictionary) -> void:
 		separator.add_theme_constant_override("separation", 10)
 		vbox.add_child(separator)
 
-# Refactored: Only populates ONE course based on the dropdown index
-func _populate_single_course(vbox: VBoxContainer, course_index: int, is_time_format: bool) -> void:
-	# 1. Clear everything EXCEPT the "Course" OptionButton
+# Now accepts mode_index to fetch the right split data
+func _populate_single_course(vbox: VBoxContainer, course_index: int, mode_index: int, is_time_format: bool) -> void:
+	# 1. Clear everything EXCEPT the "Option" HBoxContainer!
 	for child in vbox.get_children():
-		if child.name != "Course":
+		if child.name != "Option":
 			child.queue_free()
 			
-	# Optional: Give Godot a tiny moment to process the queue_free before adding new nodes
 	await get_tree().process_frame 
 	
-	# 2. Add the 14 Sets for the selected course
+	# 2. Visual Header for context
+	var header = Label.new()
+	var mode_str = "Quizizz Mode" if mode_index == 0 else "Elearning Mode"
+	header.text = "--- " + mode_str.to_upper() + " STATS ---"
+	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	header.add_theme_color_override("font_color", Color.AQUA)
+	vbox.add_child(header)
+	
+	# 3. Add the 14 Sets
 	for i in range(1, 15):
 		var title = "Set " + str(i)
 		var val = _get_dummy_time() if is_time_format else _get_dummy_grade()
 		vbox.add_child(_create_stat_row(title, val))
 		
-	# 3. Add Midtest and Final Test
+	# 4. Add Exams and All in One
 	var separator = HSeparator.new()
 	separator.add_theme_constant_override("separation", 15)
 	vbox.add_child(separator)
 	
 	var mid_val = _get_dummy_time(true) if is_time_format else _get_dummy_grade()
 	var fin_val = _get_dummy_time(true) if is_time_format else _get_dummy_grade()
+	var all_val = _get_dummy_time(true) if is_time_format else _get_dummy_grade()
+	
 	vbox.add_child(_create_stat_row("Midtest (UTS)", mid_val))
 	vbox.add_child(_create_stat_row("Final Test (UAS)", fin_val))
+	vbox.add_child(_create_stat_row("All in One", all_val))
 
 # --- The Universal Stat Row Builder ---
 func _create_stat_row(title: String, value: String) -> HBoxContainer:

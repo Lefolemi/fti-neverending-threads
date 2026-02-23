@@ -165,7 +165,7 @@ func _on_answer_pressed(btn_idx: int) -> void:
 		right_wrong_label.modulate = Color.GREEN if is_correct else Color.RED
 		
 		_load_question_ui(_current_index)
-		await get_tree().create_timer(2.0).timeout
+		await get_tree().create_timer(0.4).timeout
 		_try_go_next()
 		
 	elif _quiz_mode == 1: # ELEARNING
@@ -257,10 +257,13 @@ func _on_finish_pressed() -> void:
 	_is_quiz_active = false
 	var history_data = []
 	var final_correct_count = 0
+	
+	# 1. Process Results
 	for q in _question_deck:
 		var user_ans_text = "No Answer"
 		if q["user_answer"] != -1 and q["user_answer"] < q["options"].size():
 			user_ans_text = q["options"][q["user_answer"]]["text"]
+		
 		var correct_ans_text = ""
 		var is_correct = false
 		for opt in q["options"]:
@@ -268,7 +271,10 @@ func _on_finish_pressed() -> void:
 				correct_ans_text = opt["text"]
 				if q["user_answer"] != -1 and q["options"][q["user_answer"]] == opt:
 					is_correct = true
+		
 		if is_correct: final_correct_count += 1
+		
+		# Build history for Normal Mode (0)
 		history_data.append({
 			"q_text": q["q_text"],
 			"user_ans_text": user_ans_text,
@@ -277,11 +283,22 @@ func _on_finish_pressed() -> void:
 			"csv_line_index": q["csv_line_index"],
 			"marked": q["marked"]
 		})
+	
+	# 2. Store Session Data in GVar
 	GVar.quiz_total_questions = _question_deck.size()
 	GVar.quiz_correct_count = final_correct_count
 	GVar.quiz_history = history_data
 	GVar.quiz_time_taken = _stopwatch_val
-	Load.load_res(["res://scenes/quiz/result_screen.tscn"], "res://scenes/quiz/result_screen.tscn")
+	
+	# 3. Mode-Based Routing
+	if _quiz_mode == 1: # PRACTICE MODE
+		# Simply return to previous scene, no results shown
+		var target = GVar.last_scene if GVar.last_scene != "" else "res://scenes/main/main_menu/main_menu.tscn"
+		Load.load_res([target], target)
+		
+	else: # NORMAL (0) or EXAM (2)
+		# Both go to result screen, result_screen logic will handle the 50%/85% pass logic
+		Load.load_res(["res://scenes/quiz/result_screen.tscn"], "res://scenes/quiz/result_screen.tscn")
 
 func _on_timer_finished() -> void:
 	if _quiz_mode == 0:

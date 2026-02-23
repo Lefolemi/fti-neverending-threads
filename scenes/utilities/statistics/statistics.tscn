@@ -79,8 +79,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="Course" type="OptionButton" parent="Content/TimeScroll/VBox"]
+[node name="Option" type="HBoxContainer" parent="Content/TimeScroll/VBox"]
 layout_mode = 2
+
+[node name="Course" type="OptionButton" parent="Content/TimeScroll/VBox/Option"]
+layout_mode = 2
+size_flags_horizontal = 3
 selected = 0
 item_count = 8
 popup/item_0/text = "Manajemen Proyek Perangkat Lunak"
@@ -99,6 +103,20 @@ popup/item_6/text = "Computer Vision"
 popup/item_6/id = 6
 popup/item_7/text = "Pengolahan Citra Digital"
 popup/item_7/id = 7
+
+[node name="Spacer" type="Control" parent="Content/TimeScroll/VBox/Option"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SessionMode" type="OptionButton" parent="Content/TimeScroll/VBox/Option"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 2
+popup/item_0/text = "Quizizz Mode"
+popup/item_0/id = 0
+popup/item_1/text = "Elearning Mode"
+popup/item_1/id = 1
 
 [node name="CoursesScroll" type="ScrollContainer" parent="Content"]
 layout_mode = 2
@@ -109,8 +127,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="Course" type="OptionButton" parent="Content/CoursesScroll/VBox"]
+[node name="Option" type="HBoxContainer" parent="Content/CoursesScroll/VBox"]
 layout_mode = 2
+
+[node name="Course" type="OptionButton" parent="Content/CoursesScroll/VBox/Option"]
+layout_mode = 2
+size_flags_horizontal = 3
 selected = 0
 item_count = 8
 popup/item_0/text = "Manajemen Proyek Perangkat Lunak"
@@ -129,6 +151,20 @@ popup/item_6/text = "Computer Vision"
 popup/item_6/id = 6
 popup/item_7/text = "Pengolahan Citra Digital"
 popup/item_7/id = 7
+
+[node name="Spacer" type="Control" parent="Content/CoursesScroll/VBox/Option"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SessionMode" type="OptionButton" parent="Content/CoursesScroll/VBox/Option"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 2
+popup/item_0/text = "Quizizz Mode"
+popup/item_0/id = 0
+popup/item_1/text = "Elearning Mode"
+popup/item_1/id = 1
 
 [node name="Confirm" type="HBoxContainer" parent="."]
 layout_mode = 2

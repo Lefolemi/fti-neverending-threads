@@ -71,3 +71,8 @@
 0.0.16 :
 - added statistics UI
 - make statistics UI (kind of) usable
+
+0.0.17 :
+- added Normal/exam mode init UI
+- addedd Practice mode init UI
+- added achievement UI

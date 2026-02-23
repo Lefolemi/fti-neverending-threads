@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dhgrbt14bg60n"]
+[gd_scene load_steps=10 format=3 uid="uid://dhgrbt14bg60n"]
 
 [ext_resource type="Script" uid="uid://bvmaty5rslu0k" path="res://scripts/main_menu/utilities/version.gd" id="1_0kd0q"]
 [ext_resource type="Script" uid="uid://ckptwfw4gjrrd" path="res://scripts/main_menu/main/main_menu.gd" id="1_r7wpq"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://dv8c8rwy71l1d" path="res://scripts/main_menu/utilities/menu_page.gd" id="4_k0ycp"]
 [ext_resource type="Script" uid="uid://peqnp4rypx7p" path="res://scripts/main_menu/utilities/utility_container.gd" id="6_scmgr"]
 [ext_resource type="Script" uid="uid://dxu5q5551ot1" path="res://scripts/main_menu/utilities/debug_mode.gd" id="6_svxau"]
+[ext_resource type="Script" uid="uid://pransu62jg2y" path="res://scripts/main_menu/main/init_session_menu.gd" id="8_hsu2m"]
+[ext_resource type="Script" uid="uid://7nb20e2y0wri" path="res://scenes/main/main_menu/practice_mode_menu.gd" id="9_5fid0"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -202,5 +204,213 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Debug Mode"
 script = ExtResource("6_svxau")
+
+[node name="BGMenu" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="InitSessionMenu" type="GridContainer" parent="."]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -212.0
+offset_top = -143.5
+offset_right = 212.0
+offset_bottom = 143.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_hsu2m")
+
+[node name="Content" type="PanelContainer" parent="InitSessionMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="InitSessionMenu/Content"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="InitSessionMenu/Content/Margin"]
+layout_mode = 2
+
+[node name="MatkulTitle" type="Label" parent="InitSessionMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+
+[node name="CourseSetTitle" type="Label" parent="InitSessionMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+
+[node name="Grade" type="Label" parent="InitSessionMenu/Content/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "A"
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="InitSessionMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "90%"
+horizontal_alignment = 1
+
+[node name="InitContent" type="VBoxContainer" parent="InitSessionMenu/Content/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="AllowStopwatch" type="CheckBox" parent="InitSessionMenu/Content/Margin/VBox/InitContent"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Allow stopwatch"
+
+[node name="Buttons" type="HBoxContainer" parent="InitSessionMenu/Content/Margin/VBox/InitContent"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="QuizizzMode" type="Button" parent="InitSessionMenu/Content/Margin/VBox/InitContent/Buttons"]
+layout_mode = 2
+text = "Start Quizizz Mode"
+
+[node name="ElearningMode" type="Button" parent="InitSessionMenu/Content/Margin/VBox/InitContent/Buttons"]
+layout_mode = 2
+text = "Start Elearning Mode"
+
+[node name="Confirm" type="HBoxContainer" parent="InitSessionMenu"]
+layout_mode = 2
+alignment = 2
+
+[node name="Start" type="Button" parent="InitSessionMenu/Confirm"]
+layout_mode = 2
+text = "Let's go!"
+
+[node name="Cancel" type="Button" parent="InitSessionMenu/Confirm"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="PracticeModeMenu" type="GridContainer" parent="."]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -264.5
+offset_top = -363.0
+offset_right = 264.5
+offset_bottom = 363.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("9_5fid0")
+
+[node name="Content" type="PanelContainer" parent="PracticeModeMenu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="PracticeModeMenu/Content"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="PracticeModeMenu/Content/Margin"]
+layout_mode = 2
+
+[node name="MatkulTitle" type="Label" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+
+[node name="CourseSetTitle" type="Label" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+
+[node name="QuizModeLabel" type="Label" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "Quiz Mode"
+
+[node name="QuizMode" type="OptionButton" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Quizizz Mode"
+popup/item_0/id = 0
+popup/item_1/text = "Elearning Mode"
+popup/item_1/id = 1
+
+[node name="SetTimerLabel" type="Label" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "Set Timer"
+
+[node name="SetTimerSpin" type="SpinBox" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+
+[node name="SetTimerNote1" type="Label" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "* Note: The timer in Quizizz Mode applies per question."
+
+[node name="OptionsLabel" type="Label" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+text = "Options"
+
+[node name="OptionsGrid" type="GridContainer" parent="PracticeModeMenu/Content/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="RandomizeSet" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Randomize set"
+
+[node name="OnlyShowMarked" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Only show marked"
+
+[node name="HideQuestions" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hide questions"
+
+[node name="HideAnswers" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Hide answers"
+
+[node name="ShowQuestionNumber" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Show question number"
+
+[node name="ShowScoreCount" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+layout_mode = 2
+text = "Show score count"
+
+[node name="Confirm" type="HBoxContainer" parent="PracticeModeMenu"]
+layout_mode = 2
+alignment = 2
+
+[node name="Start" type="Button" parent="PracticeModeMenu/Confirm"]
+layout_mode = 2
+text = "Let's go!"
+
+[node name="Cancel" type="Button" parent="PracticeModeMenu/Confirm"]
+layout_mode = 2
+text = "Cancel"
 
 [connection signal="pressed" from="DebugMode" to="DebugMode" method="_on_pressed"]

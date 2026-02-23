@@ -16,6 +16,11 @@ var _course_names_cache: Array = []
 
 @onready var back_button: Button = $Back
 
+# --- Overlay & Popup References ---
+@onready var bg_menu: ColorRect = $BGMenu # Or Panel/Control depending on your node type
+@onready var init_session_menu: Control = $InitSessionMenu
+@onready var practice_mode_menu: Control = $PracticeModeMenu
+
 func _ready() -> void:
 	# 0. Load the CSV Data immediately when game starts
 	_load_course_names()
@@ -27,6 +32,10 @@ func _ready() -> void:
 	
 	# 2. Connect Back button
 	back_button.pressed.connect(_on_back_pressed)
+
+	# Listen for the popup closing itself to hide the dark background
+	init_session_menu.closed.connect(_on_popup_closed)
+	practice_mode_menu.closed.connect(_on_popup_closed)
 
 	# 3. Initialize State (Visuals only)
 	_initialize_visuals()
@@ -49,7 +58,7 @@ func _load_course_names() -> void:
 	_course_names_cache.resize(col_count)
 	for i in range(col_count):
 		_course_names_cache[i] = []
-	
+
 	# C. Read Rows (The Course Names)
 	while not file.eof_reached():
 		var line = file.get_csv_line()
@@ -99,7 +108,21 @@ func _on_mode_selected(index: int, _name: String) -> void:
 func _on_course_selected(index: int, _name: String) -> void:
 	print("Course Selected: ", index)
 	GVar.current_course = index
-	# Start Game Logic Here
+	
+	# Lock the background
+	bg_menu.show()
+	
+	# Check GVar.current_mode (0: Normal, 1: Practice, 2: Midtest, 3: Final, 4: All-in-One)
+	if GVar.current_mode == 1:
+		# Directly open the Practice specific menu
+		practice_mode_menu.show()
+	else:
+		# Delegate setup to the InitSessionMenu script and show it
+		init_session_menu.setup(index, _course_names_cache)
+		init_session_menu.show()
+
+func _on_popup_closed() -> void:
+	bg_menu.hide()
 
 func _on_back_pressed() -> void:
 	match current_state:
@@ -158,6 +181,11 @@ func _initialize_visuals():
 	mode_container.visible = false
 	course_container.visible = false
 	back_button.visible = false
+
+	# Hide Popups at startup
+	bg_menu.hide()
+	init_session_menu.hide()
+	practice_mode_menu.hide()
 
 func _set_gui_input_disabled(disabled: bool):
 	back_button.disabled = disabled

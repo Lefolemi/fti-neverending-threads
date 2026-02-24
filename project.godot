@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="FTI - Neverending Threads"
-config/version="0.0.17"
+config/version="0.0.18"
 run/main_scene="uid://dj6yefx2qbmh0"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.4", "GL Compatibility")
 
 GConst="*res://scripts/global/vars/global_constant.gd"
 GVar="*res://scripts/global/vars/global_variable.gd"
+SaveManager="*res://scripts/savefile/manager/save_manager.gd"
 Load="*res://scripts/global/loading/loading.gd"
 Audio="*res://scenes/global/audio/audio.tscn"
 BG="*res://scenes/global/background/background.tscn"

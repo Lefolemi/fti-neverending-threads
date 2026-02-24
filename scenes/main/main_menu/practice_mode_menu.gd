@@ -84,7 +84,8 @@ func _on_start_pressed() -> void:
 	GVar.quiz_hide_answers = chk_hide_a.button_pressed
 	GVar.quiz_show_question_number = chk_show_num.button_pressed
 	GVar.quiz_score_count = chk_show_score.button_pressed
-	
+
 	# 2. Launch
 	print("Practice Settings Applied. Starting Session...")
+	GVar.current_csv = "matkul/course" + str(GVar.current_matkul) + ".csv"
 	Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")

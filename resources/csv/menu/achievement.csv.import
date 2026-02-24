@@ -1,0 +1,15 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b2hb8hh6732qx"
+valid=false
+
+[deps]
+
+source_file="res://resources/csv/menu/achievement.csv"
+
+[params]
+
+compress=true
+delimiter=0

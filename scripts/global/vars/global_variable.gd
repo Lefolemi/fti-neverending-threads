@@ -1,16 +1,38 @@
 extends Node
 
 # Game Information
+var current_points: int = 0;
 var current_credits: int = 0;
-var current_background_color: Color = Color("2b2b2b");
-var music_volume: int = 100;
-var sfx_volume: int = 100;
+var unlocked_achievements: Array;
+var shop_unlocks: Array;
+var course_stats: Dictionary;
+var player_statistics: Dictionary;
 
 # General Information
-var current_matkul: int = 0;
-var current_mode: int = 0;
-var current_course: int = 0;
+var current_matkul: int = -1;
+var current_mode: int = -1;
+var current_course: int = -1;
 var last_scene: String = "";
+
+# General Settings
+var music_volume: float = 1.0
+var sfx_volume: float = 1.0
+
+# Cosmetics Settings
+var active_set: int = 1
+var ui_color: int = 0
+var invert_ui_color: bool = false
+var curved_borders: bool = false
+var ui_shadow: bool = false
+
+# Colors are stored as hex strings in the JSON
+var bg_color: String = "1e1e1e" 
+var wallpaper_color: String = "ffffff" 
+var wallpaper_opacity: float = 1.0
+var wallpaper_path: String = ""
+var wallpaper_motion: Vector2 = Vector2.ZERO
+var wallpaper_scale: float = 1.0
+var wallpaper_warp: float = 0.0
 
 # Background Settings
 var current_bg_color: Color = Color("121212")

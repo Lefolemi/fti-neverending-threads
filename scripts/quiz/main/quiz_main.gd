@@ -57,14 +57,31 @@ func _ready() -> void:
 		_is_quiz_active = true
 		_init_timers()
 		_load_question_ui(0)
+		
+		# Log the game start for statistics if not in Debug Mode
+		if GVar.current_matkul != -1:
+			GVar.player_statistics["total_game_played"] += 1
+			SaveManager.save_game() 
 	else:
 		question_label.text = "Error: No questions loaded."
+
+# --- EMERGENCY SAVE ON QUIT ---
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if _is_quiz_active and GVar.current_matkul != -1:
+			GVar.player_statistics["total_playtime"] += _stopwatch_val
+			SaveManager.save_game()
+			print("SYSTEM: Emergency playtime saved before quit.")
+		get_tree().quit()
 
 func _process(delta: float) -> void:
 	if not _is_quiz_active: return
 	
+	# ALWAYS count the time for statistics
+	_stopwatch_val += delta
+	
+	# Only update the visual label if it's allowed
 	if GVar.quiz_allow_stopwatch:
-		_stopwatch_val += delta
 		_update_stopwatch_label()
 	
 	if GVar.current_quiz_timer > 0:
@@ -82,14 +99,10 @@ func _load_question_ui(idx: int) -> void:
 	_current_index = idx
 	var data = _question_deck[idx]
 	
-	# --- 1. Text Processing (Stable Randomization) ---
 	var final_q_text = ""
-	
-	# Check if we already processed this question in this session
 	if data.has("processed_q_text"):
 		final_q_text = data["processed_q_text"]
 	else:
-		# If not, process it now and SAVE it to the dictionary
 		var raw_text = data["q_text"].to_lower()
 		final_q_text = TextUtils.process_text(raw_text, true)
 		data["processed_q_text"] = final_q_text
@@ -99,49 +112,34 @@ func _load_question_ui(idx: int) -> void:
 	
 	if not GVar.quiz_score_count: right_wrong_label.text = "" 
 	
-	# --- 2. Update Components ---
-	# We need to do the same caching for Answers!
-	# Since answer_controller handles logic internally, we need to pass the data object
-	# and let IT handle the caching, or we pre-process answers here.
-	
-	# Let's pre-process answers here to keep state management in Main
 	if not data.has("processed_options"):
 		_preprocess_answers(data)
 		
-	# Now we pass the DATA object which contains the 'processed_options'
-	# We need to update answer_controller.load_buttons to look for this new key
 	answer_controller.load_buttons(data, _quiz_mode, GVar.quiz_hide_answers)
 	
 	function_controller.update_visuals(data["flagged"], data["marked"])
 	function_controller.update_nav_state(_current_index, _question_deck.size(), _quiz_mode)
 	
-	# 3. Timer Logic
 	if _quiz_mode == 0 and not data["is_locked"] and GVar.current_quiz_timer > 0:
 		_timer_val = float(GVar.current_quiz_timer)
 		_quizizz_answered = false
 
-# --- NEW HELPER FUNCTION ---
 func _preprocess_answers(data: Dictionary) -> void:
-	# Create a duplicate of options to store processed text
-	# We don't want to overwrite the original "text" field in case we need it later
 	var processed_opts = []
 	for opt in data["options"]:
 		var new_opt = opt.duplicate()
 		var raw = new_opt["text"]
-		# Process Spintax only (false for synonyms)
 		new_opt["processed_text"] = TextUtils.process_text(raw, false)
 		processed_opts.append(new_opt)
-	
 	data["processed_options"] = processed_opts
 
 func _setup_ui_mode() -> void:
+	# VISIBILITY: Only show the label if allowed
 	stopwatch_label.visible = GVar.quiz_allow_stopwatch
 	page_label.visible = GVar.quiz_show_question_number
 	timer_label.visible = (GVar.current_quiz_timer > 0)
 	right_wrong_label.visible = GVar.quiz_score_count
 	_update_score_label()
-	
-	# DELEGATE UTILITY VISIBILITY
 	utilities_controller.setup_visibility(GVar.quiz_session_mode, _quiz_mode)
 
 # --- INTERACTION ---
@@ -256,7 +254,7 @@ func _update_csv_mark(line_index: int, new_state: bool) -> void:
 func _on_finish_pressed() -> void:
 	_is_quiz_active = false
 	var history_data = []
-	var final_correct_count = 0
+	var final_correct_count = 0 # DECLARE IT HERE
 	
 	# 1. Process Results
 	for q in _question_deck:
@@ -288,16 +286,21 @@ func _on_finish_pressed() -> void:
 	GVar.quiz_total_questions = _question_deck.size()
 	GVar.quiz_correct_count = final_correct_count
 	GVar.quiz_history = history_data
-	GVar.quiz_time_taken = _stopwatch_val
+	
+	# Store the background stopwatch value unconditionally
+	GVar.quiz_time_taken = _stopwatch_val 
 	
 	# 3. Mode-Based Routing
 	if _quiz_mode == 1: # PRACTICE MODE
-		# Simply return to previous scene, no results shown
+		# Save Playtime for practice mode (since it skips Result Screen)
+		if GVar.current_matkul != -1:
+			GVar.player_statistics["total_playtime"] += _stopwatch_val
+			SaveManager.save_game()
+			
 		var target = GVar.last_scene if GVar.last_scene != "" else "res://scenes/main/main_menu/main_menu.tscn"
 		Load.load_res([target], target)
 		
 	else: # NORMAL (0) or EXAM (2)
-		# Both go to result screen, result_screen logic will handle the 50%/85% pass logic
 		Load.load_res(["res://scenes/quiz/result_screen.tscn"], "res://scenes/quiz/result_screen.tscn")
 
 func _on_timer_finished() -> void:

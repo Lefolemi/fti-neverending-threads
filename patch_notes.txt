@@ -86,3 +86,8 @@
 0.0.19 :
 - Even more save files implementation!
 - Quality life changes
+
+0.0.20 :
+- added toggle achievement menu in debug menu
+- even more implementation of save file
+- some bug fixes regarding achievement.

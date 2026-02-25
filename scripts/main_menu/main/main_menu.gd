@@ -17,9 +17,21 @@ var _course_names_cache: Array = []
 @onready var back_button: Button = $Back
 
 # --- Overlay & Popup References ---
-@onready var bg_menu: ColorRect = $BGMenu # Or Panel/Control depending on your node type
+@onready var bg_menu: ColorRect = $BGMenu 
 @onready var init_session_menu: Control = $InitSessionMenu
 @onready var practice_mode_menu: Control = $PracticeModeMenu
+
+# --- DATA MAPPING ---
+const MATKUL_NAMES = [
+	"Manajemen Proyek Perangkat Lunak",
+	"Jaringan Komputer",
+	"Keamanan Siber",
+	"Pemrograman Web 1",
+	"Mobile Programming",
+	"Metodologi Riset",
+	"Computer Vision",
+	"Pengolahan Citra Digital"
+]
 
 func _ready() -> void:
 	# 0. Load the CSV Data immediately when game starts
@@ -82,12 +94,13 @@ func _update_course_buttons(matkul_index: int) -> void:
 	
 	# Loop through the available strings (Should be 14)
 	for i in range(courses_for_matkul.size()):
-		# Button names are Course1, Course2... (1-based index)
 		var btn_name = "Course" + str(i + 1)
 		var btn = vbox.get_node_or_null(btn_name)
 		
 		if btn:
 			btn.text = courses_for_matkul[i]
+			# FIX: Overwrite the cached placeholder with the actual CSV name!
+			btn.set_meta("original_text", courses_for_matkul[i])
 
 # --- Signal Receivers (Business Logic) ---
 
@@ -98,11 +111,21 @@ func _on_matkul_selected(index: int, _name: String) -> void:
 	# UPDATE: Change the text of Course1-14 based on the CSV data
 	_update_course_buttons(index)
 	
+	# --- NEW: APPLY PROGRESSION LOCKS ---
+	var course_name = MATKUL_NAMES[index]
+	mode_container.update_mode_locks(course_name)
+	
 	_change_menu(matkul_container, mode_container, MenuState.MODE)
 
 func _on_mode_selected(index: int, _name: String) -> void:
 	print("Mode Selected: ", index)
 	GVar.current_mode = index
+	
+	# --- NEW: APPLY SET LOCKS ---
+	# We pass 0 ("Quizizz") as the baseline format to check for unlocked progression
+	var course_name = MATKUL_NAMES[GVar.current_matkul]
+	course_container.update_course_locks(course_name, 0)
+	
 	_change_menu(mode_container, course_container, MenuState.COURSE)
 
 func _on_course_selected(index: int, _name: String) -> void:
@@ -131,7 +154,7 @@ func _on_back_pressed() -> void:
 		MenuState.MODE:
 			_change_menu(mode_container, matkul_container, MenuState.MATKUL)
 
-# --- Animation & Transition System (Stays exactly the same) ---
+# --- Animation & Transition System ---
 
 func _change_menu(outgoing: Control, incoming: Control, new_state: int) -> void:
 	_set_gui_input_disabled(true) # Lock UI
@@ -189,7 +212,6 @@ func _initialize_visuals():
 
 func _set_gui_input_disabled(disabled: bool):
 	back_button.disabled = disabled
-	# We can also disable the containers directly now!
 	matkul_container.mouse_filter = Control.MOUSE_FILTER_IGNORE if disabled else Control.MOUSE_FILTER_STOP
 	mode_container.mouse_filter = Control.MOUSE_FILTER_IGNORE if disabled else Control.MOUSE_FILTER_STOP
 	course_container.mouse_filter = Control.MOUSE_FILTER_IGNORE if disabled else Control.MOUSE_FILTER_STOP

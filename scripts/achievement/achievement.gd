@@ -31,7 +31,7 @@ const RANK_THRESHOLDS = [
 func _ready() -> void:
 	btn_close.pressed.connect(_on_close_pressed)
 	_load_csv_data()
-	_evaluate_all_achievements() # <--- THE NEW BRAIN
+	_evaluate_all_achievements() 
 	_update_overall_progress()
 	_generate_achievements()
 
@@ -118,20 +118,28 @@ func _calculate_unlock_condition(index: int) -> bool:
 
 # --- HELPER MATH FUNCTIONS ---
 
-func _is_passed(grade: String) -> bool:
-	return grade in ["S", "A+", "A", "A-", "B+", "B", "B-", "C"]
+# FIX: Changed to Variant, evaluating as Floats, accounting for "Locked" and the Sentinel "-1.0"
+func _is_passed(grade: Variant) -> bool:
+	var g_str = str(grade)
+	if g_str == "Locked" or g_str == "Unplayed": return false
+	var g_float = float(grade)
+	return g_float >= 50.0 or g_float == -1.0
 
-func _is_grade_90_plus(grade: String) -> bool:
-	return grade in ["S", "A+", "A"]
+func _is_grade_90_plus(grade: Variant) -> bool:
+	var g_str = str(grade)
+	if g_str == "Locked" or g_str == "Unplayed": return false
+	return float(grade) >= 90.0
 
-func _is_grade_100(grade: String) -> bool:
-	return grade in ["S", "A+"]
+func _is_grade_100(grade: Variant) -> bool:
+	var g_str = str(grade)
+	if g_str == "Locked" or g_str == "Unplayed": return false
+	return float(grade) >= 100.0
 
 func _has_started_any_set(course_stats: Dictionary) -> bool:
 	for mode in ["Quizizz", "Elearning"]:
 		for i in range(1, 15):
 			var g = course_stats[mode]["Set " + str(i)]["grade"]
-			if g != "Locked" and g != "Unplayed": return true
+			if str(g) != "Locked" and str(g) != "Unplayed": return true
 	return false
 
 func _count_passed_sets(course_stats: Dictionary) -> int:
@@ -187,7 +195,6 @@ func _generate_achievements() -> void:
 			header.add_theme_font_size_override("font_size", 16)
 			vbox_achievements.add_child(header)
 			
-		# Pass the boolean we calculated earlier directly into the box!
 		var ach_box = _create_achievement_box(ach["title"], ach["desc"], ach["cr"], unlocked_status[i])
 		vbox_achievements.add_child(ach_box)
 		
@@ -241,7 +248,6 @@ func _update_overall_progress() -> void:
 	var unlocked_count = 0 
 	var current_credits = 0
 	
-	# Uses the dynamically calculated array instead of trusting the string list
 	for i in range(total_achievements):
 		if unlocked_status[i]:
 			unlocked_count += 1

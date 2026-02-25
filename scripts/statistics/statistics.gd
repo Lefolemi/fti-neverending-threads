@@ -16,10 +16,9 @@ extends GridContainer
 @onready var vbox_time: VBoxContainer = $Content/TimeScroll/VBox
 @onready var vbox_courses: VBoxContainer = $Content/CoursesScroll/VBox
 
-# New OptionButton References inside the "Option" container
+# OptionButton References inside the "Option" container
 @onready var opt_time_course: OptionButton = $Content/TimeScroll/VBox/Option/Course
 @onready var opt_time_mode: OptionButton = $Content/TimeScroll/VBox/Option/SessionMode
-
 @onready var opt_courses_course: OptionButton = $Content/CoursesScroll/VBox/Option/Course
 @onready var opt_courses_mode: OptionButton = $Content/CoursesScroll/VBox/Option/SessionMode
 
@@ -37,22 +36,6 @@ const COURSE_LIST = [
 	"Pengolahan Citra Digital"
 ]
 
-var dummy_overview = {
-	"Total Playtime": "42h 15m",
-	"Total Games Played": "1,205",
-	"Total Questions Answered": "15,400",
-	"Current Rank": "Magistra",
-	"Total Points Earned": "85,400 Pts"
-}
-
-var dummy_performance = {
-	"Total Correct": "13,200",
-	"Total Wrong": "2,200",
-	"Overall Accuracy": "85.7%",
-	"Longest Win Streak": "42",
-	"Average Time Per Question": "4.2s"
-}
-
 func _ready() -> void:
 	# 1. Connect Tab Buttons
 	btn_overview.pressed.connect(_on_tab_pressed.bind("overview"))
@@ -65,7 +48,7 @@ func _ready() -> void:
 	# 2. Setup the OptionButtons dynamically
 	_setup_dropdowns()
 	
-	# 3. Generate the initial UI lists
+	# 3. Generate the actual UI lists from GVar
 	_generate_all_lists()
 	
 	# 4. Open default tab
@@ -113,26 +96,52 @@ func _setup_dropdowns() -> void:
 		opt_time_mode.add_item(m)
 		opt_courses_mode.add_item(m)
 		
-	# Bind both dropdowns in a tab to trigger the same refresh function
 	opt_time_course.item_selected.connect(_on_time_filter_changed)
 	opt_time_mode.item_selected.connect(_on_time_filter_changed)
-	
 	opt_courses_course.item_selected.connect(_on_courses_filter_changed)
 	opt_courses_mode.item_selected.connect(_on_courses_filter_changed)
 
 func _on_time_filter_changed(_ignore_index: int) -> void:
-	# Pass the currently selected index of BOTH dropdowns
 	_populate_single_course(vbox_time, opt_time_course.selected, opt_time_mode.selected, true)
 
 func _on_courses_filter_changed(_ignore_index: int) -> void:
 	_populate_single_course(vbox_courses, opt_courses_course.selected, opt_courses_mode.selected, false)
 
-# --- UI Generation ---
+# --- TRUE DATA GENERATION ---
+
 func _generate_all_lists() -> void:
-	_populate_simple_vbox(vbox_overview, dummy_overview)
-	_populate_simple_vbox(vbox_performance, dummy_performance)
+	var p_stats = GVar.player_statistics
+	var correct = p_stats["total_correct_answers"]
+	var wrong = p_stats["total_wrong_answers"]
+	var total_q = correct + wrong
+	var playtime = p_stats["total_playtime"]
 	
-	# Generate the default selected filters (Index 0 for both)
+	# Calculate Dynamic Accuracies and Averages
+	var accuracy = 0.0
+	if total_q > 0: accuracy = (float(correct) / float(total_q)) * 100.0
+	
+	var avg_time = 0.0
+	if total_q > 0: avg_time = playtime / float(total_q)
+	
+	var real_overview = {
+		"Total Playtime": _format_time_long(playtime),
+		"Total Games Played": str(p_stats["total_game_played"]),
+		"Total Questions Answered": str(total_q),
+		"Current Rank": _get_rank_title(GVar.current_points),
+		"Total Points Earned": str(GVar.current_points) + " Pts"
+	}
+
+	var real_performance = {
+		"Total Correct": str(correct),
+		"Total Wrong": str(wrong),
+		"Overall Accuracy": "%.1f%%" % accuracy,
+		"Longest Win Streak": str(p_stats["longest_correct_streak"]),
+		"Avg Time Per Question": "%.1fs" % avg_time
+	}
+	
+	_populate_simple_vbox(vbox_overview, real_overview)
+	_populate_simple_vbox(vbox_performance, real_performance)
+	
 	_populate_single_course(vbox_time, 0, 0, true)
 	_populate_single_course(vbox_courses, 0, 0, false)
 
@@ -146,43 +155,110 @@ func _populate_simple_vbox(vbox: VBoxContainer, data: Dictionary) -> void:
 		separator.add_theme_constant_override("separation", 10)
 		vbox.add_child(separator)
 
-# Now accepts mode_index to fetch the right split data
 func _populate_single_course(vbox: VBoxContainer, course_index: int, mode_index: int, is_time_format: bool) -> void:
-	# 1. Clear everything EXCEPT the "Option" HBoxContainer!
 	for child in vbox.get_children():
 		if child.name != "Option":
 			child.queue_free()
 			
 	await get_tree().process_frame 
 	
-	# 2. Visual Header for context
+	# Fetch Real Data Segment
+	var course_name = COURSE_LIST[course_index]
+	var mode_str = "Quizizz" if mode_index == 0 else "Elearning"
+	var course_data = {}
+	
+	if GVar.course_stats.has(course_name) and GVar.course_stats[course_name].has(mode_str):
+		course_data = GVar.course_stats[course_name][mode_str]
+	
+	# Visual Header
 	var header = Label.new()
-	var mode_str = "Quizizz Mode" if mode_index == 0 else "Elearning Mode"
 	header.text = "--- " + mode_str.to_upper() + " STATS ---"
 	header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	header.add_theme_color_override("font_color", Color.AQUA)
 	vbox.add_child(header)
 	
-	# 3. Add the 14 Sets
-	for i in range(1, 15):
-		var title = "Set " + str(i)
-		var val = _get_dummy_time() if is_time_format else _get_dummy_grade()
-		vbox.add_child(_create_stat_row(title, val))
-		
-	# 4. Add Exams and All in One
-	var separator = HSeparator.new()
-	separator.add_theme_constant_override("separation", 15)
-	vbox.add_child(separator)
+	# Define Set Order
+	var ordered_keys = []
+	for i in range(1, 15): ordered_keys.append("Set " + str(i))
+	ordered_keys.append("Midtest")
+	ordered_keys.append("Final Test")
+	ordered_keys.append("All in One")
 	
-	var mid_val = _get_dummy_time(true) if is_time_format else _get_dummy_grade()
-	var fin_val = _get_dummy_time(true) if is_time_format else _get_dummy_grade()
-	var all_val = _get_dummy_time(true) if is_time_format else _get_dummy_grade()
-	
-	vbox.add_child(_create_stat_row("Midtest (UTS)", mid_val))
-	vbox.add_child(_create_stat_row("Final Test (UAS)", fin_val))
-	vbox.add_child(_create_stat_row("All in One", all_val))
+	# Populate Rows
+	for key in ordered_keys:
+		if key == "Midtest":
+			var separator = HSeparator.new()
+			separator.add_theme_constant_override("separation", 15)
+			vbox.add_child(separator)
+			
+		var val_str = "Locked"
+		if course_data.has(key):
+			var raw_grade = course_data[key]["grade"]
+			var raw_time = course_data[key]["time"]
+			
+			var q_count = 15
+			if key == "Midtest": q_count = 50
+			elif key == "Final Test": q_count = 60
+			elif key == "All in One": q_count = 100
+			
+			if is_time_format:
+				if str(raw_grade) == "Locked": val_str = "Locked"
+				elif str(raw_grade) == "Unplayed": val_str = "--"
+				else: val_str = _format_time_short(raw_time)
+			else:
+				val_str = _get_real_grade(raw_grade, q_count, raw_time)
+				
+		vbox.add_child(_create_stat_row(key, val_str))
 
-# --- The Universal Stat Row Builder ---
+# --- Formatting Helpers ---
+
+func _get_real_grade(grade_val: Variant, q_count: int, time_val: float) -> String:
+	if str(grade_val) == "Locked": return "Locked"
+	if str(grade_val) == "Unplayed": return "Unplayed"
+	
+	var val = float(grade_val)
+	
+	# Handle specific logic cases
+	if val == -1.0: return "Ɐ (0.0%)"
+	if val == 0.0: return "F (0.0%)"
+	
+	var letter = "E"
+	if val >= 100.0:
+		if time_val > 0 and time_val <= (float(q_count) * 3.0): letter = "S"
+		else: letter = "A+"
+	elif val >= 90.0: letter = "A"
+	elif val >= 80.0: letter = "A-"
+	elif val >= 75.0: letter = "B+"
+	elif val >= 70.0: letter = "B"
+	elif val >= 65.0: letter = "B-"
+	elif val >= 50.0: letter = "C"
+	elif val >= 20.0: letter = "D"
+	
+	return "%s (%.1f%%)" % [letter, val]
+
+func _get_rank_title(points: int) -> String:
+	if points >= 2818: return "Magistra"
+	if points >= 2600: return "Master"
+	if points >= 2000: return "Expert"
+	if points >= 1200: return "Intermediate"
+	if points >= 500: return "Novice"
+	if points >= 150: return "Amateur"
+	return "Unranked"
+
+func _format_time_long(time_sec: float) -> String:
+	var hrs = int(time_sec) / 3600
+	var mins = (int(time_sec) % 3600) / 60
+	if hrs > 0: return "%dh %dm" % [hrs, mins]
+	return "%dm" % mins
+
+func _format_time_short(time_sec: float) -> String:
+	if time_sec <= 0.0: return "--"
+	var mins = int(time_sec) / 60
+	var secs = int(time_sec) % 60
+	return "%dm %02ds" % [mins, secs]
+
+# --- Colorization ---
+
 func _create_stat_row(title: String, value: String) -> HBoxContainer:
 	var hbox = HBoxContainer.new()
 	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -197,11 +273,16 @@ func _create_stat_row(title: String, value: String) -> HBoxContainer:
 	lbl_value.text = value
 	lbl_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	
-	if value.begins_with("S ") or value.begins_with("A "):
+	# Contextual Coloring
+	if value.begins_with("S ") or value.begins_with("A"):
 		lbl_value.add_theme_color_override("font_color", Color.GREEN)
 	elif value.begins_with("C ") or value.begins_with("D "):
 		lbl_value.add_theme_color_override("font_color", Color.ORANGE)
-	elif value.ends_with("s"): 
+	elif value.begins_with("E ") or value.begins_with("F "):
+		lbl_value.add_theme_color_override("font_color", Color.RED)
+	elif value.begins_with("Ɐ"):
+		lbl_value.add_theme_color_override("font_color", Color.PURPLE)
+	elif value.ends_with("s") or value.ends_with("m"): 
 		lbl_value.add_theme_color_override("font_color", Color.YELLOW)
 	else:
 		lbl_value.add_theme_color_override("font_color", Color.WHITE)
@@ -209,19 +290,9 @@ func _create_stat_row(title: String, value: String) -> HBoxContainer:
 	hbox.add_child(lbl_value)
 	return hbox
 
-# --- Dummy Data Helpers ---
-func _get_dummy_grade() -> String:
-	var grades = ["S (100/100)", "A (90/100)", "B (80/100)", "C (70/100)", "Locked"]
-	return grades[randi() % grades.size()]
-
-func _get_dummy_time(is_test: bool = false) -> String:
-	if is_test:
-		return str(randi_range(5, 15)) + "m " + str(randi_range(10, 59)) + "s"
-	return str(randi_range(0, 2)) + "m " + str(randi_range(10, 59)) + "s"
-
 # --- Interactions ---
 func _on_close_pressed() -> void:
 	if GVar.last_scene != "":
 		Load.load_res([GVar.last_scene], GVar.last_scene)
 	else:
-		push_warning("GVar.last_scene is empty!")
+		Load.load_res(["res://scenes/main/main_menu/main_menu.tscn"], "res://scenes/main/main_menu/main_menu.tscn")

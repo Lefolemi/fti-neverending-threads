@@ -85,7 +85,32 @@ func _on_start_pressed() -> void:
 	GVar.quiz_show_question_number = chk_show_num.button_pressed
 	GVar.quiz_score_count = chk_show_score.button_pressed
 
-	# 2. Launch
-	print("Practice Settings Applied. Starting Session...")
+	# --- 2. ITEM BANKING LOGIC FOR PRACTICE MODE ---
+	
+	if GVar.current_mode == 0:
+		# NORMAL SETS: 30 questions per set pool
+		GVar.set_range_from = GVar.current_course * 30
+		GVar.set_range_to = GVar.set_range_from + 29
+		
+	elif GVar.current_mode == 2:
+		# MIDTEST (UTS): Covers Sets 1 through 7
+		GVar.set_range_from = 0
+		GVar.set_range_to = (7 * 30) - 1 
+		
+	elif GVar.current_mode == 3:
+		# FINAL TEST (UAS): Covers Sets 8 through 14
+		GVar.set_range_from = 7 * 30 
+		GVar.set_range_to = (14 * 30) - 1 
+		
+	elif GVar.current_mode == 4:
+		# ALL IN ONE: The entire course pool!
+		GVar.set_range_from = 0
+		GVar.set_range_to = (14 * 30) - 1 
+		
+	# OVERRIDE: 0 means play EVERY question in the defined range
+	GVar.quiz_subset_qty = 0
+
+	# 3. Launch
+	print("SYSTEM: Practice Settings Applied. Loading full set range...")
 	GVar.current_csv = "matkul/course" + str(GVar.current_matkul) + ".csv"
 	Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")

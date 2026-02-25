@@ -34,6 +34,15 @@ func _calculate_results() -> void:
 	
 	if total > 0:
 		score_pct = (float(correct) / float(total)) * 100.0
+		
+	# --- NEW: THE INTEGRITY CHECK ---
+	var answered_count = 0
+	for entry in GVar.quiz_history:
+		if entry["user_ans_text"] != "No Answer":
+			answered_count += 1
+			
+	var is_fully_completed = (answered_count == total)
+	# --------------------------------
 	
 	# 2. Display Labels
 	lbl_right_wrong.text = "Right: %d | Wrong: %d" % [correct, wrong]
@@ -83,8 +92,13 @@ func _calculate_results() -> void:
 		grade = "E"; multiplier = 0.2; comment = "Failed. Try again."
 		lbl_grade.modulate = Color.RED
 	else:
-		grade = "Ɐ"; multiplier = 6.7; comment = "Absolute Inverse Perfection!"
-		lbl_grade.modulate = Color.PURPLE
+		# THE ZERO PERCENT ZONE
+		if is_fully_completed:
+			grade = "Ɐ"; multiplier = 6.7; comment = "Absolute Inverse Perfection!"
+			lbl_grade.modulate = Color.PURPLE
+		else:
+			grade = "F"; multiplier = 0.0; comment = "Incomplete. No points awarded."
+			lbl_grade.modulate = Color.RED
 		
 	lbl_grade.text = grade
 	lbl_comment.text = comment
@@ -104,7 +118,7 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 	if GVar.current_matkul == -1:
 		print("SYSTEM: Debug Mode detected. Progress not saved.")
 		return
-		
+
 	# 1. Update Global Player Statistics
 	GVar.current_points += payout
 	GVar.player_statistics["total_playtime"] += time_val
@@ -114,8 +128,6 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 	
 	# 2. Map the specific module path
 	var course_name = MATKUL_NAMES[GVar.current_matkul]
-	
-	# Map mode string. If it's Elearning (1), use Elearning. Else default to Quizizz.
 	var session_str = "Elearning" if GVar.current_quiz_mode == 1 else "Quizizz"
 	
 	var set_name = "Set " + str(GVar.current_course + 1)
@@ -128,23 +140,38 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 	var old_score_raw = stats["grade"]
 	var old_time = stats["time"]
 	
+	# --- INTEGRITY CHECK FOR SENTINEL VALUE ---
+	var answered_count = 0
+	for entry in GVar.quiz_history:
+		if entry["user_ans_text"] != "No Answer":
+			answered_count += 1
+	var is_fully_completed = (answered_count == GVar.quiz_total_questions)
+	
+	# Determine if this session is an 'Official' Ɐ attempt
+	var is_inverse_mastery = (score_pct == 0.0 and is_fully_completed)
+	
 	var is_new_record = false
 	
 	# If never played, it's automatically a new record
 	if str(old_score_raw) == "Locked" or str(old_score_raw) == "Unplayed":
 		is_new_record = true
 	else:
-		# If played, compare the raw numbers
+		# Compare numeric scores. 
+		# Note: We treat -1.0 as a 'special' score that beats a regular 0.0
 		var old_numeric = float(old_score_raw)
-		if score_pct > old_numeric:
+		
+		if is_inverse_mastery and old_numeric >= 0.0: 
+			# Upgrading from a normal fail to an Inverse Perfection
+			is_new_record = true
+		elif score_pct > old_numeric:
 			is_new_record = true
 		elif score_pct == old_numeric and time_val < old_time:
-			# Exact same score, but faster time!
 			is_new_record = true
 			
 	# 4. Overwrite and Unlock Next Level
 	if is_new_record:
-		stats["grade"] = score_pct # Store the raw float percentage!
+		# Save the magic number -1.0 if it's a Ɐ, otherwise save the float
+		stats["grade"] = -1.0 if is_inverse_mastery else score_pct
 		stats["time"] = time_val
 		
 		# Auto-Unlock the next set if they passed (50%+)
@@ -158,6 +185,9 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 	# 5. Force the physical save file to update immediately
 	SaveManager.save_game()
 	print("SYSTEM: Progress successfully saved.")
+	
+	# --- TRIGGER NOTIFIER ---
+	# Notify.check_for_new_unlocks()
 
 # --- INTERACTIONS ---
 

@@ -5,15 +5,15 @@ None: 0 credits
 
 Amateur: ??? credits
 - Sandbox Mode unlocked
-- Color picker unlocked
 
 Novice: ??? credits
 - All in One Mode unlocked
 - More accesible in Sandbox Mode
+- 1 Theme Set unlocked
 
 Intermediate: ??? credits
 - A complete control on Sandbox Mode
-- 3 Theme Set unlocked
+- 1 Theme Set unlocked
 
 Expert: ??? credits
 - Ability to see all questions and answers
@@ -22,6 +22,7 @@ Expert: ??? credits
 Master: ??? credits
 - A special wallpaper
 - Custom questions and answers
+- 1 Theme Set unlocked
 
 Magistra: all possible credits
 - Debug mode unlocked

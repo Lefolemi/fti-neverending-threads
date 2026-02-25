@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="FTI - Neverending Threads"
-config/version="0.0.18"
+config/version="0.0.19"
 run/main_scene="uid://dj6yefx2qbmh0"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

@@ -16,7 +16,6 @@ extends GridContainer
 @onready var btn_preview: Button = $Confirm/Preview
 @onready var btn_close: Button = $Confirm/Close
 
-
 # --- Shop Data ---
 const COLOR_PALETTE = {
 	"Classic": Color("2b2b2b"), "Midnight": Color("121212"), "Ocean": Color("0f2027"),
@@ -49,29 +48,32 @@ var set_upgrades = [
 # State
 var current_selected_btn: Button = null
 var current_selected_id: String = ""
+var current_selected_price: int = 0 # Track price for the Buy button
 
-# Preview State
 # Preview State
 var is_previewing_wp: bool = false
 var is_previewing_color: bool = false
 var original_title_text: String = "Shop"
-var pre_preview_ui_color: Color # <-- ADD THIS SNAPSHOT VARIABLE
+var pre_preview_ui_color: Color 
 
 func _ready() -> void:
-	# Store the original title so we can restore it
 	original_title_text = title_label.text
-	
-	# Enable GUI input on the Title Label so players can click it to cancel
 	title_label.mouse_filter = Control.MOUSE_FILTER_STOP
 	title_label.gui_input.connect(_on_title_gui_input)
 	
 	btn_close.pressed.connect(_on_close_pressed)
 	btn_preview.pressed.connect(_on_preview_pressed)
+	btn_buy.pressed.connect(_on_buy_pressed) # CONNECT THE BUY BUTTON
 	
 	btn_buy.disabled = true
 	btn_preview.disabled = true
 	
+	_update_points_display()
 	_generate_shop_ui()
+
+# --- Points UI ---
+func _update_points_display() -> void:
+	lbl_points.text = "Wallet: " + str(GVar.current_points) + " Pts"
 
 # --- Async UI Generation ---
 func _generate_shop_ui() -> void:
@@ -126,6 +128,7 @@ func _create_shop_button(item_id: String, title: String, price: int, tex: Textur
 	btn.self_modulate = Color.WHITE 
 	
 	var vbox = VBoxContainer.new()
+	vbox.name = "VBox" # NAMED SO WE CAN FIND IT LATER
 	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_KEEP_SIZE, 5)
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -161,22 +164,31 @@ func _create_shop_button(item_id: String, title: String, price: int, tex: Textur
 	vbox.add_child(lbl_title)
 	
 	var lbl_price = Label.new()
-	lbl_price.text = str(price) + " Pts"
+	lbl_price.name = "PriceLabel" # NAMED SO WE CAN FIND IT LATER
 	lbl_price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl_price.add_theme_color_override("font_color", Color.YELLOW)
 	lbl_price.add_theme_font_size_override("font_size", 12)
+	
+	# --- THE "SOLD" CHECK ---
+	if GVar.shop_unlocks.has(item_id):
+		lbl_price.text = "SOLD"
+		lbl_price.add_theme_color_override("font_color", Color.GREEN)
+	else:
+		lbl_price.text = str(price) + " Pts"
+		lbl_price.add_theme_color_override("font_color", Color.YELLOW)
+		
 	vbox.add_child(lbl_price)
 	
 	btn.pressed.connect(_on_item_clicked.bind(item_id, price, btn))
 	return btn
 
 # --- Interactions ---
+
 func _on_item_clicked(item_id: String, price: int, btn: Button) -> void:
-	# If they click a new item while previewing a UI color, cancel the preview
 	if is_previewing_color:
 		_stop_preview()
 		
 	current_selected_id = item_id
+	current_selected_price = price
 	
 	if current_selected_btn and is_instance_valid(current_selected_btn):
 		current_selected_btn.self_modulate = Color.WHITE
@@ -184,12 +196,55 @@ func _on_item_clicked(item_id: String, price: int, btn: Button) -> void:
 	current_selected_btn = btn
 	current_selected_btn.self_modulate = Color.YELLOW 
 	
-	btn_buy.disabled = false
+	# --- DYNAMIC BUY BUTTON LOGIC ---
+	var is_owned = GVar.shop_unlocks.has(item_id)
 	
+	if is_owned:
+		btn_buy.text = "Owned"
+		btn_buy.disabled = true
+	else:
+		if GVar.current_points >= price:
+			btn_buy.text = "Buy (-" + str(price) + ")"
+			btn_buy.disabled = false
+		else:
+			btn_buy.text = "Not Enough Pts"
+			btn_buy.disabled = true
+	
+	# Preview logic
 	if item_id.begins_with("CLR_") or (item_id.begins_with("WP_") and item_id.trim_prefix("WP_").is_valid_int()):
 		btn_preview.disabled = false
 	else:
 		btn_preview.disabled = true
+
+func _on_buy_pressed() -> void:
+	if current_selected_id == "" or GVar.shop_unlocks.has(current_selected_id):
+		return
+		
+	if GVar.current_points >= current_selected_price:
+		# 1. Deduct Points
+		GVar.current_points -= current_selected_price
+		
+		# 2. Add to Unlocks
+		GVar.shop_unlocks.append(current_selected_id)
+		
+		# 3. Save to Disk immediately
+		SaveManager.save_game()
+		
+		# 4. Update Global UI
+		_update_points_display()
+		
+		# 5. Update the specific item's button visually without reloading the whole shop
+		if current_selected_btn and is_instance_valid(current_selected_btn):
+			var price_node = current_selected_btn.get_node("VBox/PriceLabel")
+			if price_node:
+				price_node.text = "SOLD"
+				price_node.add_theme_color_override("font_color", Color.GREEN)
+				
+		# 6. Re-trigger the click logic to update the Confirm button to "Owned"
+		_on_item_clicked(current_selected_id, current_selected_price, current_selected_btn)
+		
+		# Optional: Play a cash register 'Cha-Ching' sound here!
+		print("SYSTEM: Successfully purchased ", current_selected_id)
 
 # --- Preview Logic ---
 func _on_preview_pressed() -> void:
@@ -209,12 +264,10 @@ func _on_preview_pressed() -> void:
 		is_previewing_color = true
 		title_label.text = "Press Title to stop preview"
 		
-		# 1. SNAPSHOT THE ORIGINAL COLOR BEFORE CHANGING IT
 		pre_preview_ui_color = ThemeEngine.current_background_color
 		
-		# 2. Apply the preview color
 		var c_name = current_selected_id.trim_prefix("CLR_")
-		ThemeEngine.current_background_color = COLOR_PALETTE[c_name] # Force the state change
+		ThemeEngine.current_background_color = COLOR_PALETTE[c_name] 
 		ThemeEngine.refresh_theme(COLOR_PALETTE[c_name])
 
 func _stop_preview() -> void:
@@ -235,20 +288,17 @@ func _stop_preview() -> void:
 		is_previewing_color = false
 		title_label.text = original_title_text
 		
-		# 3. RESTORE FROM THE SNAPSHOT
 		ThemeEngine.current_background_color = pre_preview_ui_color 
 		ThemeEngine.refresh_theme(pre_preview_ui_color)
 
-# Detect clicks on the Title to stop the preview
 func _on_title_gui_input(event: InputEvent) -> void:
 	if (is_previewing_wp or is_previewing_color) and (event is InputEventMouseButton or event is InputEventScreenTouch) and event.is_pressed():
 		_stop_preview()
 
-# Detect clicks ANYWHERE on the screen when wallpaper is fullscreen
 func _input(event: InputEvent) -> void:
 	if is_previewing_wp and (event is InputEventMouseButton or event is InputEventScreenTouch) and event.is_pressed():
 		_stop_preview()
-		get_viewport().set_input_as_handled() # Prevent the click from triggering anything else
+		get_viewport().set_input_as_handled() 
 
 func _on_close_pressed() -> void:
 	if is_previewing_color or is_previewing_wp:

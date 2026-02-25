@@ -254,28 +254,30 @@ func _update_csv_mark(line_index: int, new_state: bool) -> void:
 func _on_finish_pressed() -> void:
 	_is_quiz_active = false
 	var history_data = []
-	var final_correct_count = 0 # DECLARE IT HERE
+	var final_correct_count = 0
 	
 	# 1. Process Results
 	for q in _question_deck:
 		var user_ans_text = "No Answer"
-		if q["user_answer"] != -1 and q["user_answer"] < q["options"].size():
-			user_ans_text = q["options"][q["user_answer"]]["text"]
-		
-		var correct_ans_text = ""
 		var is_correct = false
+		var correct_ans_text = ""
+		
+		# Find the correct answer text
 		for opt in q["options"]:
 			if opt["is_correct"]:
 				correct_ans_text = opt["text"]
-				if q["user_answer"] != -1 and q["options"][q["user_answer"]] == opt:
-					is_correct = true
+				break
 		
-		if is_correct: final_correct_count += 1
+		# Integrity Check: Differentiate between Wrong and No Answer
+		if q["user_answer"] != -1 and q["user_answer"] < q["options"].size():
+			user_ans_text = q["options"][q["user_answer"]]["text"]
+			if q["options"][q["user_answer"]]["is_correct"]:
+				is_correct = true
+				final_correct_count += 1
 		
-		# Build history for Normal Mode (0)
 		history_data.append({
 			"q_text": q["q_text"],
-			"user_ans_text": user_ans_text,
+			"user_ans_text": user_ans_text, # "No Answer" is strictly preserved here
 			"correct_ans_text": correct_ans_text,
 			"is_correct": is_correct,
 			"csv_line_index": q["csv_line_index"],
@@ -286,21 +288,19 @@ func _on_finish_pressed() -> void:
 	GVar.quiz_total_questions = _question_deck.size()
 	GVar.quiz_correct_count = final_correct_count
 	GVar.quiz_history = history_data
-	
-	# Store the background stopwatch value unconditionally
 	GVar.quiz_time_taken = _stopwatch_val 
 	
-	# 3. Mode-Based Routing
-	if _quiz_mode == 1: # PRACTICE MODE
-		# Save Playtime for practice mode (since it skips Result Screen)
+	# 3. Mode-Based Routing (THE FIX)
+	# We check current_mode for Practice (1), NOT _quiz_mode (Elearning)
+	if GVar.current_mode == 1: 
 		if GVar.current_matkul != -1:
 			GVar.player_statistics["total_playtime"] += _stopwatch_val
 			SaveManager.save_game()
-			
 		var target = GVar.last_scene if GVar.last_scene != "" else "res://scenes/main/main_menu/main_menu.tscn"
 		Load.load_res([target], target)
-		
-	else: # NORMAL (0) or EXAM (2)
+	else: 
+		# NORMAL (0), MIDTEST (2), FINAL (3), ALL-IN-ONE (4)
+		# Now, Elearning sessions will correctly hit the Result Screen!
 		Load.load_res(["res://scenes/quiz/result_screen.tscn"], "res://scenes/quiz/result_screen.tscn")
 
 func _on_timer_finished() -> void:

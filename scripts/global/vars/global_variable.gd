@@ -37,7 +37,7 @@ var wallpaper_warp: float = 0.0
 # Background Settings
 var current_bg_color: Color = Color("121212")
 var current_wp_color: Color = Color.WHITE
-var current_wp_id: int = 1 
+var current_wp_id: int = 0
 var current_opacity: float = 1.0
 var current_velocity: Vector2 = Vector2.ZERO
 var current_scale: float = 1.0

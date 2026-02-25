@@ -99,9 +99,10 @@ func _update_stats_display() -> void:
 		var saved_score = stats["grade"] # This holds the raw number (e.g., 100, 30) OR "Locked"/"Unplayed"
 		var saved_time = stats["time"]
 		
-		# 1. Hide the speedrun elements by default
+		# 1. Reset Visibility and Colors by default
 		chk_allow_stopwatch.hide()
 		init_time.hide()
+		init_grade.modulate = Color.WHITE
 		
 		# Check if it's a string meaning it hasn't been beaten yet
 		if str(saved_score) == "Locked" or str(saved_score) == "Unplayed":
@@ -112,28 +113,52 @@ func _update_stats_display() -> void:
 			# It's a real score! Convert to float just to be safe for math
 			var numeric_score = float(saved_score)
 			
-			init_score.text = str(numeric_score) + "%"
-			init_grade.text = _get_letter_grade(numeric_score, saved_time)
-			init_time.text = "Best time: " + _format_time(saved_time)
+			# Determine question count for dynamic S-Rank scaling
+			var q_count = 15 # Default
+			if _current_set_name == "Midtest": q_count = 50
+			elif _current_set_name == "Final Test": q_count = 60
+			elif _current_set_name == "All in One": q_count = 100
 			
-			# 2. Reveal the speedrun UI only if they got a B (70%) or higher
-			if numeric_score >= 70.0:
-				chk_allow_stopwatch.show()
-				init_time.show()
+			# Handle the Sentinel Value (-1.0) for the Ɐ Grade
+			if numeric_score == -1.0:
+				init_score.text = "0.00%"
+				init_grade.text = "Ɐ"
+				init_grade.modulate = Color.PURPLE
+				init_time.text = "Best time: " + _format_time(saved_time)
+				init_time.show() # Show time because Ɐ is a completionist rank
+			
+			# Handle Standard 0% (F Grade)
+			elif numeric_score == 0.0:
+				init_score.text = "0.00%"
+				init_grade.text = "F"
+				init_grade.modulate = Color.RED
+				init_time.text = "Best time: 00:00:00"
+			
+			# Handle Normal Grades
+			else:
+				init_score.text = str(numeric_score) + "%"
+				init_grade.text = _get_letter_grade(numeric_score, saved_time, q_count)
+				init_time.text = "Best time: " + _format_time(saved_time)
+				
+				# 2. Reveal the speedrun UI only if they got a B (70%) or higher
+				if numeric_score >= 70.0:
+					chk_allow_stopwatch.show()
+					init_time.show()
 	else:
 		init_grade.text = "Error"
 		init_score.text = "Error"
 		init_time.text = "Best time: Error"
 		chk_allow_stopwatch.hide()
 		init_time.hide()
+		init_grade.modulate = Color.WHITE
 
 # --- HELPER FUNCTIONS ---
 
-func _get_letter_grade(percent: float, total_time: float) -> String:
+func _get_letter_grade(percent: float, total_time: float, q_count: int) -> String:
 	if percent >= 100:
-		# Assuming an average set is ~15 questions. 15 * 3 seconds = 45 seconds for S Rank.
-		# You can adjust this 45.0 threshold later if some sets are longer!
-		if total_time > 0 and total_time <= 45.0: 
+		# Dynamic S-Rank logic: 3 seconds average per question
+		var s_threshold = float(q_count) * 3.0
+		if total_time > 0 and total_time <= s_threshold: 
 			return "S"
 		else:
 			return "A+"
@@ -146,7 +171,7 @@ func _get_letter_grade(percent: float, total_time: float) -> String:
 	elif percent >= 20: return "D"
 	elif percent > 0:   return "E"
 	else:
-		return "Ɐ" # The Easter Egg!
+		return "F" 
 
 func _format_time(time_sec: float) -> String:
 	if time_sec <= 0.0:
@@ -175,5 +200,32 @@ func _on_start_pressed() -> void:
 	else:
 		GVar.current_quiz_mode = _selected_session_type 
 
+	# --- UPDATED: ITEM BANKING LOGIC ---
+	
+	if GVar.current_mode == 0:
+		# NORMAL SETS: 30 questions per set pool, pick 15.
+		GVar.set_range_from = GVar.current_course * 30
+		GVar.set_range_to = GVar.set_range_from + 29
+		GVar.quiz_subset_qty = 15
+
+	elif GVar.current_mode == 2:
+		# MIDTEST (UTS): Covers Sets 1-7 (Indices 0 to 209)
+		GVar.set_range_from = 0
+		GVar.set_range_to = (7 * 30) - 1 
+		GVar.quiz_subset_qty = 50 # Updated to 50 questions
+		
+	elif GVar.current_mode == 3:
+		# FINAL TEST (UAS): Covers Sets 8-14 (Indices 210 to 419)
+		GVar.set_range_from = 7 * 30 
+		GVar.set_range_to = (14 * 30) - 1 
+		GVar.quiz_subset_qty = 60 # Updated to 60 questions
+		
+	elif GVar.current_mode == 4:
+		# ALL IN ONE: The entire course pool!
+		GVar.set_range_from = 0
+		GVar.set_range_to = (14 * 30) - 1 
+		GVar.quiz_subset_qty = 100 # Adjusted higher for "The Ultimate Gauntlet"
+	
+	# --- LOAD SCENE ---
 	GVar.current_csv = "matkul/course" + str(GVar.current_matkul) + ".csv"
 	Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")

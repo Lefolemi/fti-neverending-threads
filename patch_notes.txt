@@ -82,3 +82,7 @@
 - parts of the save file has been implemented with the game
 - some life quality improvement
 - i should've done bottom to up integration :(
+
+0.0.19 :
+- Even more save files implementation!
+- Quality life changes

@@ -35,20 +35,59 @@ func _ready() -> void:
 	spin_scale.value_changed.connect(_on_scale_changed)
 	spin_warp.value_changed.connect(_on_warp_changed)
 
-	# 2. Sync UI to GVar state without triggering signals
+	# 2. Lock features the player hasn't bought yet
+	_setup_shop_locks()
+
+	# 3. Sync UI to GVar state without triggering signals
 	_sync_ui_to_state()
 
 # The Root Script calls this when the tab is clicked for the first time
 func init_tab() -> void:
 	_generate_wallpaper_grid()
+	_setup_shop_locks() # Re-verify locks just in case they bought something
 	_sync_ui_to_state()
 	_update_live_background()
+
+# --- SHOP LOCK LOGIC ---
+
+func _setup_shop_locks() -> void:
+	# Color Pickers
+	var has_bg_picker = GVar.shop_unlocks.has("BG_Picker")
+	bg_color_picker.disabled = not has_bg_picker
+	wp_color_picker.disabled = not has_bg_picker
+	
+	# Random Buttons
+	btn_rand_bg.disabled = not GVar.shop_unlocks.has("BG_Rand")
+	btn_rand_wp.disabled = not GVar.shop_unlocks.has("WP_Rand")
+	
+	# Opacity
+	var has_opacity = GVar.shop_unlocks.has("WP_Opacity")
+	slider_opacity.editable = has_opacity
+	slider_opacity.modulate = Color.WHITE if has_opacity else Color.DIM_GRAY
+	
+	# Motion
+	var has_motion = GVar.shop_unlocks.has("WP_Motion")
+	spin_motion_x.editable = has_motion
+	spin_motion_x.modulate = Color.WHITE if has_motion else Color.DIM_GRAY
+	spin_motion_y.editable = has_motion
+	spin_motion_y.modulate = Color.WHITE if has_motion else Color.DIM_GRAY
+	
+	# Scale
+	var has_scale = GVar.shop_unlocks.has("WP_Scale")
+	spin_scale.editable = has_scale
+	spin_scale.modulate = Color.WHITE if has_scale else Color.DIM_GRAY
+	
+	# Warp
+	var has_warp = GVar.shop_unlocks.has("WP_Warp")
+	spin_warp.editable = has_warp
+	spin_warp.modulate = Color.WHITE if has_warp else Color.DIM_GRAY
 
 # --- Grid Generation ---
 func _generate_wallpaper_grid() -> void:
 	for child in grid_wp.get_children():
 		child.queue_free()
 		
+	# Make sure this matches your shop (e.g., if Shop has 15, change to 16)
 	for i in range(1, 25):
 		var btn = TextureButton.new()
 		btn.name = "WP_" + str(i)
@@ -60,14 +99,20 @@ func _generate_wallpaper_grid() -> void:
 		btn.custom_minimum_size = Vector2(100, 100) 
 		btn.ignore_texture_size = true
 		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_COVERED
-		btn.self_modulate = Color.WHITE 
 		
-		btn.pressed.connect(_on_wallpaper_clicked.bind(i, btn))
+		# --- STRICT SHOP LOCK: ALL WALLPAPERS ---
+		# No freebies. Every single wallpaper must be bought in the shop.
+		var is_unlocked = GVar.shop_unlocks.has("WP_" + str(i))
+		
+		if is_unlocked:
+			btn.self_modulate = Color.WHITE 
+			btn.pressed.connect(_on_wallpaper_clicked.bind(i, btn))
+		else:
+			btn.disabled = true
+			btn.self_modulate = Color(0.2, 0.2, 0.2) # Dim the locked wallpapers heavily
+			
 		grid_wp.add_child(btn)
 		
-		# --- THE CHUNKING FIX ---
-		# Every 4 wallpapers, pause execution until the next visual frame.
-		# This keeps the game running at 60fps while loading in the background!
 		if i % 4 == 0:
 			await get_tree().process_frame
 
@@ -83,7 +128,6 @@ func _setup_selection_label() -> void:
 # --- Interactions ---
 
 func _on_wallpaper_clicked(id: int, btn: TextureButton) -> void:
-	# Check if we are clicking the one already selected
 	if GVar.current_wp_id == id:
 		# DESELECT LOGIC
 		GVar.current_wp_id = 0
@@ -95,15 +139,12 @@ func _on_wallpaper_clicked(id: int, btn: TextureButton) -> void:
 		# SELECT LOGIC
 		GVar.current_wp_id = id
 		
-		# Reset the OLD button to pure white
 		if current_selected_btn and is_instance_valid(current_selected_btn):
 			current_selected_btn.self_modulate = Color.WHITE
 			
-		# Set the NEW button
 		current_selected_btn = btn
 		current_selected_btn.self_modulate = GVar.current_wp_color
 		
-		# Move the "Selected" label
 		if selection_label.get_parent():
 			selection_label.get_parent().remove_child(selection_label)
 		btn.add_child(selection_label)
@@ -121,7 +162,6 @@ func _on_rand_bg_pressed() -> void:
 
 func _on_wp_color_changed(color: Color) -> void:
 	GVar.current_wp_color = color
-	# ONLY tint the actively selected thumbnail
 	if current_selected_btn and is_instance_valid(current_selected_btn):
 		current_selected_btn.self_modulate = color
 		
@@ -155,7 +195,6 @@ func _on_warp_changed(value: float) -> void:
 # --- Core Update Logic ---
 
 func _sync_ui_to_state() -> void:
-	# Use set_value_no_signal to prevent firing signals during UI setup
 	bg_color_picker.color = GVar.current_bg_color
 	wp_color_picker.color = GVar.current_wp_color
 	slider_opacity.set_value_no_signal(GVar.current_opacity)
@@ -166,7 +205,6 @@ func _sync_ui_to_state() -> void:
 	
 	await get_tree().process_frame 
 	
-	# Manually attach the selection label to the correct button WITHOUT simulating a click
 	if GVar.current_wp_id > 0:
 		var active_btn = grid_wp.get_node_or_null("WP_" + str(GVar.current_wp_id))
 		if active_btn:
@@ -180,13 +218,11 @@ func _update_live_background() -> void:
 	BG.set_bg_color(GVar.current_bg_color)
 
 	var wp_tex: Texture2D = null
-	# Only attempt to load if ID is valid (greater than 0)
 	if GVar.current_wp_id > 0:
 		var full_wp_path = "res://sprites/bg/bg_" + str(GVar.current_wp_id) + ".png"
 		if ResourceLoader.exists(full_wp_path):
 			wp_tex = load(full_wp_path)
 
-	# Send updated GVar data to the Autoload Shader
 	BG.apply_background_settings(
 		wp_tex, 
 		GVar.current_wp_color, 

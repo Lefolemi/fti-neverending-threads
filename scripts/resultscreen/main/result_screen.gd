@@ -50,7 +50,12 @@ func _calculate_results() -> void:
 	
 	var mins = int(time_val) / 60
 	var secs = int(time_val) % 60
-	lbl_best_time.text = "Time: %02d:%02d" % [mins, secs]
+	
+	# If stopwatch is disabled, show a dash or N/A to indicate time wasn't tracked
+	if GVar.quiz_allow_stopwatch:
+		lbl_best_time.text = "Time: %02d:%02d" % [mins, secs]
+	else:
+		lbl_best_time.text = "Time: --:--"
 	
 	# 3. Dynamic Grading Scale
 	var avg_time = 999.0
@@ -61,7 +66,7 @@ func _calculate_results() -> void:
 	var multiplier = 1.0 # For calculating point payouts
 	
 	if score_pct >= 100.0:
-		if avg_time <= 3.0: # 3 seconds per question threshold for S
+		if avg_time <= 3.0 and GVar.quiz_allow_stopwatch: # S-Rank requires time tracking!
 			grade = "S"; multiplier = 2.5; comment = "PERFECT & FAST! Godlike!"
 			lbl_grade.modulate = Color.GOLD
 		else:
@@ -121,7 +126,10 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 
 	# 1. Update Global Player Statistics
 	GVar.current_points += payout
-	GVar.player_statistics["total_playtime"] += time_val
+	# Only add playtime if stopwatch is allowed to prevent skewing stats with untimed idling
+	if GVar.quiz_allow_stopwatch:
+		GVar.player_statistics["total_playtime"] += time_val
+		
 	GVar.player_statistics["total_game_played"] += 1
 	GVar.player_statistics["total_correct_answers"] += GVar.quiz_correct_count
 	GVar.player_statistics["total_wrong_answers"] += (GVar.quiz_total_questions - GVar.quiz_correct_count)
@@ -165,14 +173,18 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 			is_new_record = true
 		elif score_pct > old_numeric:
 			is_new_record = true
-		elif score_pct == old_numeric and time_val < old_time:
+		# Tiebreaker ONLY counts if stopwatch is allowed
+		elif score_pct == old_numeric and GVar.quiz_allow_stopwatch and time_val < old_time:
 			is_new_record = true
 			
 	# 4. Overwrite and Unlock Next Level
 	if is_new_record:
 		# Save the magic number -1.0 if it's a Ɐ, otherwise save the float
 		stats["grade"] = -1.0 if is_inverse_mastery else score_pct
-		stats["time"] = time_val
+		
+		# Only overwrite the time record if the stopwatch was legally running
+		if GVar.quiz_allow_stopwatch:
+			stats["time"] = time_val
 		
 		# Auto-Unlock the next set if they passed (50%+)
 		if GVar.current_mode == 0 and score_pct >= 50.0:
@@ -186,8 +198,8 @@ func _save_progress(score_pct: float, time_val: float, payout: int) -> void:
 	SaveManager.save_game()
 	print("SYSTEM: Progress successfully saved.")
 	
-	# --- TRIGGER NOTIFIER ---
-	# Notify.check_for_new_unlocks()
+	# 6. --- TRIGGER GLOBAL ACHIEVEMENT CHECK ---
+	AchievementManager.evaluate_all()
 
 # --- INTERACTIONS ---
 

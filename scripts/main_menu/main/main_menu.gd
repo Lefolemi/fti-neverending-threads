@@ -51,6 +51,10 @@ func _ready() -> void:
 
 	# 3. Initialize State (Visuals only)
 	_initialize_visuals()
+	
+	# --- NEW: FAILSAFE ACHIEVEMENT CHECK ---
+	# Catches playtime accumulated from aborted sessions or manual save-file tampering.
+	AchievementManager.evaluate_all()
 
 # --- CSV Logic ---
 

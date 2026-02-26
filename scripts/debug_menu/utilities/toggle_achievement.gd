@@ -3,10 +3,6 @@ extends GridContainer
 @onready var close_button: Button = $Close
 @onready var vbox_achievements: VBoxContainer = $Content/VBox/AchievementList/VBox
 
-const CSV_PATH = "res://resources/csv/menu/achievement.csv"
-
-var parsed_achievements: Array = []
-
 var category_names = [
 	"Manajemen Proyek Perangkat Lunak", "Jaringan Komputer", 
 	"Keamanan Siber", "Pemrograman Web 1", "Mobile Programming", 
@@ -14,19 +10,8 @@ var category_names = [
 	"Time Related", "Challenge Related"
 ]
 
-const RANK_THRESHOLDS = [
-	{"name": "None", "req": 0},
-	{"name": "Amateur", "req": 150},
-	{"name": "Novice", "req": 500},
-	{"name": "Intermediate", "req": 1200},
-	{"name": "Expert", "req": 2000},
-	{"name": "Master", "req": 2600},
-	{"name": "Magistra", "req": 2818}
-]
-
 func _ready() -> void:
 	close_button.pressed.connect(_on_close_pressed)
-	_load_csv_data()
 	_generate_achievements()
 
 # --- Navigation Logic ---
@@ -39,32 +24,6 @@ func show_menu(node: String) -> void:
 func _on_close_pressed() -> void:
 	show_menu("MenuVBox")
 
-# --- Data Loading ---
-func _load_csv_data() -> void:
-	if not FileAccess.file_exists(CSV_PATH):
-		push_error("CSV file not found at: ", CSV_PATH)
-		return
-		
-	var file = FileAccess.open(CSV_PATH, FileAccess.READ)
-	file.get_csv_line() # Skip header
-	
-	while not file.eof_reached():
-		var line = file.get_csv_line()
-		if line.size() >= 2 and line[0].strip_edges() != "":
-			var title = line[0]
-			var desc = line[1]
-			var credits = 0
-			var split_desc = desc.split("(")
-			if split_desc.size() > 1:
-				credits = split_desc[split_desc.size() - 1].to_int()
-			
-			parsed_achievements.append({
-				"title": title,
-				"desc": desc,
-				"cr": credits
-			})
-	file.close()
-
 # --- Async UI Generation ---
 func _generate_achievements() -> void:
 	for child in vbox_achievements.get_children():
@@ -74,8 +33,11 @@ func _generate_achievements() -> void:
 		
 	var current_cat_idx = -1
 	
-	for i in range(parsed_achievements.size()):
-		var ach = parsed_achievements[i]
+	# Fetch the master list directly from the new Autoload!
+	var achievements = AchievementManager.parsed_achievements
+	
+	for i in range(achievements.size()):
+		var ach = achievements[i]
 		
 		var cat_idx = 0
 		if i < 56:   cat_idx = i / 7 
@@ -94,16 +56,16 @@ func _generate_achievements() -> void:
 			header.add_theme_color_override("font_color", Color.AQUA)
 			vbox_achievements.add_child(header)
 			
-		# Check if already unlocked so we can disable the button
+		# Check if already unlocked
 		var is_unlocked = GVar.unlocked_achievements.has(ach["title"])
 		
-		var btn = _create_debug_button(i, ach["title"], ach["desc"], ach["cr"], is_unlocked)
+		var btn = _create_debug_button(i, ach["title"], ach["desc"], is_unlocked)
 		vbox_achievements.add_child(btn)
 		
 		if i % 4 == 0:
 			await get_tree().process_frame
 
-func _create_debug_button(index: int, title: String, desc: String, credits: int, is_unlocked: bool) -> Button:
+func _create_debug_button(index: int, title: String, desc: String, is_unlocked: bool) -> Button:
 	var btn = Button.new()
 	btn.custom_minimum_size = Vector2(0, 60)
 	btn.disabled = is_unlocked
@@ -129,43 +91,23 @@ func _create_debug_button(index: int, title: String, desc: String, credits: int,
 	lbl_desc.add_theme_font_size_override("font_size", 12)
 	text_vbox.add_child(lbl_desc)
 	
-	# FIX: Bind the lbl_title directly so we don't have to search for it later!
-	btn.pressed.connect(_on_force_unlock_pressed.bind(index, title, desc, credits, btn, lbl_title))
+	# We only need to pass the index, the button, and the label now.
+	btn.pressed.connect(_on_force_unlock_pressed.bind(index, btn, lbl_title))
 	
 	return btn
 
 # --- THE FORCE UNLOCK ENGINE ---
-# FIX: Added title_lbl: Label as the final parameter
-func _on_force_unlock_pressed(index: int, title: String, desc: String, credits: int, btn: Button, title_lbl: Label) -> void:
-	# 1. Disable the button immediately
+func _on_force_unlock_pressed(index: int, btn: Button, title_lbl: Label) -> void:
+	# 1. Disable the button visually
 	btn.disabled = true
-	
-	# Because we passed the label directly, we can just modify it!
 	title_lbl.text += " (UNLOCKED)"
 	title_lbl.add_theme_color_override("font_color", Color.GRAY)
 	
-	# 2. Add to Unlocked Array & Add Points
-	GVar.unlocked_achievements.append(title)
-	
-	var old_points = GVar.current_points
-	GVar.current_points += credits
-	
-	# 3. Force the underlying GVar Save Data to match the achievement!
+	# 2. Force the underlying GVar Save Data to match the achievement
 	_manipulate_save_data(index)
 	
-	# 4. Save to Disk
-	SaveManager.save_game()
-	
-	# 5. Trigger Notifications
-	Notify.notify_achievement(title, desc)
-	
-	# Check for Rank Up
-	var old_rank = _get_rank_from_points(old_points)
-	var new_rank = _get_rank_from_points(GVar.current_points)
-	
-	if old_rank != new_rank:
-		# Because notify_achievement was called first, the queue will show achievement THEN rank up
-		Notify.notify_rank_up(new_rank)
+	# 3. Ask the Autoload to scan changes, add points, notify, and save!
+	AchievementManager.evaluate_all()
 
 # --- SAVE FILE MANIPULATION ---
 func _manipulate_save_data(index: int) -> void:
@@ -215,12 +157,3 @@ func _manipulate_save_data(index: int) -> void:
 					for mode in ["Quizizz", "Elearning"]:
 						for s in range(1, 15): GVar.course_stats[c_name][mode]["Set " + str(s)]["grade"] = 100.0
 					GVar.course_stats[c_name]["Quizizz"]["Final Test"]["grade"] = 100.0
-
-func _get_rank_from_points(points: int) -> String:
-	var current_rank = "None"
-	for i in range(RANK_THRESHOLDS.size()):
-		if points >= RANK_THRESHOLDS[i]["req"]:
-			current_rank = RANK_THRESHOLDS[i]["name"]
-		else:
-			break
-	return current_rank

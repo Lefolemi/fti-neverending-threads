@@ -91,3 +91,7 @@
 - added toggle achievement menu in debug menu
 - even more implementation of save file
 - some bug fixes regarding achievement.
+
+0.0.21 :
+- Some quality improvements
+- Deck View is now added

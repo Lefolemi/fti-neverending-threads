@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhgrbt14bg60n"]
+[gd_scene load_steps=11 format=3 uid="uid://dhgrbt14bg60n"]
 
 [ext_resource type="Script" uid="uid://bvmaty5rslu0k" path="res://scripts/main_menu/utilities/version.gd" id="1_0kd0q"]
 [ext_resource type="Script" uid="uid://ckptwfw4gjrrd" path="res://scripts/main_menu/main/main_menu.gd" id="1_r7wpq"]
 [ext_resource type="PackedScene" uid="uid://btccjgt5e7jvc" path="res://scenes/main/main_menu/matkul_container.tscn" id="2_r7wpq"]
+[ext_resource type="Script" uid="uid://bfvkyfnidxqn5" path="res://scripts/main_menu/utilities/other.gd" id="3_5fid0"]
 [ext_resource type="PackedScene" uid="uid://d12ccl3c5de7q" path="res://scenes/main/main_menu/course_container.tscn" id="3_k0ycp"]
 [ext_resource type="Script" uid="uid://dv8c8rwy71l1d" path="res://scripts/main_menu/utilities/menu_page.gd" id="4_k0ycp"]
 [ext_resource type="Script" uid="uid://peqnp4rypx7p" path="res://scripts/main_menu/utilities/utility_container.gd" id="6_scmgr"]
@@ -66,6 +67,27 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "vX.X.X"
 script = ExtResource("1_0kd0q")
+
+[node name="Other" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -222.0
+offset_right = 186.0
+offset_bottom = -191.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_5fid0")
+
+[node name="Decks" type="Button" parent="Other"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "Decks"
 
 [node name="MatkulContainer" parent="." instance=ExtResource("2_r7wpq")]
 layout_mode = 1
@@ -418,4 +440,5 @@ text = "Let's go!"
 layout_mode = 2
 text = "Cancel"
 
+[connection signal="pressed" from="Other/Decks" to="Other" method="_on_decks_pressed"]
 [connection signal="pressed" from="DebugMode" to="DebugMode" method="_on_pressed"]

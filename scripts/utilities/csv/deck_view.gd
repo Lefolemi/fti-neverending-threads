@@ -23,7 +23,8 @@ func _ready() -> void:
 	course_opt.item_selected.connect(_on_course_selected)
 
 	# 3. Load the initial CSV (Defaults to index 0 / Course 0)
-	_load_course_csv(0)
+	var initial_index = course_opt.selected if course_opt.selected != -1 else 0
+	_load_course_csv(initial_index)
 
 func _on_back_pressed() -> void:
 	if GVar.last_scene != "":
@@ -99,19 +100,30 @@ func _load_course_csv(course_id: int) -> void:
 		if content_container.has_method("_update_table_async"):
 			content_container._update_table_async()
 
-
 # --- CSV FILE WRITING LOGIC ---
 
 # Triggered whenever the player clicks a checkbox in the UI
 func _on_mark_toggled(question_text: String, is_marked: bool) -> void:
 	_update_csv_marked_state(question_text, false, is_marked)
 
-# Triggered when "Unmark All" button is pressed
+# Triggered when "Unmark All" button is pressed (NOW WITH DOUBLE CONFIRMATION)
 func _on_unmark_all_pressed() -> void:
-	_update_csv_marked_state("", true, false)
-	# Reload the UI so all checkboxes disappear visually
-	_load_course_csv(current_course_id)
-
+	# 1st Confirmation
+	var is_sure = await ConfirmManager.ask("Are you sure you want to unmark ALL questions in this course?")
+	
+	if is_sure:
+		# 2nd Confirmation (The big warning)
+		var is_absolutely_sure = await ConfirmManager.ask("WARNING: This will permanently wipe all your bookmarks for this course and cannot be undone!\n\nAre you ABSOLUTELY sure?")
+		
+		if is_absolutely_sure:
+			print("Double confirmation passed! Wiping marks for course: ", current_course_id)
+			_update_csv_marked_state("", true, false)
+			# Reload the UI so all checkboxes disappear visually
+			_load_course_csv(current_course_id)
+		else:
+			print("Player cancelled at the final warning.")
+	else:
+		print("Player cancelled the unmark all action.")
 
 # Helper function to read, modify, and rewrite the CSV file
 func _update_csv_marked_state(target_question: String, unmark_all: bool, is_marked: bool) -> void:

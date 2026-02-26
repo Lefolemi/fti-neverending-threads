@@ -134,7 +134,6 @@ func _preprocess_answers(data: Dictionary) -> void:
 	data["processed_options"] = processed_opts
 
 func _setup_ui_mode() -> void:
-	# VISIBILITY: Only show the label if allowed
 	stopwatch_label.visible = GVar.quiz_allow_stopwatch
 	page_label.visible = GVar.quiz_show_question_number
 	timer_label.visible = (GVar.current_quiz_timer > 0)
@@ -174,7 +173,8 @@ func _try_go_next() -> void:
 	if _current_index < _question_deck.size() - 1:
 		_load_question_ui(_current_index + 1)
 	else:
-		_on_finish_pressed()
+		# If Quizizz mode reaches the end of the deck, force the finish!
+		_on_finish_pressed(true)
 
 func _on_nav_pressed(direction: int) -> void:
 	var new_idx = _current_index + direction
@@ -195,7 +195,10 @@ func _on_mark_pressed() -> void:
 # --- POPUP HANDLERS ---
 
 func _on_restart_pressed() -> void:
-	Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")
+	# Add confirmation for Restarting as well!
+	var is_sure = await ConfirmManager.ask("Are you sure you want to restart the session?\nAll current progress will be lost!")
+	if is_sure:
+		Load.load_res(["res://scenes/quiz/quiz_main.tscn"], "res://scenes/quiz/quiz_main.tscn")
 
 func _on_session_settings_pressed() -> void:
 	if session_settings: session_settings.open_menu()
@@ -251,7 +254,14 @@ func _update_csv_mark(line_index: int, new_state: bool) -> void:
 	for row in lines: file_write.store_csv_line(row)
 	file_write.close()
 
-func _on_finish_pressed() -> void:
+# Note: is_forced defaults to false. It is passed as true ONLY when the timer runs out.
+func _on_finish_pressed(is_forced: bool = false) -> void:
+	# Check for confirmation if it's NOT forced and NOT practice mode
+	if not is_forced and GVar.current_mode != 1:
+		var is_sure = await ConfirmManager.ask("Are you sure you want to finish the session?\n(MAKE SURE THERE'S NO MISSING ANSWER!)")
+		if not is_sure:
+			return # Cancel the finish
+			
 	_is_quiz_active = false
 	var history_data = []
 	var final_correct_count = 0
@@ -277,7 +287,7 @@ func _on_finish_pressed() -> void:
 		
 		history_data.append({
 			"q_text": q["q_text"],
-			"user_ans_text": user_ans_text, # "No Answer" is strictly preserved here
+			"user_ans_text": user_ans_text,
 			"correct_ans_text": correct_ans_text,
 			"is_correct": is_correct,
 			"csv_line_index": q["csv_line_index"],
@@ -290,8 +300,7 @@ func _on_finish_pressed() -> void:
 	GVar.quiz_history = history_data
 	GVar.quiz_time_taken = _stopwatch_val 
 	
-	# 3. Mode-Based Routing (THE FIX)
-	# We check current_mode for Practice (1), NOT _quiz_mode (Elearning)
+	# 3. Mode-Based Routing
 	if GVar.current_mode == 1: 
 		if GVar.current_matkul != -1:
 			GVar.player_statistics["total_playtime"] += _stopwatch_val
@@ -299,8 +308,6 @@ func _on_finish_pressed() -> void:
 		var target = GVar.last_scene if GVar.last_scene != "" else "res://scenes/main/main_menu/main_menu.tscn"
 		Load.load_res([target], target)
 	else: 
-		# NORMAL (0), MIDTEST (2), FINAL (3), ALL-IN-ONE (4)
-		# Now, Elearning sessions will correctly hit the Result Screen!
 		Load.load_res(["res://scenes/quiz/result_screen.tscn"], "res://scenes/quiz/result_screen.tscn")
 
 func _on_timer_finished() -> void:
@@ -318,7 +325,8 @@ func _on_timer_finished() -> void:
 			await get_tree().create_timer(2.0).timeout
 			_try_go_next()
 	else:
-		_on_finish_pressed()
+		# Timer is up in E-Learning Mode -> FORCE FINISH (bypass confirm manager)
+		_on_finish_pressed(true)
 
 func _update_timer_label() -> void:
 	var mins = int(_timer_val) / 60

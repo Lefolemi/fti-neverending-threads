@@ -48,7 +48,8 @@ var set_upgrades = [
 # State
 var current_selected_btn: Button = null
 var current_selected_id: String = ""
-var current_selected_price: int = 0 # Track price for the Buy button
+var current_selected_title: String = "" # Added to keep track of the name for the popup
+var current_selected_price: int = 0 
 
 # Preview State
 var is_previewing_wp: bool = false
@@ -63,7 +64,7 @@ func _ready() -> void:
 	
 	btn_close.pressed.connect(_on_close_pressed)
 	btn_preview.pressed.connect(_on_preview_pressed)
-	btn_buy.pressed.connect(_on_buy_pressed) # CONNECT THE BUY BUTTON
+	btn_buy.pressed.connect(_on_buy_pressed) 
 	
 	btn_buy.disabled = true
 	btn_preview.disabled = true
@@ -128,7 +129,7 @@ func _create_shop_button(item_id: String, title: String, price: int, tex: Textur
 	btn.self_modulate = Color.WHITE 
 	
 	var vbox = VBoxContainer.new()
-	vbox.name = "VBox" # NAMED SO WE CAN FIND IT LATER
+	vbox.name = "VBox"
 	vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_KEEP_SIZE, 5)
 	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -164,11 +165,10 @@ func _create_shop_button(item_id: String, title: String, price: int, tex: Textur
 	vbox.add_child(lbl_title)
 	
 	var lbl_price = Label.new()
-	lbl_price.name = "PriceLabel" # NAMED SO WE CAN FIND IT LATER
+	lbl_price.name = "PriceLabel" 
 	lbl_price.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_price.add_theme_font_size_override("font_size", 12)
 	
-	# --- THE "SOLD" CHECK ---
 	if GVar.shop_unlocks.has(item_id):
 		lbl_price.text = "SOLD"
 		lbl_price.add_theme_color_override("font_color", Color.GREEN)
@@ -176,18 +176,21 @@ func _create_shop_button(item_id: String, title: String, price: int, tex: Textur
 		lbl_price.text = str(price) + " Pts"
 		lbl_price.add_theme_color_override("font_color", Color.YELLOW)
 		
+	# THE MISSING LINE: We must actually add the label to the VBox!
 	vbox.add_child(lbl_price)
-	
-	btn.pressed.connect(_on_item_clicked.bind(item_id, price, btn))
+		
+	# Pass the TITLE as well so we can use it in the ConfirmManager popup
+	btn.pressed.connect(_on_item_clicked.bind(item_id, title, price, btn))
 	return btn
 
 # --- Interactions ---
 
-func _on_item_clicked(item_id: String, price: int, btn: Button) -> void:
+func _on_item_clicked(item_id: String, item_title: String, price: int, btn: Button) -> void:
 	if is_previewing_color:
 		_stop_preview()
 		
 	current_selected_id = item_id
+	current_selected_title = item_title
 	current_selected_price = price
 	
 	if current_selected_btn and is_instance_valid(current_selected_btn):
@@ -196,21 +199,16 @@ func _on_item_clicked(item_id: String, price: int, btn: Button) -> void:
 	current_selected_btn = btn
 	current_selected_btn.self_modulate = Color.YELLOW 
 	
-	# --- DYNAMIC BUY BUTTON LOGIC ---
 	var is_owned = GVar.shop_unlocks.has(item_id)
 	
 	if is_owned:
 		btn_buy.text = "Owned"
 		btn_buy.disabled = true
 	else:
-		if GVar.current_points >= price:
-			btn_buy.text = "Buy (-" + str(price) + ")"
-			btn_buy.disabled = false
-		else:
-			btn_buy.text = "Not Enough Pts"
-			btn_buy.disabled = true
+		# Always keep it enabled so they can click it and get the "Not enough money" feedback
+		btn_buy.text = "Buy (-" + str(price) + ")"
+		btn_buy.disabled = false
 	
-	# Preview logic
 	if item_id.begins_with("CLR_") or (item_id.begins_with("WP_") and item_id.trim_prefix("WP_").is_valid_int()):
 		btn_preview.disabled = false
 	else:
@@ -220,31 +218,40 @@ func _on_buy_pressed() -> void:
 	if current_selected_id == "" or GVar.shop_unlocks.has(current_selected_id):
 		return
 		
-	if GVar.current_points >= current_selected_price:
-		# 1. Deduct Points
+	# --- 1. THE POOR CHECK ---
+	if GVar.current_points < current_selected_price:
+		Audio.play_sfx("res://audio/sfx/wrong.wav")
+		title_label.text = "Not enough money!!"
+		title_label.add_theme_color_override("font_color", Color.RED)
+		
+		# Wait 2 seconds, then reset
+		await get_tree().create_timer(2.0).timeout
+		title_label.text = original_title_text
+		title_label.remove_theme_color_override("font_color")
+		return
+		
+	# --- 2. THE CONFIRMATION MANAGER ---
+	var is_sure = await ConfirmManager.ask("Are you sure you want to buy " + current_selected_title + " for " + str(current_selected_price) + " Pts?")
+	
+	# --- 3. THE PURCHASE ---
+	if is_sure:
+		Audio.play_sfx("res://audio/sfx/buy.wav")
+		
+		# Deduct Points & Add to Unlocks
 		GVar.current_points -= current_selected_price
-		
-		# 2. Add to Unlocks
 		GVar.shop_unlocks.append(current_selected_id)
-		
-		# 3. Save to Disk immediately
 		SaveManager.save_game()
 		
-		# 4. Update Global UI
 		_update_points_display()
 		
-		# 5. Update the specific item's button visually without reloading the whole shop
 		if current_selected_btn and is_instance_valid(current_selected_btn):
 			var price_node = current_selected_btn.get_node("VBox/PriceLabel")
 			if price_node:
 				price_node.text = "SOLD"
 				price_node.add_theme_color_override("font_color", Color.GREEN)
 				
-		# 6. Re-trigger the click logic to update the Confirm button to "Owned"
-		_on_item_clicked(current_selected_id, current_selected_price, current_selected_btn)
-		
-		# Optional: Play a cash register 'Cha-Ching' sound here!
-		print("SYSTEM: Successfully purchased ", current_selected_id)
+		# Update button to "Owned"
+		_on_item_clicked(current_selected_id, current_selected_title, current_selected_price, current_selected_btn)
 
 # --- Preview Logic ---
 func _on_preview_pressed() -> void:

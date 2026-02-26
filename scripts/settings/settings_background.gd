@@ -19,6 +19,17 @@ extends ScrollContainer
 var selection_label: Label
 var current_selected_btn: TextureButton = null # Track exactly which button is active
 
+const COURSE_LIST = [
+	"Manajemen Proyek Perangkat Lunak",
+	"Jaringan Komputer",
+	"Keamanan Siber",
+	"Pemrograman Web 1",
+	"Mobile Programming",
+	"Metodologi Riset",
+	"Computer Vision",
+	"Pengolahan Citra Digital"
+]
+
 func _ready() -> void:
 	_setup_selection_label()
 
@@ -71,7 +82,7 @@ func _setup_shop_locks() -> void:
 	spin_motion_x.modulate = Color.WHITE if has_motion else Color.DIM_GRAY
 	spin_motion_y.editable = has_motion
 	spin_motion_y.modulate = Color.WHITE if has_motion else Color.DIM_GRAY
-	
+
 	# Scale
 	var has_scale = GVar.shop_unlocks.has("WP_Scale")
 	spin_scale.editable = has_scale
@@ -87,7 +98,10 @@ func _generate_wallpaper_grid() -> void:
 	for child in grid_wp.get_children():
 		child.queue_free()
 		
-	# Make sure this matches your shop (e.g., if Shop has 15, change to 16)
+	# Grab total credits to check for Novice Rank
+	var total_credits = _calculate_total_achievement_credits()
+		
+	# Generate all 24 Wallpapers
 	for i in range(1, 25):
 		var btn = TextureButton.new()
 		btn.name = "WP_" + str(i)
@@ -100,9 +114,19 @@ func _generate_wallpaper_grid() -> void:
 		btn.ignore_texture_size = true
 		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_COVERED
 		
-		# --- STRICT SHOP LOCK: ALL WALLPAPERS ---
-		# No freebies. Every single wallpaper must be bought in the shop.
-		var is_unlocked = GVar.shop_unlocks.has("WP_" + str(i))
+		var is_unlocked = false
+		
+		# --- DYNAMIC UNLOCK LOGIC ---
+		if i <= 15:
+			# Wallpapers 1-15: Shop Unlocks
+			is_unlocked = GVar.shop_unlocks.has("WP_" + str(i))
+		elif i >= 16 and i <= 23:
+			# Wallpapers 16-23: Course Specific Mastery (70% on all 14 sets)
+			var course_idx = i - 16 # WP 16 maps to Course 0, WP 23 maps to Course 7
+			is_unlocked = _has_70_percent_in_all_sets(course_idx)
+		elif i == 24:
+			# Wallpaper 24: Novice Rank (500 Credits)
+			is_unlocked = total_credits >= 500
 		
 		if is_unlocked:
 			btn.self_modulate = Color.WHITE 
@@ -115,6 +139,59 @@ func _generate_wallpaper_grid() -> void:
 		
 		if i % 4 == 0:
 			await get_tree().process_frame
+
+# --- UNLOCK HELPERS ---
+
+func _has_70_percent_in_all_sets(course_index: int) -> bool:
+	var course_name = COURSE_LIST[course_index]
+	var stats = GVar.course_stats[course_name]
+	
+	for i in range(1, 15):
+		var set_name = "Set " + str(i)
+		var q_grade = stats["Quizizz"][set_name]["grade"]
+		var e_grade = stats["Elearning"][set_name]["grade"]
+		
+		var highest_grade = 0.0
+		
+		if str(q_grade) != "Locked" and str(q_grade) != "Unplayed":
+			highest_grade = max(highest_grade, float(q_grade))
+		if str(e_grade) != "Locked" and str(e_grade) != "Unplayed":
+			highest_grade = max(highest_grade, float(e_grade))
+			
+		# If even a single set is below 70%, it is locked.
+		if highest_grade < 70.0:
+			return false
+			
+	return true
+
+func _calculate_total_achievement_credits() -> int:
+	var total_cr = 0
+	var path = "res://resources/csv/menu/achievement.csv"
+	
+	if not FileAccess.file_exists(path): return 0
+		
+	var file = FileAccess.open(path, FileAccess.READ)
+	file.get_csv_line()
+	
+	var ach_values = {}
+	while not file.eof_reached():
+		var line = file.get_csv_line()
+		if line.size() >= 2:
+			var title = line[0].strip_edges()
+			var credits = 0
+			var split_desc = line[1].split("(")
+			if split_desc.size() > 1:
+				credits = split_desc[split_desc.size() - 1].to_int()
+			ach_values[title] = credits
+	file.close()
+	
+	for unlocked_title in GVar.unlocked_achievements:
+		if ach_values.has(unlocked_title):
+			total_cr += ach_values[unlocked_title]
+			
+	return total_cr
+
+# --- UI LOGIC ---
 
 func _setup_selection_label() -> void:
 	selection_label = Label.new()

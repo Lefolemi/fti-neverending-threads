@@ -69,41 +69,53 @@ func _calculate_results() -> void:
 		if avg_time <= 3.0 and GVar.quiz_allow_stopwatch: # S-Rank requires time tracking!
 			grade = "S"; multiplier = 2.5; comment = "PERFECT & FAST! Godlike!"
 			lbl_grade.modulate = Color.GOLD
+			Audio.play_sfx("res://audio/sfx/congratulations.wav")
 		else:
 			grade = "A+"; multiplier = 2.0; comment = "Perfect score! Outstanding!"
 			lbl_grade.modulate = Color.CYAN
+			Audio.play_sfx("res://audio/sfx/win.wav")
 	elif score_pct >= 90.0:
 		grade = "A"; multiplier = 1.7; comment = "Excellent work!"
 		lbl_grade.modulate = Color.GREEN
+		Audio.play_sfx("res://audio/sfx/win.wav")
 	elif score_pct >= 80.0:
 		grade = "A-"; multiplier = 1.5; comment = "Great job!"
 		lbl_grade.modulate = Color.GREEN
+		Audio.play_sfx("res://audio/sfx/win.wav")
 	elif score_pct >= 75.0:
 		grade = "B+"; multiplier = 1.3; comment = "Very good!"
 		lbl_grade.modulate = Color.YELLOW
+		Audio.play_sfx("res://audio/sfx/win.wav")
 	elif score_pct >= 70.0:
 		grade = "B"; multiplier = 1.1; comment = "Good job, keep studying."
 		lbl_grade.modulate = Color.YELLOW
+		Audio.play_sfx("res://audio/sfx/win.wav")
 	elif score_pct >= 65.0:
 		grade = "B-"; multiplier = 1.0; comment = "Not bad, but room to grow."
 		lbl_grade.modulate = Color.YELLOW
+		Audio.play_sfx("res://audio/sfx/fail.wav")
 	elif score_pct >= 50.0:
 		grade = "C"; multiplier = 0.8; comment = "You passed, but barely."
 		lbl_grade.modulate = Color.ORANGE
+		Audio.play_sfx("res://audio/sfx/fail.wav")
 	elif score_pct >= 20.0:
 		grade = "D"; multiplier = 0.5; comment = "Below average. Study more."
 		lbl_grade.modulate = Color.RED
+		Audio.play_sfx("res://audio/sfx/fail.wav")
 	elif score_pct > 0.0:
 		grade = "E"; multiplier = 0.2; comment = "Failed. Try again."
 		lbl_grade.modulate = Color.RED
+		Audio.play_sfx("res://audio/sfx/fail.wav")
 	else:
 		# THE ZERO PERCENT ZONE
 		if is_fully_completed:
 			grade = "Ɐ"; multiplier = 6.7; comment = "Absolute Inverse Perfection!"
 			lbl_grade.modulate = Color.PURPLE
+			Audio.play_sfx("res://audio/sfx/congratulations_reverse.wav")
 		else:
 			grade = "F"; multiplier = 0.0; comment = "Incomplete. No points awarded."
 			lbl_grade.modulate = Color.RED
+			Audio.play_sfx("res://audio/sfx/fail.wav")
 		
 	lbl_grade.text = grade
 	lbl_comment.text = comment

@@ -34,6 +34,9 @@ var wallpaper_motion: Vector2 = Vector2.ZERO
 var wallpaper_scale: float = 1.0
 var wallpaper_warp: float = 0.0
 
+# Aesthetic Sets
+var aesthetic_sets: Dictionary
+
 # Background Settings
 var current_bg_color: Color = Color("121212")
 var current_wp_color: Color = Color.WHITE

@@ -55,6 +55,14 @@ layout_mode = 2
 layout_mode = 2
 alignment = 2
 
+[node name="ResetSet" type="Button" parent="Confirm"]
+layout_mode = 2
+text = "Reset Set"
+
+[node name="Control" type="Control" parent="Confirm"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Apply" type="Button" parent="Confirm"]
 layout_mode = 2
 text = "Apply"

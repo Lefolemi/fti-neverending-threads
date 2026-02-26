@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://b28xxgqce3g1x"]
+
+[ext_resource type="Script" uid="uid://bo1u85db0cnlh" path="res://scripts/utilities/confirmation/confirmation_manager.gd" id="1_yryqc"]
+
+[node name="Confirmation" type="CanvasLayer"]
+layer = 3
+visible = false
+script = ExtResource("1_yryqc")
+
+[node name="BGMenu" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="ConfirmPanel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -238.5
+offset_top = -121.0
+offset_right = 238.5
+offset_bottom = 121.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ConfirmPanel"]
+layout_mode = 2
+
+[node name="ConfirmLabel" type="Label" parent="ConfirmPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="ConfirmPanel/VBox"]
+layout_mode = 2
+
+[node name="Yes" type="Button" parent="ConfirmPanel/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Yes"
+
+[node name="Control" type="Control" parent="ConfirmPanel/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="No" type="Button" parent="ConfirmPanel/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "No"

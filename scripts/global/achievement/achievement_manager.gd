@@ -29,6 +29,7 @@ func _ready() -> void:
 func evaluate_all() -> void:
 	var old_rank = get_current_rank()
 	var triggered_new_save = false
+	var played_ach_sfx = false # Prevents deafening the player if multiple pop at once
 	
 	for i in range(parsed_achievements.size()):
 		var ach = parsed_achievements[i]
@@ -40,8 +41,15 @@ func evaluate_all() -> void:
 				GVar.unlocked_achievements.append(ach["title"])
 				# 2. Add Credits
 				GVar.current_points += ach["cr"]
-				# 3. Fire Notification
+				
+				# 3. Fire Notification & SFX
 				Notify.notify_achievement(ach["title"], ach["desc"])
+				
+				# Ensure the sound only plays once per frame even if 5 achievements unlock at the same time
+				if not played_ach_sfx:
+					Audio.play_sfx("res://audio/sfx/notification.wav")
+					played_ach_sfx = true
+					
 				triggered_new_save = true
 				
 	# If we got any new achievements, check if those new points leveled us up!
@@ -49,6 +57,8 @@ func evaluate_all() -> void:
 		var new_rank = get_current_rank()
 		if new_rank != old_rank:
 			Notify.notify_rank_up(new_rank)
+			# Fire Rank Up SFX
+			Audio.play_sfx("res://audio/sfx/rankup.wav")
 		
 		# Auto-save the new points and unlocked arrays
 		SaveManager.save_game()

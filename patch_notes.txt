@@ -95,3 +95,9 @@
 0.0.21 :
 - Some quality improvements
 - Deck View is now added
+
+0.0.22 :
+- aesthetic sets are now working perfectly
+- even more quaily of life works
+- settings are now fixed
+- even more save file improvements, like in temp.tscn.

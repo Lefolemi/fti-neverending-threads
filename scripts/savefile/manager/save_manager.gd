@@ -21,34 +21,33 @@ func _get_default_data() -> Dictionary:
 		},
 		"course_stats": {},
 		
-		# --- NEW: EXPANDED SETTINGS ---
+		# --- EXPANDED SETTINGS ---
 		"settings": {
 			"quiz_allow_stopwatch": true,
-			
-			# General Settings
 			"music_volume": 1.0,
 			"sfx_volume": 1.0,
-			
-			# Cosmetic Settings
 			"active_set": 1,
-			"ui_color": 0, # 0 = Classic
+			"ui_color": 0, # Main fallback just in case
+			"aesthetic_sets": {} # This will hold 6 dictionaries
+		}
+	}
+
+	# --- GENERATE THE 6 PROFILES (SAVE SLOTS) ---
+	for i in range(1, 7):
+		data["settings"]["aesthetic_sets"][str(i)] = {
+			"ui_color": 0, # 0 = Classic, using INT ID as intended
 			"invert_ui_color": false,
 			"curved_borders": false,
 			"ui_shadow": false,
-			
-			"bg_color": "1e1e1e", # Hex string representation
-			"wallpaper_color": "ffffff",
-			"wallpaper_opacity": 1.0,
-			"wallpaper_path": "",
-			
-			# Breaking down Vector2 for JSON safety
-			"wallpaper_motion_x": 0.0, 
-			"wallpaper_motion_y": 0.0,
-			
-			"wallpaper_scale": 1.0,
-			"wallpaper_warp": 0.0
+			"bg_color": "4d4d4d",
+			"wp_color": "ffffff",
+			"wp_opacity": 1.0,
+			"wp_id": 0,
+			"wp_motion_x": 0.0, 
+			"wp_motion_y": 0.0,
+			"wp_scale": 1.0,
+			"wp_warp": 0.0
 		}
-	}
 
 	var subjects = [
 		"Manajemen Proyek Perangkat Lunak", "Jaringan Komputer", 
@@ -93,6 +92,30 @@ func load_game() -> void:
 	save_game()
 
 func save_game() -> void:
+	# 1. Sync the active live variables in GVar into the active set profile before saving!
+	var active_id = str(GVar.active_set)
+	
+	# Fallback if GVar doesn't have the dictionary yet
+	if not GVar.get("aesthetic_sets"):
+		GVar.aesthetic_sets = _get_default_data()["settings"]["aesthetic_sets"]
+		
+	# Overwrite the active set slot with whatever is currently on screen
+	GVar.aesthetic_sets[active_id] = {
+		"ui_color": GVar.ui_color,
+		"invert_ui_color": GVar.invert_ui_color,
+		"curved_borders": GVar.curved_borders,
+		"ui_shadow": GVar.ui_shadow,
+		"bg_color": GVar.current_bg_color.to_html(false),
+		"wp_color": GVar.current_wp_color.to_html(false),
+		"wp_opacity": GVar.current_opacity,
+		"wp_id": GVar.current_wp_id,
+		"wp_motion_x": GVar.current_velocity.x,
+		"wp_motion_y": GVar.current_velocity.y,
+		"wp_scale": GVar.current_scale,
+		"wp_warp": GVar.current_warp
+	}
+	
+	# 2. Compile the JSON data
 	var current_data = {
 		"current_points": GVar.current_points,
 		"unlocked_achievements": GVar.unlocked_achievements,
@@ -100,24 +123,12 @@ func save_game() -> void:
 		"player_statistics": GVar.player_statistics,
 		"course_stats": GVar.course_stats,
 		
-		# --- NEW: PACKING SETTINGS FROM GVAR ---
 		"settings": {
 			"quiz_allow_stopwatch": GVar.quiz_allow_stopwatch,
 			"music_volume": GVar.music_volume,
 			"sfx_volume": GVar.sfx_volume,
 			"active_set": GVar.active_set,
-			"ui_color": GVar.ui_color,
-			"invert_ui_color": GVar.invert_ui_color,
-			"curved_borders": GVar.curved_borders,
-			"ui_shadow": GVar.ui_shadow,
-			"bg_color": GVar.bg_color,
-			"wallpaper_color": GVar.wallpaper_color,
-			"wallpaper_opacity": GVar.wallpaper_opacity,
-			"wallpaper_path": GVar.wallpaper_path,
-			"wallpaper_motion_x": GVar.wallpaper_motion.x, # Extracting X
-			"wallpaper_motion_y": GVar.wallpaper_motion.y, # Extracting Y
-			"wallpaper_scale": GVar.wallpaper_scale,
-			"wallpaper_warp": GVar.wallpaper_warp
+			"aesthetic_sets": GVar.aesthetic_sets # Save all 6 profiles!
 		}
 	}
 	
@@ -144,27 +155,32 @@ func _apply_to_gvar(data: Dictionary) -> void:
 	GVar.player_statistics = data["player_statistics"]
 	GVar.course_stats = data["course_stats"]
 
-	# --- NEW: UNPACKING SETTINGS TO GVAR ---
 	if data.has("settings"):
 		var s = data["settings"]
 		if s.has("quiz_allow_stopwatch"): GVar.quiz_allow_stopwatch = s["quiz_allow_stopwatch"]
 		if s.has("music_volume"): GVar.music_volume = s["music_volume"]
 		if s.has("sfx_volume"): GVar.sfx_volume = s["sfx_volume"]
-		
 		if s.has("active_set"): GVar.active_set = s["active_set"]
-		if s.has("ui_color"): GVar.ui_color = s["ui_color"]
-		if s.has("invert_ui_color"): GVar.invert_ui_color = s["invert_ui_color"]
-		if s.has("curved_borders"): GVar.curved_borders = s["curved_borders"]
-		if s.has("ui_shadow"): GVar.ui_shadow = s["ui_shadow"]
 		
-		if s.has("bg_color"): GVar.bg_color = s["bg_color"]
-		if s.has("wallpaper_color"): GVar.wallpaper_color = s["wallpaper_color"]
-		if s.has("wallpaper_opacity"): GVar.wallpaper_opacity = s["wallpaper_opacity"]
-		if s.has("wallpaper_path"): GVar.wallpaper_path = s["wallpaper_path"]
-		
-		# Reconstructing Vector2
-		if s.has("wallpaper_motion_x") and s.has("wallpaper_motion_y"):
-			GVar.wallpaper_motion = Vector2(s["wallpaper_motion_x"], s["wallpaper_motion_y"])
+		# --- UNPACK AESTHETICS ---
+		if s.has("aesthetic_sets"):
+			GVar.aesthetic_sets = s["aesthetic_sets"]
 			
-		if s.has("wallpaper_scale"): GVar.wallpaper_scale = s["wallpaper_scale"]
-		if s.has("wallpaper_warp"): GVar.wallpaper_warp = s["wallpaper_warp"]
+			# Pull the settings of the ACTIVE SET directly into GVar's live variables
+			var active_id = str(GVar.active_set)
+			if GVar.aesthetic_sets.has(active_id):
+				var config = GVar.aesthetic_sets[active_id]
+				
+				GVar.ui_color = config.get("ui_color", 0) # <--- Default is 0 (Classic)
+				GVar.invert_ui_color = config.get("invert_ui_color", false)
+				GVar.curved_borders = config.get("curved_borders", false)
+				GVar.ui_shadow = config.get("ui_shadow", false)
+				
+				GVar.current_bg_color = Color(config.get("bg_color", "4d4d4d"))
+				GVar.current_wp_color = Color(config.get("wp_color", "ffffff"))
+				GVar.current_opacity = config.get("wp_opacity", 1.0)
+				GVar.current_wp_id = config.get("wp_id", 0)
+				
+				GVar.current_velocity = Vector2(config.get("wp_motion_x", 0.0), config.get("wp_motion_y", 0.0))
+				GVar.current_scale = config.get("wp_scale", 1.0)
+				GVar.current_warp = config.get("wp_warp", 0.0)

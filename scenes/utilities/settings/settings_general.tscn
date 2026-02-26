@@ -115,9 +115,3 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 text = "Set 6"
-
-[node name="ResetSet" type="Button" parent="Margin/VBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 1
-text = "Reset Set"

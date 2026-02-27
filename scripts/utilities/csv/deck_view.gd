@@ -90,7 +90,10 @@ func _load_course_csv(course_id: int) -> void:
 			if i == seen_idx:
 				continue # SKIP putting "seen" data into the table
 				
-			row.set_text(cell_ui_idx, line_data[i])
+			# --- CLEAN THE TEXT HERE BEFORE DISPLAYING! ---
+			var clean_text = TextUtils.process_text_static(line_data[i])
+			
+			row.set_text(cell_ui_idx, clean_text)
 			row.set_text_alignment(cell_ui_idx, HORIZONTAL_ALIGNMENT_LEFT)
 			cell_ui_idx += 1
 
@@ -158,10 +161,14 @@ func _update_csv_marked_state(target_question: String, unmark_all: bool, is_mark
 		if unmark_all:
 			# If unmarking all, set everything to 0
 			row[marked_idx] = "0"
-		elif row[0] == target_question:
-			# We found the specific question the user clicked!
-			row[marked_idx] = "1" if is_marked else "0"
-			break # Stop searching, we found it
+		else:
+			# CRITICAL: We must clean the raw CSV text before comparing it to the UI text!
+			var clean_csv_question = TextUtils.process_text_static(row[0])
+			
+			if clean_csv_question == target_question:
+				# We found the specific question the user clicked!
+				row[marked_idx] = "1" if is_marked else "0"
+				break # Stop searching, we found it
 			
 	# 4. Write everything back to the CSV
 	file = FileAccess.open(path, FileAccess.WRITE)

@@ -1,15 +1,24 @@
-[gd_scene load_steps=11 format=3 uid="uid://dhgrbt14bg60n"]
+[gd_scene load_steps=15 format=3 uid="uid://dhgrbt14bg60n"]
 
 [ext_resource type="Script" uid="uid://bvmaty5rslu0k" path="res://scripts/main_menu/utilities/version.gd" id="1_0kd0q"]
 [ext_resource type="Script" uid="uid://ckptwfw4gjrrd" path="res://scripts/main_menu/main/main_menu.gd" id="1_r7wpq"]
 [ext_resource type="PackedScene" uid="uid://btccjgt5e7jvc" path="res://scenes/main/main_menu/matkul_container.tscn" id="2_r7wpq"]
+[ext_resource type="Shader" uid="uid://w1cper4sidpg" path="res://resources/shader/main_menu/main_menu_title.gdshader" id="2_xgdw1"]
 [ext_resource type="Script" uid="uid://bfvkyfnidxqn5" path="res://scripts/main_menu/utilities/other.gd" id="3_5fid0"]
 [ext_resource type="PackedScene" uid="uid://d12ccl3c5de7q" path="res://scenes/main/main_menu/course_container.tscn" id="3_k0ycp"]
+[ext_resource type="Script" uid="uid://de2vxmooxdmgg" path="res://scripts/main_menu/utilities/main_menu_title.gd" id="4_2lqjb"]
 [ext_resource type="Script" uid="uid://dv8c8rwy71l1d" path="res://scripts/main_menu/utilities/menu_page.gd" id="4_k0ycp"]
 [ext_resource type="Script" uid="uid://peqnp4rypx7p" path="res://scripts/main_menu/utilities/utility_container.gd" id="6_scmgr"]
 [ext_resource type="Script" uid="uid://dxu5q5551ot1" path="res://scripts/main_menu/utilities/debug_mode.gd" id="6_svxau"]
 [ext_resource type="Script" uid="uid://pransu62jg2y" path="res://scripts/main_menu/main/init_session_menu.gd" id="8_hsu2m"]
 [ext_resource type="Script" uid="uid://7nb20e2y0wri" path="res://scenes/main/main_menu/practice_mode_menu.gd" id="9_5fid0"]
+[ext_resource type="Texture2D" uid="uid://bsv3ydif4rdpv" path="res://sprites/misc/title_card.png" id="11_uis6f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2lqjb"]
+shader = ExtResource("2_xgdw1")
+shader_parameter/ui_color = Color(0, 0, 0, 1)
+shader_parameter/invert_mode = false
+shader_parameter/speed = 3.0
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -20,37 +29,22 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r7wpq")
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_2lqjb")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -435.0
-offset_right = 20.0
-offset_bottom = -412.0
+offset_left = -196.0
+offset_top = -496.0
+offset_right = 196.0
+offset_bottom = -368.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "FTI"
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="Title"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 26.5
-offset_right = 20.0
-offset_bottom = 49.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "NEVERENDING THREADS"
-horizontal_alignment = 1
+texture = ExtResource("11_uis6f")
+script = ExtResource("4_2lqjb")
 
 [node name="Version" type="Label" parent="."]
 layout_mode = 1
@@ -59,9 +53,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -93.0
+offset_left = -127.0
 offset_top = -369.0
-offset_right = 23.0
+offset_right = -11.0
 offset_bottom = -346.0
 grow_horizontal = 2
 grow_vertical = 2

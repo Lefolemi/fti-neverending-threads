@@ -3,22 +3,22 @@ None -> Amateur -> Novice -> Intermediate -> Expert -> Master -> Magistra
 None: 0 credits
 - Unlock the game itself ;)
 
-Amateur: ??? credits
+Amateur: 150 credits
 - All in One Mode unlocked
 - Sandbox Mode unlocked
 
-Novice: ??? credits
+Novice: 500 credits
 - More accesible in Sandbox Mode
 - 1 Theme Set unlocked
 
-Intermediate: ??? credits
+Intermediate: 1200 credits
 - A complete control on Sandbox Mode
 - 1 Theme Set unlocked
 
-Expert: ??? credits
+Expert: 2000 credits
 - Ability to see all questions and answers
 
-Master: ??? credits
+Master: 2600 credits
 - A special wallpaper
 - Custom questions and answers
 - 1 Theme Set unlocked

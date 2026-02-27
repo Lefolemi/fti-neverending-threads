@@ -1,3 +1,4 @@
+ALPHA
 0.0.1 :
 - added main menu.
 
@@ -101,3 +102,9 @@
 - even more quaily of life works
 - settings are now fixed
 - even more save file improvements, like in temp.tscn.
+
+BETA
+0.1.0 :
+- a LOT of bug fixes
+- fixed mode containter in particular
+- added game title sprites

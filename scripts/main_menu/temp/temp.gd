@@ -38,27 +38,28 @@ func _start_boot_sequence() -> void:
 # --- INITIALIZATION LOGIC ---
 
 func _apply_boot_aesthetics() -> void:
-	# SaveManager has already unpacked the active set into GVar.
-	# Now we just need to wake up ThemeEngine and BG to apply them!
-	
 	# 1. Apply UI Theme
 	ThemeEngine.use_curves = GVar.curved_borders
 	ThemeEngine.use_shadows = GVar.ui_shadow
 	ThemeEngine.use_light_mode = GVar.invert_ui_color
 	
-	var actual_ui_color = COLOR_PALETTE[0] # Fallback to Classic
+	var actual_ui_color = COLOR_PALETTE[0]
 	if typeof(GVar.ui_color) == TYPE_INT and GVar.ui_color >= 0 and GVar.ui_color < COLOR_PALETTE.size():
 		actual_ui_color = COLOR_PALETTE[GVar.ui_color]
 		
 	ThemeEngine.refresh_theme(actual_ui_color)
 	
-	# 2. Apply Background
+	# 2. Apply Background & Environment
+	# We must update the World/Environment color as well!
+	RenderingServer.set_default_clear_color(GVar.current_bg_color)
+	
 	var wp_tex: Texture2D = null
 	if GVar.current_wp_id > 0:
 		var full_wp_path = "res://sprites/bg/bg_" + str(GVar.current_wp_id) + ".png"
 		if ResourceLoader.exists(full_wp_path):
 			wp_tex = load(full_wp_path)
 			
+	# Apply all settings to the BG autoload
 	BG.apply_background_settings(
 		wp_tex, 
 		GVar.current_wp_color, 
@@ -68,4 +69,8 @@ func _apply_boot_aesthetics() -> void:
 		GVar.current_warp
 	)
 	
-	print("SYSTEM: Boot aesthetics successfully applied for Set ", GVar.active_set)
+	# Extra Polish: If your BG script handles the environment color internally, 
+	# make sure you call it. Otherwise, RenderingServer.set_default_clear_color 
+	# is the direct way to change that background void color.
+	
+	print("SYSTEM: Boot aesthetics + BG Color (", GVar.current_bg_color, ") applied for Set ", GVar.active_set)

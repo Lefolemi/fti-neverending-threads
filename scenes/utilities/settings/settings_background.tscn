@@ -29,6 +29,7 @@ layout_mode = 2
 text = "Background Color"
 
 [node name="BGColorPicker" type="ColorPickerButton" parent="Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 edit_alpha = false
 
@@ -45,6 +46,7 @@ layout_mode = 2
 text = "Wallapaper Color"
 
 [node name="WallpaperColorPicker" type="ColorPickerButton" parent="Margin/VBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 edit_alpha = false
 

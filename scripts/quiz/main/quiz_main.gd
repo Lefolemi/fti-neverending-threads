@@ -154,8 +154,12 @@ func _on_answer_pressed(btn_idx: int) -> void:
 		_quizizz_answered = true
 		
 		var is_correct = data["options"][btn_idx]["is_correct"]
-		if is_correct: _score_right += 1
-		else: _score_wrong += 1
+		if is_correct: 
+			_score_right += 1
+			Audio.play_sfx("res://audio/sfx/correct.wav") # <--- Play Correct SFX
+		else: 
+			_score_wrong += 1
+			Audio.play_sfx("res://audio/sfx/wrong.wav")   # <--- Play Wrong SFX
 		
 		_update_score_label()
 		right_wrong_label.text = "CORRECT!" if is_correct else "WRONG!"
@@ -320,6 +324,7 @@ func _on_timer_finished() -> void:
 			_score_wrong += 1
 			_update_score_label()
 			right_wrong_label.text = "TIME UP!"
+			Audio.play_sfx("res://audio/sfx/wrong.wav")
 			right_wrong_label.modulate = Color.RED
 			_load_question_ui(_current_index)
 			await get_tree().create_timer(2.0).timeout

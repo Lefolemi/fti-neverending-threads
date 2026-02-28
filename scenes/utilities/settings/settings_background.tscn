@@ -31,6 +31,7 @@ text = "Background Color"
 [node name="BGColorPicker" type="ColorPickerButton" parent="Margin/VBox"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+mouse_filter = 1
 edit_alpha = false
 
 [node name="BGColorButtons" type="HBoxContainer" parent="Margin/VBox"]
@@ -39,6 +40,7 @@ alignment = 2
 
 [node name="RandomColor" type="Button" parent="Margin/VBox/BGColorButtons"]
 layout_mode = 2
+mouse_filter = 1
 text = "Random Color"
 
 [node name="WallpaperColorLabel" type="Label" parent="Margin/VBox"]
@@ -48,6 +50,7 @@ text = "Wallapaper Color"
 [node name="WallpaperColorPicker" type="ColorPickerButton" parent="Margin/VBox"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+mouse_filter = 1
 edit_alpha = false
 
 [node name="WallpaperColorButtons" type="HBoxContainer" parent="Margin/VBox"]
@@ -56,6 +59,7 @@ alignment = 2
 
 [node name="RandomColor" type="Button" parent="Margin/VBox/WallpaperColorButtons"]
 layout_mode = 2
+mouse_filter = 1
 text = "Random Color"
 
 [node name="Separator1" type="HSeparator" parent="Margin/VBox"]
@@ -83,6 +87,7 @@ text = "Wallpaper Opacity"
 
 [node name="WallpaperOpacitySlider" type="HSlider" parent="Margin/VBox"]
 layout_mode = 2
+mouse_filter = 1
 max_value = 1.0
 step = 0.1
 value = 1.0
@@ -101,6 +106,7 @@ text = "Motion X: "
 [node name="MotionX" type="SpinBox" parent="Margin/VBox/WallpaperMotionBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 min_value = -5.0
 max_value = 5.0
 step = 0.1
@@ -112,6 +118,7 @@ text = "Motion Y: "
 [node name="MotionY" type="SpinBox" parent="Margin/VBox/WallpaperMotionBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 min_value = -5.0
 max_value = 5.0
 step = 0.1
@@ -123,6 +130,7 @@ text = "Wallpaper Scale"
 [node name="WallpaperScale" type="SpinBox" parent="Margin/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 min_value = 0.1
 max_value = 5.0
 step = 0.1
@@ -135,6 +143,7 @@ text = "Wallpaper Warp"
 [node name="WallpaperWarp" type="SpinBox" parent="Margin/VBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 max_value = 1.0
 step = 0.01
 

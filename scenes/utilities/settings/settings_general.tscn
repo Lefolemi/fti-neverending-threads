@@ -61,14 +61,17 @@ layout_mode = 2
 
 [node name="InvertUIColor" type="CheckBox" parent="Margin/VBox/ThemeOptions"]
 layout_mode = 2
+mouse_filter = 1
 text = "Invert UI Color"
 
 [node name="CurvedBorders" type="CheckBox" parent="Margin/VBox/ThemeOptions"]
 layout_mode = 2
+mouse_filter = 1
 text = "Curved Borders"
 
 [node name="UIShadow" type="CheckBox" parent="Margin/VBox/ThemeOptions"]
 layout_mode = 2
+mouse_filter = 1
 text = "UI Shadow"
 
 [node name="SetLabel" type="Label" parent="Margin/VBox"]

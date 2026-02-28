@@ -3,6 +3,8 @@ extends GridContainer
 signal closed # Emitted to tell MainMenu to hide BGMenu
 
 # --- UI References ---
+@onready var init_matkul_title: Label = $Content/Margin/VBox/MatkulTitle
+@onready var init_course_title: Label = $Content/Margin/VBox/CourseSetTitle
 @onready var lbl_matkul: Label = $Content/Margin/VBox/MatkulTitle
 @onready var lbl_course: Label = $Content/Margin/VBox/CourseSetTitle
 
@@ -20,6 +22,9 @@ signal closed # Emitted to tell MainMenu to hide BGMenu
 # Buttons
 @onready var btn_start: Button = $Confirm/Start
 @onready var btn_cancel: Button = $Confirm/Cancel
+
+var _current_course_name: String = ""
+var _current_set_name: String = ""
 
 func _ready() -> void:
 	# 1. Setup Quiz Mode Options
@@ -47,6 +52,14 @@ func setup(course_index: int, course_names_cache: Array) -> void:
 		"Pengolahan Citra Digital"
 	]
 	
+	# 1. Determine the Master Course Name
+	if GVar.current_matkul >= 0 and GVar.current_matkul < matkul_names.size():
+		_current_course_name = matkul_names[GVar.current_matkul]
+		init_matkul_title.text = _current_course_name
+	else:
+		_current_course_name = "Unknown Subject"
+		init_matkul_title.text = _current_course_name
+	
 	if GVar.current_matkul >= 0 and GVar.current_matkul < matkul_names.size():
 		lbl_matkul.text = matkul_names[GVar.current_matkul]
 	
@@ -54,9 +67,56 @@ func setup(course_index: int, course_names_cache: Array) -> void:
 		var names = course_names_cache[GVar.current_matkul]
 		if course_index >= 0 and course_index < names.size():
 			lbl_course.text = names[course_index]
-	
+
 	# 2. Sync UI with current Global Variables
 	_sync_ui_from_gvar()
+	
+	# 3. Check Rank-Based Unlocks
+	_check_rank_unlocks()
+
+func _check_rank_unlocks() -> void:
+	# Calculate actual lifetime achievement credits, NOT the spendable points!
+	var total_credits = _calculate_current_credits()
+	
+	# Amateur Rank requires 150 credits.
+	if total_credits >= 150:
+		chk_hide_q.show()
+		chk_hide_a.show()
+	else:
+		chk_hide_q.hide()
+		chk_hide_a.hide()
+		
+		# FAILSAFE: Ensure they are turned off if hidden
+		chk_hide_q.button_pressed = false
+		chk_hide_a.button_pressed = false
+
+# --- Add this helper to the bottom of the script ---
+
+func _calculate_current_credits() -> int:
+	var total_cr = 0
+	var path = "res://resources/csv/menu/achievement.csv"
+	
+	if not FileAccess.file_exists(path):
+		return 0
+		
+	var file = FileAccess.open(path, FileAccess.READ)
+	file.get_csv_line() # Skip header
+	
+	while not file.eof_reached():
+		var line = file.get_csv_line()
+		if line.size() >= 2:
+			var title = line[0].strip_edges()
+			var desc = line[1]
+			
+			# Check if title exists in GVar's unlocked list
+			if GVar.unlocked_achievements.has(title):
+				var split_desc = desc.split("(")
+				if split_desc.size() > 1:
+					var cr_val = split_desc[split_desc.size() - 1].to_int()
+					total_cr += cr_val
+	file.close()
+	
+	return total_cr
 
 func _sync_ui_from_gvar() -> void:
 	opt_quiz_mode.selected = GVar.current_quiz_mode

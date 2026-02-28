@@ -149,9 +149,10 @@ func _render_grid_async(job_id: int) -> void:
 
 func _create_button(index: int, data: Dictionary) -> void:
 	var btn = Button.new()
+	btn.mouse_filter = Control.MOUSE_FILTER_PASS
 	var snippet = data["q_text"].left(25) + ("..." if data["q_text"].length() > 25 else "")
 	btn.text = "Q%d\n%s" % [index + 1, snippet]
-	
+
 	btn.custom_minimum_size = Vector2(100, 60)
 	btn.clip_text = true
 	

@@ -201,14 +201,8 @@ func _update_mode_locks(course_name: String) -> void:
 				_apply_lock(child, highest_midtest_score >= 70.0, "Final Test (Req: Midtest 70%)")
 			elif "all" in text:
 				# --- REWARD LOCK: Requires Final Test 85% AND Novice Rank ---
-				var has_novice = GVar.unlocked_achievements.has("Amateur") or \
-								 GVar.unlocked_achievements.has("Novice") or \
-								 GVar.unlocked_achievements.has("Intermediate") or \
-								 GVar.unlocked_achievements.has("Expert") or \
-								 GVar.unlocked_achievements.has("Master") or \
-								 GVar.unlocked_achievements.has("Magistra")
 				
-				var requirements_met = (highest_final_score >= 85.0) and has_novice
+				var requirements_met = (highest_final_score >= 85.0)
 				
 				_apply_lock(child, requirements_met, "All in One (Req: Final 85% & Novice Rank)")
 			else:
@@ -255,13 +249,27 @@ func _on_matkul_selected(index: int, _name: String) -> void:
 
 func _on_mode_selected(index: int, _name: String) -> void:
 	GVar.current_mode = index
-	_change_menu(mode_container, course_container, MenuState.COURSE)
+	
+	if index == 0 or index == 1:
+		# Normal & Practice Mode: The player needs to pick a specific Set (Course 1-14)
+		_change_menu(mode_container, course_container, MenuState.COURSE)
+	else:
+		# Midtest (2), Final Test (3), All in One (4): Skip the course container!
+		# Go straight to the session init.
+		bg_menu.show()
+		
+		# We pass 0 as a dummy index since these modes don't rely on specific sets.
+		# (Your init_session_menu will look at GVar.current_mode anyway)
+		init_session_menu.setup(0, _course_names_cache)
+		init_session_menu.show()
 
 func _on_course_selected(index: int, _name: String) -> void:
 	GVar.current_course = index
 	bg_menu.show()
 
 	if GVar.current_mode == 1:
+		# WE MUST CALL SETUP BEFORE SHOWING!
+		practice_mode_menu.setup(index, _course_names_cache)
 		practice_mode_menu.show()
 	else:
 		init_session_menu.setup(index, _course_names_cache)

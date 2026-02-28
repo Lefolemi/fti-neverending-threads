@@ -325,7 +325,6 @@ layout_mode = 2
 text = "Cancel"
 
 [node name="PracticeModeMenu" type="GridContainer" parent="."]
-visible = false
 z_index = 10
 layout_mode = 1
 anchors_preset = 8
@@ -407,10 +406,12 @@ layout_mode = 2
 text = "Only show marked"
 
 [node name="HideQuestions" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+visible = false
 layout_mode = 2
 text = "Hide questions"
 
 [node name="HideAnswers" type="CheckBox" parent="PracticeModeMenu/Content/Margin/VBox/OptionsGrid"]
+visible = false
 layout_mode = 2
 text = "Hide answers"
 

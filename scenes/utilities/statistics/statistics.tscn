@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bug0yaria2e8v"]
+[gd_scene load_steps=8 format=3 uid="uid://bug0yaria2e8v"]
 
 [ext_resource type="Script" uid="uid://cdarq4a0wqwtg" path="res://scripts/statistics/statistics.gd" id="1_uxagb"]
+[ext_resource type="Script" uid="uid://cuc1p3kttg5sg" path="res://scripts/statistics/main/statistics_menu.gd" id="2_3e0gv"]
+[ext_resource type="Script" uid="uid://mr1d4fbcfac2" path="res://scripts/statistics/content/overview_scroll.gd" id="2_plxw2"]
+[ext_resource type="Script" uid="uid://bp3mevgfewag2" path="res://scripts/statistics/content/performance_scroll.gd" id="4_lswhq"]
+[ext_resource type="Script" uid="uid://bbosj0ya5yfr8" path="res://scripts/statistics/content/time_scroll.gd" id="5_purwj"]
+[ext_resource type="Script" uid="uid://dc4xibx88p4wb" path="res://scripts/statistics/content/courses_scroll.gd" id="6_k4cce"]
+[ext_resource type="Script" uid="uid://b0hnmc0t1dxqu" path="res://scripts/statistics/main/statistics_confirm.gd" id="7_lswhq"]
 
 [node name="Statistics" type="GridContainer"]
 anchors_preset = 8
@@ -26,6 +32,7 @@ horizontal_alignment = 1
 [node name="Menu" type="GridContainer" parent="."]
 layout_mode = 2
 columns = 2
+script = ExtResource("2_3e0gv")
 
 [node name="Overview" type="Button" parent="Menu"]
 layout_mode = 2
@@ -54,6 +61,8 @@ size_flags_vertical = 3
 
 [node name="OverviewScroll" type="ScrollContainer" parent="Content"]
 layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("2_plxw2")
 
 [node name="VBox" type="VBoxContainer" parent="Content/OverviewScroll"]
 layout_mode = 2
@@ -62,7 +71,10 @@ size_flags_vertical = 3
 theme_override_constants/separation = 20
 
 [node name="PerformanceScroll" type="ScrollContainer" parent="Content"]
+visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("4_lswhq")
 
 [node name="VBox" type="VBoxContainer" parent="Content/PerformanceScroll"]
 layout_mode = 2
@@ -71,7 +83,10 @@ size_flags_vertical = 3
 theme_override_constants/separation = 20
 
 [node name="TimeScroll" type="ScrollContainer" parent="Content"]
+visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("5_purwj")
 
 [node name="VBox" type="VBoxContainer" parent="Content/TimeScroll"]
 layout_mode = 2
@@ -119,7 +134,10 @@ popup/item_1/text = "Elearning Mode"
 popup/item_1/id = 1
 
 [node name="CoursesScroll" type="ScrollContainer" parent="Content"]
+visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("6_k4cce")
 
 [node name="VBox" type="VBoxContainer" parent="Content/CoursesScroll"]
 layout_mode = 2
@@ -169,6 +187,7 @@ popup/item_1/id = 1
 [node name="Confirm" type="HBoxContainer" parent="."]
 layout_mode = 2
 alignment = 2
+script = ExtResource("7_lswhq")
 
 [node name="Close" type="Button" parent="Confirm"]
 layout_mode = 2

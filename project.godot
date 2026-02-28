@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="FTI - Neverending Threads"
-config/version="0.1.0"
+config/description="This is a quiz game specifically made for "
+config/version="0.1.1"
 run/main_scene="uid://dj6yefx2qbmh0"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 boot_splash/image="uid://df3k1owv6kn5s"
+config/icon="uid://02yw6k4jygli"
 
 [autoload]
 

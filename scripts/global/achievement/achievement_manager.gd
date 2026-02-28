@@ -165,9 +165,38 @@ func _count_passed_aio() -> int:
 			count += 1
 	return count
 
-func _is_100_percent_complete() -> bool:
+func get_total_completion_percentage() -> float:
+	var completed_tasks = 0
+	var total_tasks = 283.0 # 224 Sets + 8 Mid + 8 Final + 39 Shop + 4 Playtime
+	
+	# --- 1. Course Progression (240 Tasks) ---
 	for i in range(8):
 		var stats = GVar.course_stats[category_names[i]]
-		if _count_passed_sets(stats) < 28: return false
-		if not _is_passed(stats["Quizizz"]["Final Test"]["grade"]) and not _is_passed(stats["Elearning"]["Final Test"]["grade"]): return false
-	return true
+		
+		# A. Sets (Both modes, up to 28 per course)
+		completed_tasks += _count_passed_sets(stats)
+		
+		# B. Midtest (Counts if passed in either mode)
+		if _is_passed(stats["Quizizz"]["Midtest"]["grade"]) or _is_passed(stats["Elearning"]["Midtest"]["grade"]):
+			completed_tasks += 1
+			
+		# C. Final Test (Counts if passed in either mode)
+		if _is_passed(stats["Quizizz"]["Final Test"]["grade"]) or _is_passed(stats["Elearning"]["Final Test"]["grade"]):
+			completed_tasks += 1
+			
+	# --- 2. Shop Unlocks (39 Tasks) ---
+	completed_tasks += GVar.shop_unlocks.size()
+	
+	# --- 3. Playtime Milestones (4 Tasks) ---
+	var pt = GVar.player_statistics["total_playtime"]
+	if pt >= 7200: completed_tasks += 1 # 2 Hours (720s0)
+	if pt >= 18000: completed_tasks += 1 # 5 Hours (18000s)
+	if pt >= 43200: completed_tasks += 1 # 12 Hours (43200s)
+	if pt >= 86400: completed_tasks += 1 # 24 Hours (86400s)
+	
+	return (float(completed_tasks) / total_tasks) * 100.0
+
+
+func _is_100_percent_complete() -> bool:
+	# Achievement 64 triggers the moment this hits 100.0%
+	return get_total_completion_percentage() >= 100.0

@@ -9,7 +9,7 @@ extends GridContainer
 const CSV_PATH = "res://resources/csv/menu/achievement.csv"
 
 var parsed_achievements: Array = []
-var unlocked_status: Array = [] # Stores the true/false state of each achievement based on live stats
+var unlocked_status: Array = [] 
 
 var category_names = [
 	"Manajemen Proyek Perangkat Lunak", "Jaringan Komputer", 
@@ -69,8 +69,7 @@ func _evaluate_all_achievements() -> void:
 		var is_unlocked = _calculate_unlock_condition(i)
 		unlocked_status.append(is_unlocked)
 		
-		# Sync it to GVar so the rest of the game knows it's unlocked 
-		# without having to do the math again.
+		# Sync it to GVar
 		var title = parsed_achievements[i]["title"]
 		if is_unlocked and not GVar.unlocked_achievements.has(title):
 			GVar.unlocked_achievements.append(title)
@@ -78,47 +77,84 @@ func _evaluate_all_achievements() -> void:
 # --- THE LOGIC ENGINE ---
 
 func _calculate_unlock_condition(index: int) -> bool:
-	# 1. Course Achievements (Index 0 to 55)
+	return _get_achievement_progress(index) >= 100.0
+
+# --- DYNAMIC PROGRESS TRACKER ---
+# This calculates exactly how close the player is to an achievement (0.0 to 100.0%)
+func _get_achievement_progress(index: int) -> float:
+	if unlocked_status.size() > index and unlocked_status[index]: 
+		return 100.0
+
+	# 1. Course Achievements
 	if index < 56:
 		var course_idx = index / 7
 		var ach_type = index % 7
-		var course_name = category_names[course_idx]
-		var stats = GVar.course_stats[course_name]
-		
+		var stats = GVar.course_stats[category_names[course_idx]]
 		var sets_passed = _count_passed_sets(stats)
 		
 		match ach_type:
-			0: return _has_started_any_set(stats)
-			1: return sets_passed >= 7
-			2: return sets_passed >= 14
-			3: return _is_grade_90_plus(stats["Quizizz"]["Midtest"]["grade"]) or _is_grade_90_plus(stats["Elearning"]["Midtest"]["grade"])
-			4: return sets_passed >= 21
-			5: return sets_passed >= 28
-			6: return _is_grade_100(stats["Quizizz"]["Final Test"]["grade"]) or _is_grade_100(stats["Elearning"]["Final Test"]["grade"])
-			
-	# 2. Time Related (Index 56 to 61)
+			0: return 100.0 if _has_started_any_set(stats) else 0.0
+			1: return min((float(sets_passed) / 7.0) * 100.0, 100.0)
+			2: return min((float(sets_passed) / 14.0) * 100.0, 100.0)
+			3: 
+				var pass_mid = _is_grade_90_plus(stats["Quizizz"]["Midtest"]["grade"]) or _is_grade_90_plus(stats["Elearning"]["Midtest"]["grade"])
+				return 100.0 if pass_mid else 0.0
+			4: return min((float(sets_passed) / 21.0) * 100.0, 100.0)
+			5: return min((float(sets_passed) / 28.0) * 100.0, 100.0)
+			6: 
+				var pass_fin = _is_grade_100(stats["Quizizz"]["Final Test"]["grade"]) or _is_grade_100(stats["Elearning"]["Final Test"]["grade"])
+				return 100.0 if pass_fin else 0.0
+
+	# 2. Time Related Achievements
 	elif index < 62:
-		var play_time_seconds = GVar.player_statistics["total_playtime"]
+		var pt = float(GVar.player_statistics["total_playtime"])
 		match index:
-			56: return play_time_seconds >= 1200    # 20 mins
-			57: return play_time_seconds >= 7200    # 2 hours
-			58: return play_time_seconds >= 18000   # 5 hours
-			59: return play_time_seconds >= 43200   # 12 hours
-			60: return play_time_seconds >= 86400   # 24 hours
-			61: return play_time_seconds >= 129600  # 36 hours
-			
-	# 3. Challenge Related (Index 62 to 64)
+			56: return min((pt / 1200.0) * 100.0, 100.0)    # 20 mins
+			57: return min((pt / 7200.0) * 100.0, 100.0)    # 2 hours (Good Student Fixed!)
+			58: return min((pt / 18000.0) * 100.0, 100.0)   # 5 hours
+			59: return min((pt / 43200.0) * 100.0, 100.0)   # 12 hours
+			60: return min((pt / 86400.0) * 100.0, 100.0)   # 24 hours
+			61: return min((pt / 129600.0) * 100.0, 100.0)  # 36 hours
+
+	# 3. Challenge Related
 	else:
 		match index:
-			62: return _count_passed_aio() >= 1
-			63: return _count_passed_aio() >= 8
-			64: return _is_100_percent_complete()
+			62: return min((float(_count_passed_aio()) / 1.0) * 100.0, 100.0)
+			63: return min((float(_count_passed_aio()) / 8.0) * 100.0, 100.0)
+			64: return _get_total_completion_percentage()
 			
-	return false
+	return 0.0
+
+# --- THE TRUE 100% COMPLETION CALCULATOR ---
+func _get_total_completion_percentage() -> float:
+	var completed_tasks = 0
+	# 240 Courses + 39 Shop Items + 6 Playtime Milestones = 285 Total Tasks
+	var total_tasks = 285.0 
+	
+	# A. Courses
+	for i in range(8):
+		var stats = GVar.course_stats[category_names[i]]
+		completed_tasks += _count_passed_sets(stats)
+		if _is_passed(stats["Quizizz"]["Midtest"]["grade"]) or _is_passed(stats["Elearning"]["Midtest"]["grade"]): completed_tasks += 1
+		if _is_passed(stats["Quizizz"]["Final Test"]["grade"]) or _is_passed(stats["Elearning"]["Final Test"]["grade"]): completed_tasks += 1
+			
+	# B. Shop
+	completed_tasks += GVar.shop_unlocks.size()
+	
+	# C. Playtime
+	var pt = GVar.player_statistics["total_playtime"]
+	if pt >= 1200: completed_tasks += 1
+	if pt >= 7200: completed_tasks += 1
+	if pt >= 18000: completed_tasks += 1
+	if pt >= 43200: completed_tasks += 1
+	if pt >= 86400: completed_tasks += 1
+	if pt >= 129600: completed_tasks += 1
+	
+	return min((float(completed_tasks) / total_tasks) * 100.0, 100.0)
+
 
 # --- HELPER MATH FUNCTIONS ---
 
-# FIX: Changed to Variant, evaluating as Floats, accounting for "Locked" and the Sentinel "-1.0"
 func _is_passed(grade: Variant) -> bool:
 	var g_str = str(grade)
 	if g_str == "Locked" or g_str == "Unplayed": return false
@@ -157,13 +193,6 @@ func _count_passed_aio() -> int:
 			count += 1
 	return count
 
-func _is_100_percent_complete() -> bool:
-	for i in range(8):
-		var stats = GVar.course_stats[category_names[i]]
-		if _count_passed_sets(stats) < 28: return false
-		if not _is_passed(stats["Quizizz"]["Final Test"]["grade"]) and not _is_passed(stats["Elearning"]["Final Test"]["grade"]): return false
-	return true
-
 # --- Async Dynamic Generation (Chunked) ---
 
 func _generate_achievements() -> void:
@@ -195,15 +224,18 @@ func _generate_achievements() -> void:
 			header.add_theme_font_size_override("font_size", 16)
 			vbox_achievements.add_child(header)
 			
-		var ach_box = _create_achievement_box(ach["title"], ach["desc"], ach["cr"], unlocked_status[i])
+		# Calculate the progressive percentage here to pass to the UI box
+		var progress_pct = _get_achievement_progress(i)
+		var ach_box = _create_achievement_box(ach["title"], ach["desc"], ach["cr"], unlocked_status[i], progress_pct)
 		vbox_achievements.add_child(ach_box)
 		
 		if i % 4 == 0:
 			await get_tree().process_frame
 
-func _create_achievement_box(title: String, desc: String, credits: int, is_unlocked: bool) -> Control:
+func _create_achievement_box(title: String, desc: String, credits: int, is_unlocked: bool, pct: float) -> Control:
 	var bg_panel = PanelContainer.new()
 	bg_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bg_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	
 	var hbox = HBoxContainer.new()
 	bg_panel.add_child(hbox)
@@ -212,7 +244,8 @@ func _create_achievement_box(title: String, desc: String, credits: int, is_unloc
 	icon.custom_minimum_size = Vector2(64, 64)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.modulate = Color(0.3, 0.3, 0.3) 
+	# Make the icon light up if unlocked!
+	icon.modulate = Color.WHITE if is_unlocked else Color(0.3, 0.3, 0.3) 
 	hbox.add_child(icon)
 	
 	var text_vbox = VBoxContainer.new()
@@ -234,9 +267,21 @@ func _create_achievement_box(title: String, desc: String, credits: int, is_unloc
 	text_vbox.add_child(lbl_desc)
 	
 	var lbl_percent = Label.new()
-	lbl_percent.text = "100%" if is_unlocked else "0%"
 	lbl_percent.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	lbl_percent.add_theme_color_override("font_color", Color.GREEN if is_unlocked else Color.DARK_GRAY)
+	
+	# Dynamic Text and Color based on actual progress!
+	if is_unlocked or pct >= 100.0:
+		lbl_percent.text = "100%"
+		lbl_percent.add_theme_color_override("font_color", Color.GREEN)
+	else:
+		lbl_percent.text = "%.1f%%" % pct
+		if pct >= 50.0:
+			lbl_percent.add_theme_color_override("font_color", Color.YELLOW)
+		elif pct > 0.0:
+			lbl_percent.add_theme_color_override("font_color", Color.ORANGE)
+		else:
+			lbl_percent.add_theme_color_override("font_color", Color.DARK_GRAY)
+			
 	hbox.add_child(lbl_percent)
 	
 	return bg_panel
@@ -252,7 +297,7 @@ func _update_overall_progress() -> void:
 		if unlocked_status[i]:
 			unlocked_count += 1
 			current_credits += parsed_achievements[i]["cr"]
-	
+
 	var current_rank = "None"
 	var credits_to_go = 0
 	

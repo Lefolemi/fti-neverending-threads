@@ -46,10 +46,12 @@ size_flags_vertical = 3
 
 [node name="General" parent="Content" instance=ExtResource("1_i2ta4")]
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="Background" parent="Content" instance=ExtResource("2_v2mdq")]
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="Confirm" type="HBoxContainer" parent="."]
 layout_mode = 2

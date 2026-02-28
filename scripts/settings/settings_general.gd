@@ -197,6 +197,7 @@ func _create_color_button(c_name: String, c_value: Color, color_index: int) -> v
 	var btn = Button.new()
 	btn.custom_minimum_size = Vector2(100, 120)
 	btn.name = c_name
+	btn.mouse_filter = Control.MOUSE_FILTER_PASS
 	
 	var vbox = VBoxContainer.new()
 	vbox.name = "VBox"

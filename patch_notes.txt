@@ -108,3 +108,7 @@ BETA
 - a LOT of bug fixes
 - fixed mode containter in particular
 - added game title sprites
+
+0.1.1 :
+- fixed a LOT of bugs
+- some visual improvements

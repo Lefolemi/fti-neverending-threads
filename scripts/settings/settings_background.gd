@@ -113,6 +113,7 @@ func _generate_wallpaper_grid() -> void:
 		btn.custom_minimum_size = Vector2(100, 100) 
 		btn.ignore_texture_size = true
 		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_COVERED
+		btn.mouse_filter = Control.MOUSE_FILTER_PASS
 		
 		var is_unlocked = false
 		
